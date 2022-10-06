@@ -1,0 +1,16 @@
+{
+    "name": "FouAph.Pathfinding",
+    "rootNamespace": "",
+    "references": [
+        "GUID:777c5dcb1befe4141b8b7df7d74726ce"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Agus/Level 1.unity
+    path: Assets/_Project/3. Scenes/Agus/Level 1.unity
     guid: b35a3b196ed424b4888237d40db86b37
   m_configObjects: {}
