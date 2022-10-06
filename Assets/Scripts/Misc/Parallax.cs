@@ -23,3 +23,5 @@ public class Parallax : MonoBehaviour
         }
     }
 }
+
+

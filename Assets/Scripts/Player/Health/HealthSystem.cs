@@ -15,9 +15,13 @@ public class HealthSystem : MonoBehaviour, IDamageable
     protected Color originialColor;
     public UnityEvent onDeathEvent;
 
+    [System.NonSerialized]
+    public bool isDead;
+
     //TODO make individual HealthSystem For Enemy and Player
     public virtual void Start()
     {
+        isDead = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -29,7 +33,10 @@ public class HealthSystem : MonoBehaviour, IDamageable
 
         Invoke("DelayStart", .2f);
     }
-
+    private void OnDisable()
+    {
+        onDeathEvent.RemoveAllListeners();
+    }
     void DelayStart()
     {
         if (deathVFX)

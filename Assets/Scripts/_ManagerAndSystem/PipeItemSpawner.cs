@@ -5,7 +5,8 @@ using UnityEngine;
 public class PipeItemSpawner : MonoBehaviour
 {
     private Animator animator;
-    public bool busy;
+    [SerializeField] AudioClip spawnSfx;
+   [System.NonSerialized] public bool busy;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -14,8 +15,10 @@ public class PipeItemSpawner : MonoBehaviour
     public void SpawnItem()
     {
         animator.SetTrigger("Spawn");
+        AudioPoolSystem.Singeleton.PlayAudio(spawnSfx, 0.5f);
         busy = true;
-    StartCoroutine(ResetBusy());
+
+        StartCoroutine(ResetBusy());
     }
 
     IEnumerator ResetBusy()

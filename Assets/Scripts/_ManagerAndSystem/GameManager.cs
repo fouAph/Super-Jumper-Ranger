@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
+    public GameState gameState = GameState.Menu;
+    [SerializeField] HealthSystem playerHealth;
     ItemSpawnManager itemSpawnManager;
     EnemySpawnerManager enemySpawnerManager;
     private void Awake()
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!gameStart) return;
+        if (gameState == GameState.GetReady || gameState == GameState.Menu) return;
 
 
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
@@ -83,12 +86,12 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy()
     {
         enemySpawnerManager.SpawnEnemy();
-        print($"curent enemy count is {currentEnemyCount} that is less than { maxEnemyCount} /n spawning 1 enemy");
+        print($"curent enemy count is {currentEnemyCount} that is less than {maxEnemyCount} /n spawning 1 enemy");
     }
 
     void GameStart()
     {
-        gameStart = true;
+        gameState = GameState.InGame;
     }
 
     public void UpdateScore(int scoreToAdd)
@@ -101,3 +104,5 @@ public class GameManager : MonoBehaviour
 
 
 }
+
+public enum GameState { Menu, GetReady, InGame }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2649697009252995054}
   - component: {fileID: 7362739224546553814}
   - component: {fileID: -8654892493939208297}
+  - component: {fileID: 7863695307235785433}
   m_Layer: 0
   m_Name: RandomWeaponPickUp
   m_TagString: Untagged
@@ -151,6 +152,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c8f260998ced4d142ad54aa3387f5089, type: 2}
   - {fileID: 11400000, guid: fa94e65176f440846b345ab1f6142342, type: 2}
   - {fileID: 11400000, guid: 991c3ac10a12ba245bdd7e896adb2a10, type: 2}
+  pickupSfx: {fileID: 8300000, guid: 38183f89c1ed1b744940102c3591fb91, type: 3}
+  pikcupVFX: {fileID: 2587631508003662213, guid: 24411b46a25192f4f8267810fa89ebdc, type: 3}
+  scoreAdder: {fileID: -8654892493939208297}
+  healthSystem: {fileID: 0}
 --- !u!114 &-8654892493939208297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +169,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreToAdd: 1
+--- !u!114 &7863695307235785433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649697009252995052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810422011f013a44aa9f07d283554201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  deathVFX: {fileID: 916736919616079195, guid: e385a9a1b04a3b946b114c0cf3d6d30a, type: 3}
+  deathClipSFX: {fileID: 8300000, guid: b9c29a0c354380c4f80ccb193e217513, type: 3}
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  onDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []

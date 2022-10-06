@@ -4,11 +4,21 @@ using UnityEngine;
 public class GunPickupRandom : MonoBehaviour
 {
     public List<GunDataSO> gunDataSO;
+    [SerializeField] AudioClip pickupSfx;
+    public GameObject pikcupVFX;
     [SerializeField] ScoreAdder scoreAdder;
-
-    private void Awake()
+    [SerializeField] HealthSystem healthSystem;
+    private void Start()
     {
         scoreAdder = GetComponent<ScoreAdder>();
+        Invoke("DelayStart", .1f);
+        healthSystem = GetComponent<HealthSystem>();
+    }
+
+    void DelayStart()
+    {
+        PoolSystem.Singleton.AddObjectToPooledObject(pikcupVFX, 5);
+        if (healthSystem) healthSystem.onDeathEvent.AddListener(delegate { SubstractCurrentBoxCount(); });
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -16,14 +26,28 @@ public class GunPickupRandom : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             WeaponManager.Singleton.PickupGun(this);
-           
+            PoolSystem.Singleton.SpawnFromPool(pikcupVFX, transform.position, Quaternion.identity);
+            AudioPoolSystem.Singeleton.PlayAudio(pickupSfx, .5f);
 
             if (GameManager.Singleton && scoreAdder)
             {
                 GameManager.Singleton.UpdateScore(scoreAdder.scoreToAdd);
-                GameManager.Singleton.currentBoxCount--;
+                SubstractCurrentBoxCount();
             }
         }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))
+        {
+            if (healthSystem)
+                healthSystem.Die();
+        }
+    }
+
+    void SubstractCurrentBoxCount()
+    {
+        if (GameManager.Singleton)
+            GameManager.Singleton.currentBoxCount--;
+
     }
 
 

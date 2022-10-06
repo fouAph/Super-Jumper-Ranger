@@ -1,169 +1,119 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Enemy : MonoBehaviour
 {
-    public Transform footPos;
-    public Transform currentPlayer;
-    public LayerMask whatIsRaycastable;
+    private CharacterController2D controller2D;
+    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashingCooldownTime;
+    private bool canDashing;
 
-    private bool facingRight;
-    private bool jumpReady = true;
-    private bool moving;
-    protected bool winding;
+    Transform playerTransform;
+    Rigidbody2D rb;
+    private int direction;
+    [SerializeField] private float targetDashPositionX;
+    private float dashingTimer;
+    [SerializeField] private bool isDashing;
+    [SerializeField] private float offsetY = .3f;
 
-    //Grounded stuff
-    private bool grounded;
-    public LayerMask whatIsGround;
-
-    //variables
-    public float moveSpeed = 2700f;
-    public float jumpForce = 850f;
-    private float windupSpeed = 3f;
-
-    private int currentJumps;
-    public int maxJumps = 2;
-
-    private Rigidbody2D rb;
-    public float maxMoveSpeed = 14;
-
-    private Vector2 standardScale;
-    //Sprites and stuff
-    private SpriteRenderer sprite;
-    protected Color actorColor;
-
-    protected void Start()
+    private void Awake()
     {
-        currentJumps = maxJumps;
-        sprite = GetComponent<SpriteRenderer>();
-        facingRight = true;
+        controller2D = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController2D>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
-        standardScale = transform.localScale;
+
+
+        dashingTimer = dashingCooldownTime;
+
+        if (transform.position.x >= playerTransform.position.x)
+        {
+            targetDashPositionX = transform.position.x;
+
+        }
+        else if (transform.position.x <= playerTransform.position.x)
+        {
+            targetDashPositionX = Mathf.Abs(transform.position.x);
+        }
+        isDashing = false;
     }
 
     private void Update()
     {
-        if (currentPlayer == null) return;
+        if (dashingTimer >= 0 && !isDashing)
+            dashingTimer -= Time.deltaTime;
 
-        Vector2 playerPos = currentPlayer.transform.position;
-        Vector2 lookPos = playerPos - (Vector2)transform.position;
-        float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
+        // canDashing = (controller2D.collisions.below && dashingTimer<=0);
+        canDashing = (!isDashing && controller2D.collisions.below && dashingTimer <= 0);
+        isDashing = (rb.velocity.magnitude > 0);
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, lookPos, 100, whatIsRaycastable);
-
-        float playerX = playerPos.x;
-        Behaviour(playerX, hit);
-    }
-
-    private void FixedUpdate()
-    {
-        SlowDown();
-    }
-
-    private void LateUpdate()
-    {
-        grounded = Physics2D.OverlapCircle(footPos.position, 0.7f, whatIsGround);
-        if (currentJumps < maxJumps && grounded)
-            currentJumps = maxJumps;
-
-        if (transform.localScale.y < standardScale.y)
-            transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y + 0.03f);
-        if (transform.localScale.x < standardScale.x)
-            transform.localScale = new Vector2(transform.localScale.x + 0.03f, transform.localScale.y);
-    }
-
-    protected void Move(int dir)
-    {
-        //flip player
-        // FlipActor(dir);
-
-        //Actually move player
-        moving = true;
-
-        float xVel = rb.velocity.x;
-
-        if (xVel < maxMoveSpeed && dir > 0)
-            rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right * dir);
-        else if (xVel > -maxMoveSpeed && dir < 0)
-            rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right * dir);
-
-        if (dir == 0)
+        if (canDashing)
         {
+            DashAttack();
+
 
         }
+        else if (playerTransform)
+            FollowPlayerY();
 
-        //If player is turning around, help turn faster
-        if (xVel > 0.2f && dir < 0)
-            rb.AddForce(moveSpeed * 3.2f * Time.deltaTime * -Vector2.right);
-        if (xVel < 0.2f && dir > 0)
+        if (direction == -1 && transform.position.x <= targetDashPositionX && isDashing
+                                                  || direction == 1 && transform.position.x >= targetDashPositionX && isDashing)
         {
-            rb.AddForce(moveSpeed * 3.2f * Time.deltaTime * Vector2.right);
+            rb.velocity = Vector3.zero;
+         StartCoroutine(SetFacingDirection());
         }
     }
 
-    protected virtual void Behaviour(float playerX, RaycastHit2D hit2D)
+    public void FollowPlayerY()
     {
-        if (playerX > transform.position.x)
-            Move(1);
-        else Move(-1);
+        var tr = transform.position;
+        // transform.position = new Vector3(transform.position.x,  Mathf.Lerp(playerTransform.position.y,playerTransform.position.y, moveSpeed), transform.position.z);
 
-        if (Random.Range(0, 1f) < 0.0025)
-            Jump();
-
+        if (playerTransform.position.y <= transform.position.y + offsetY)
+            transform.Translate(0, -moveSpeed * Time.deltaTime, 0);
+        else if (playerTransform.position.y >= transform.position.y + offsetY)
+            transform.Translate(0, moveSpeed * Time.deltaTime, 0);
     }
 
-    private void SlowDown()
+    public void DashAttack()
     {
-        if (moving) return;
 
-        //If no key pressed but still moving, slow down player
-        if (rb.velocity.x > 0.2f)
-            rb.AddForce(moveSpeed * Time.deltaTime * -Vector2.right);
-        else if (rb.velocity.x < -0.2f)
-            rb.AddForce(moveSpeed * Time.deltaTime * Vector2.right);
+        isDashing = true;
+        // dashPositionX = transform.position.x;
+        SetDashDirection();
+        // ((Vector2.right * direction) * dashSpeed)
+        rb.velocity = new Vector3(dashSpeed * direction, 0, 0);
+
+
+         dashingTimer = dashingCooldownTime;
     }
 
-    protected void StopMoving()
+    private void SetDashDirection()
     {
-        moving = false;
-    }
 
-    private void FlipActor(int dir)
-    {
-        if ((facingRight && dir < 0) || !facingRight && dir > 0)
+
+        if (transform.position.x >= playerTransform.position.x)
         {
-            facingRight = !facingRight;
-            sprite.flipX = !sprite.flipX;
+            direction = -1;
+            targetDashPositionX *= -1;
         }
+        else if (transform.position.x <= playerTransform.position.x)
+        {
+            direction = 1;
+            targetDashPositionX = Mathf.Abs(targetDashPositionX);
+        }
+        // StartCoroutine(SetFacingDirection());
     }
 
-    protected void Jump()
+    IEnumerator SetFacingDirection()
     {
-        if (currentJumps <= 1) return;
-
-        float angleMod = transform.rotation.eulerAngles.z % 180;
-
-        if (angleMod < 45 || angleMod > 135)
-            transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y / 4);
-        else
-            transform.localScale = new Vector2(transform.localScale.x / 4, transform.localScale.y);
-
-        //Spawn jump fx
-        // Instantiate(jumpFx, transform.position, transform.rotation);
-
-        //Play jump sound
-        // AudioManager.Play("Jump");
-
-        rb.velocity = new Vector2(rb.velocity.x, 0);
-
-        rb.AddForce(Vector2.up * jumpForce);
-        currentJumps--;
-        winding = false;
+        var tr = transform.localScale;
+        yield return new WaitForSeconds(.1f);
+        if (rb.velocity.x >= 0.01f)
+            tr.x =  Mathf.Abs(tr.x);
+    else tr.x = -tr.x;
+        transform.localScale = tr;
     }
 
-    private void JumpReset()
-    {
-        currentJumps = maxJumps;
-    }
+
 }
