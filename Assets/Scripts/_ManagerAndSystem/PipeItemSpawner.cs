@@ -6,7 +6,7 @@ public class PipeItemSpawner : MonoBehaviour
 {
     private Animator animator;
     [SerializeField] AudioClip spawnSfx;
-   [System.NonSerialized] public bool busy;
+    [System.NonSerialized] public bool busy;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -15,10 +15,17 @@ public class PipeItemSpawner : MonoBehaviour
     public void SpawnItem()
     {
         animator.SetTrigger("Spawn");
-        AudioPoolSystem.Singeleton.PlayAudio(spawnSfx, 0.5f);
         busy = true;
+        StartCoroutine(PlaySpawnSFX());
 
         StartCoroutine(ResetBusy());
+    }
+
+    IEnumerator PlaySpawnSFX()
+    {
+        yield return new WaitForSeconds(.5f);
+        AudioPoolSystem.Singleton.PlayAudio(spawnSfx, 0.5f);
+
     }
 
     IEnumerator ResetBusy()

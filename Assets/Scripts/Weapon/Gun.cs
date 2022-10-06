@@ -8,7 +8,8 @@ public class Gun : MonoBehaviour
     public Transform bulletSpawnPoint;
     public BulletProjectilePoolHelper bulletPrefab;         //BulletPrefab with BulletProjectilePoolHelper.cs
 
-    private float currentAmmo;
+    [System.NonSerialized]
+    public int currentAmmo;
     [System.NonSerialized]
     public int curentDamage;
     private float currentFireRate;
@@ -52,6 +53,9 @@ public class Gun : MonoBehaviour
             {
                 if (!WeaponManager.Singleton.useInfiniteAmmo)
                     currentAmmo--;
+                
+                UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
+
                 _lastFired = Time.time;
                 switch (gunDataSO.bulletType)
                 {
@@ -63,7 +67,7 @@ public class Gun : MonoBehaviour
                         break;
                 }
 
-                AudioPoolSystem.Singeleton.PlayAudio(gunDataSO.shootSFX, 1f);
+                AudioPoolSystem.Singleton.PlayAudio(gunDataSO.shootSFX, 1f);
                 CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
             }
     }

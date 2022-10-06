@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -24,11 +25,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Game State")]
     public GameObject player;
-    public bool gameStart;
 
-    [Header("Score")]
+    [Header("Player")]
     public int score;
-    public TMP_Text scoreTMP;
 
     [Header("Enemy Spawn Settings")]
     public int maxEnemyCount;
@@ -44,19 +43,25 @@ public class GameManager : MonoBehaviour
     public float nextBoxSpawnTime = 1f;
     float boxWaitTimer;
 
+    private UiManager uiManager;
     private void Start()
     {
+        uiManager = UiManager.Singleton;
         itemSpawnManager = ItemSpawnManager.Singleton;
         enemySpawnerManager = EnemySpawnerManager.Singleton;
         Invoke("GameStart", 1f);
         boxWaitTimer = nextBoxSpawnTime;
+
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+            ResetLevel();
+
         if (gameState == GameState.GetReady || gameState == GameState.Menu) return;
-
-
+        if (playerHealth.isDead)
+            gameState = GameState.GameOver;
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
             enemyWaitTimer -= Time.deltaTime;
@@ -94,15 +99,18 @@ public class GameManager : MonoBehaviour
         gameState = GameState.InGame;
     }
 
-    public void UpdateScore(int scoreToAdd)
+    public void UpdateScoreCount(int scoreToAdd)
     {
-        print("added");
         score += scoreToAdd;
-        if (scoreTMP)
-            scoreTMP.text = $"Score : {score}";
+        if (uiManager)
+            uiManager.UpdateScoreText(score);
     }
 
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
 
 }
 
-public enum GameState { Menu, GetReady, InGame }
+public enum GameState { Menu, GetReady, InGame, GameOver }

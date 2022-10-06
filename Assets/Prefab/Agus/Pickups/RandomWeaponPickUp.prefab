@@ -181,10 +181,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810422011f013a44aa9f07d283554201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 30
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  damagedSFX: {fileID: 0}
+  onDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
   deathVFX: {fileID: 916736919616079195, guid: e385a9a1b04a3b946b114c0cf3d6d30a, type: 3}
   deathClipSFX: {fileID: 8300000, guid: b9c29a0c354380c4f80ccb193e217513, type: 3}
-  hitColor: {r: 1, g: 1, b: 1, a: 1}
   onDeathEvent:
     m_PersistentCalls:
       m_Calls: []

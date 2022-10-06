@@ -27,11 +27,11 @@ public class GunPickupRandom : MonoBehaviour
         {
             WeaponManager.Singleton.PickupGun(this);
             PoolSystem.Singleton.SpawnFromPool(pikcupVFX, transform.position, Quaternion.identity);
-            AudioPoolSystem.Singeleton.PlayAudio(pickupSfx, .5f);
+            AudioPoolSystem.Singleton.PlayAudio(pickupSfx, .5f);
 
             if (GameManager.Singleton && scoreAdder)
             {
-                GameManager.Singleton.UpdateScore(scoreAdder.scoreToAdd);
+                GameManager.Singleton.UpdateScoreCount(scoreAdder.scoreToAdd);
                 SubstractCurrentBoxCount();
             }
         }

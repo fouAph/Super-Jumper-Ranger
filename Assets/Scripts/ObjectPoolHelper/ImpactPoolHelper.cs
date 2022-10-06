@@ -12,7 +12,7 @@ public class ImpactPoolHelper : PoolHelper, IPooledObject
     public override void OnObjectSpawn()
     {
         base.OnObjectSpawn();
-        AudioPoolSystem.Singeleton.PlayAudioAtLocation(impactSFX, transform.position, 1f);
+        AudioPoolSystem.Singleton.PlayAudioAtLocation(impactSFX, transform.position, 1f);
   
     }
 

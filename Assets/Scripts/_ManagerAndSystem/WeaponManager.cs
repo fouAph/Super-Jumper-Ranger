@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
+using NaughtyAttributes;
 public class WeaponManager : MonoBehaviour
 {
     #region Singeleton
@@ -20,9 +22,15 @@ public class WeaponManager : MonoBehaviour
     public Transform weaponInventoryHolder;
     public bool useInfiniteAmmo;
     public bool useSwapWeapon;
-    List<Gun> guns = new List<Gun>();
-    private int selectedWeapon;
 
+
+    private int selectedWeapon;
+    List<Gun> guns = new List<Gun>();
+    UiManager uiManager ;
+    private void Start()
+    {
+       uiManager = UiManager.Singleton;
+    }
     private void Update()
     {
         ChangeWeaponSlotInput();
@@ -32,6 +40,7 @@ public class WeaponManager : MonoBehaviour
     {
         // if (PlayerManager.instance.blockInput) { return; }
         int previousSelectedWeapon = selectedWeapon;
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (guns.Count > 0)
@@ -65,11 +74,8 @@ public class WeaponManager : MonoBehaviour
         if (previousSelectedWeapon != selectedWeapon)
         {
             SelectWeapon();
-            // print("audio stop");
-            // GameSettings.Instance.audioManager.otherSFXSource.Stop();
         }
 
-        // onWeaponChangeCallback.Invoke();
     }
 
     public void SelectWeapon()
@@ -82,6 +88,9 @@ public class WeaponManager : MonoBehaviour
             {
                 gun.gameObject.SetActive(true);
                 currentGun = gun.GetComponentInChildren<Gun>();
+                if (currentGun)
+                    StartCoroutine(UpdateAmmoRoutine());
+
 
                 // CurrentEquip(curWeapon);
                 // UIManager.instance.weaponSlotUIs[i].selectedPanel.gameObject.SetActive(true);
@@ -93,6 +102,13 @@ public class WeaponManager : MonoBehaviour
             // UIManager.instance.ResetAlpha();
             i++;
         }
+
+    }
+
+    IEnumerator UpdateAmmoRoutine()
+    {
+        yield return new WaitForSeconds(.1f);
+        uiManager.UpdateAmmoCountText(currentGun.currentAmmo);
     }
 
     public void PickupGun(GunPickup _gunpickup)
@@ -126,12 +142,15 @@ public class WeaponManager : MonoBehaviour
         bool isPickedup = false;
         var pickupDataSo = _gunPickupRandom.gunDataSO;
 
+        //FIXME Fix Swap Weapon Algorithm
         if (useSwapWeapon && currentGun)
         {
             currentGun.transform.SetParent(PoolSystem.Singleton.transform);
             currentGun.gameObject.SetActive(false);
             currentGun = null;
-                isPickedup = true;
+            isPickedup = true;
+            if (guns.Count > 0)
+                guns.RemoveAt(0);
         }
         else
         {
@@ -145,6 +164,8 @@ public class WeaponManager : MonoBehaviour
             int randGun = Random.Range(0, pickupDataSo.Count);
             var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             gun.transform.SetParent(weaponInventoryHolder);
+
+
             guns.Add(pickupDataSo[randGun].ItemPrefab.GetComponent<Gun>());
 
             if (currentGun)
@@ -158,11 +179,7 @@ public class WeaponManager : MonoBehaviour
 
     }
 
-    public void SwapGun(GunPickupRandom _gunPickupRandom)
-    {
 
-
-    }
     #region Unused
     /*
     public void EquipAvailableWeapon()

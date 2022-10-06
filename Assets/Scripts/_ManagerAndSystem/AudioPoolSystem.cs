@@ -4,15 +4,15 @@ using UnityEngine;
 public class AudioPoolSystem : MonoBehaviour
 {
     #region Singleton
-    public static AudioPoolSystem Singeleton;
+    public static AudioPoolSystem Singleton;
     private void Awake()
     {
-        if (Singeleton != null)
+        if (Singleton != null)
         {
-            DestroyImmediate(Singeleton);
+            DestroyImmediate(Singleton);
         }
 
-        Singeleton = this;
+        Singleton = this;
     }
     #endregion
 
@@ -138,6 +138,4 @@ public class AudioPoolSystem : MonoBehaviour
     }
 
 }
-
-
 public enum SoundType { SFX, Music }
