@@ -49,7 +49,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
 
     void DelayStart()
     {
-        if (deathVFX)
+        if (deathVFX && PoolSystem.Singleton)
         {
             PoolSystem.Singleton.AddObjectToPooledObject(deathVFX, 10);
         }

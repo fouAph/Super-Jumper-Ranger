@@ -77,10 +77,7 @@ public class AiController : MonoBehaviour
 
     private void Awake()
     {
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
+        
         _controller = GetComponent<CharacterController2D>();
         _characterScript = GetComponent<Character>();
         _pathAgent = GetComponent<PathfindingAgent>();

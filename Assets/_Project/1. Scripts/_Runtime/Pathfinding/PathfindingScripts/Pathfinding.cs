@@ -19,7 +19,10 @@ public class Pathfinding : MonoBehaviour
     LayerMask onewayLayer;
     //LayerMask groundAndOnewayLayer;
 
-    public GameObject _currentMap;
+    public GameObject[] _currentMap;
+    public bool useDynamicPathFinding;
+    public float updateEvery = .3f;
+    private float updateTimer;
 
     public float blockSize = 1f; //each block is square. This should probably match your square 2dCollider on a tile.
     public float jumpHeight = 3.8f; //the maximum jump height of a character
@@ -41,7 +44,7 @@ public class Pathfinding : MonoBehaviour
         return gl;
     }
     private List<pathNode> nodes = new List<pathNode>();
-    public List<pathNode> groundNodes = new List<pathNode>();
+    private List<pathNode> groundNodes = new List<pathNode>();
     private List<pathNode> ladderNodes = new List<pathNode>();
     private List<pathNode> portalNodes = new List<pathNode>();
 
@@ -54,8 +57,6 @@ public class Pathfinding : MonoBehaviour
 
     void Awake()
     {
-
-
         groundLayer = LayerManager.instance.groundLayer; //1 << 0;//LayerMask.NameToLayer("ground");
         ladderLayer = LayerManager.instance.ladderLayer; //1 << 1;// LayerMask.NameToLayer("ladder");
         portalLayer = LayerManager.instance.portalLayer;//1 << 2;// LayerMask.NameToLayer("portal");
@@ -67,11 +68,21 @@ public class Pathfinding : MonoBehaviour
     void Start()
     {
         //Debug tools do not work in awake!
+        updateTimer = updateEvery;
         CreateNodeMap();
     }
 
     void Update()
     {
+        if (useDynamicPathFinding)
+        {
+            updateTimer -= Time.deltaTime;
+            if (updateTimer <= 0)
+            {
+                UpdateNodesPosition();
+                updateTimer = updateEvery;
+            }
+        }
         DeliverPathfindingInstructions();
         MakeThreadDoWork();
 
@@ -106,7 +117,7 @@ public class Pathfinding : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-
+            UpdateNodesPosition();
         }
     }
 
@@ -125,24 +136,29 @@ public class Pathfinding : MonoBehaviour
 
         //oneway.value == 1 << hit.transform.gameObject.layer
         //Find all children of tile parent
-        foreach (Transform child in _currentMap.transform)
+        for (int i = 0; i < _currentMap.Length; i++)
         {
-            // Debug.Log(child.gameObject.layer + " " + (1 << LayerMask.NameToLayer("ground")));
-            if (1 << child.gameObject.layer == groundLayer.value)
             {
-                groundObjects.Add(child.gameObject);
-            }
-            else if (1 << child.gameObject.layer == ladderLayer.value)
-            {
-                ladderObjects.Add(child.gameObject);
-            }
-            else if (1 << child.gameObject.layer == portalLayer.value)
-            {
-                portalObjects.Add(child.gameObject);
-            }
-            else if (1 << child.gameObject.layer == onewayLayer.value)
-            {
-                onewayObjects.Add(child.gameObject);
+                foreach (Transform child in _currentMap[i].transform)
+                {
+                    // Debug.Log(child.gameObject.layer + " " + (1 << LayerMask.NameToLayer("ground")));
+                    if (1 << child.gameObject.layer == groundLayer.value)
+                    {
+                        groundObjects.Add(child.gameObject);
+                    }
+                    else if (1 << child.gameObject.layer == ladderLayer.value)
+                    {
+                        ladderObjects.Add(child.gameObject);
+                    }
+                    else if (1 << child.gameObject.layer == portalLayer.value)
+                    {
+                        portalObjects.Add(child.gameObject);
+                    }
+                    else if (1 << child.gameObject.layer == onewayLayer.value)
+                    {
+                        onewayObjects.Add(child.gameObject);
+                    }
+                }
             }
         }
 
@@ -373,6 +389,19 @@ public class Pathfinding : MonoBehaviour
 
         RefreshAreaAroundBlock(newGameObject, false);
 
+    }
+
+    void ClearOldNodesPosition()
+    {
+        groundNodes.Clear();
+    }
+
+    void UpdateNodesPosition()
+    {
+        print("Updating nodes");
+        ClearOldNodesPosition();
+        UpdateNodes(groundNodes, nodes);
+        CreateNodeMap();
     }
 
     //Used by creating and Removing pathfinding nodes
@@ -694,7 +723,7 @@ public class Pathfinding : MonoBehaviour
                         pathNode newJumpNode = new pathNode("jump", air);
 
                         newJumpNode.spawnedFrom = searchList[i]; //this node has been spawned from a groundNode
-                        //jumpNodes.Add(newJumpNode);
+                                                                 //jumpNodes.Add(newJumpNode);
                         newJumpNode.c = nodeWeights.GetNodeWeightByString(newJumpNode.type);
                         newJumpNode.height = curHeight;
                         newJumpNode.realHeight = curHeight;
@@ -714,7 +743,7 @@ public class Pathfinding : MonoBehaviour
                                 pathNode newJumpNode = new pathNode("jump", newHeight);
 
                                 newJumpNode.spawnedFrom = searchList[i]; //this node has been spawned from a groundNode
-                                //jumpNodes.Add(newJumpNode);
+                                                                         //jumpNodes.Add(newJumpNode);
                                 newJumpNode.c = nodeWeights.GetNodeWeightByString(newJumpNode.type);
                                 newJumpNode.realHeight = curHeight;
                                 newJumpNode.height = h;
@@ -759,7 +788,7 @@ public class Pathfinding : MonoBehaviour
 
 
                 if (xDistance < blockSize * maxJumpBlocksX + blockSize + groundMaxWidth) //
-                    //the x distance modifier used to be 0.72!
+                                                                                         //the x distance modifier used to be 0.72!
                     if (b != a.spawnedFrom && a.pos.y > b.pos.y + blockSize * 0.5f &&
 
                         a.pos.y - b.pos.y > Mathf.Abs(a.pos.x - b.pos.x) * 0.9f - blockSize * 1f &&
@@ -871,7 +900,7 @@ public class Pathfinding : MonoBehaviour
                     pathNode newFallNode = new pathNode("fall", leftNode);
 
                     newFallNode.spawnedFrom = searchList[i]; //this node has been spawned from a groundNode
-                    //fallNodes.Add(newFallNode);
+                                                             //fallNodes.Add(newFallNode);
 
                     newFallNode.c = nodeWeights.GetNodeWeightByString(newFallNode.type);
                     nodes.Add(newFallNode);
@@ -895,7 +924,7 @@ public class Pathfinding : MonoBehaviour
                     pathNode newFallNode = new pathNode("fall", rightNode);
 
                     newFallNode.spawnedFrom = searchList[i]; //this node has been spawned from a groundNode
-                    //fallNodes.Add(newFallNode);
+                                                             //fallNodes.Add(newFallNode);
 
                     newFallNode.c = nodeWeights.GetNodeWeightByString(newFallNode.type);
                     nodes.Add(newFallNode);

@@ -91,7 +91,6 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy()
     {
         enemySpawnerManager.SpawnEnemy();
-        print($"curent enemy count is {currentEnemyCount} that is less than {maxEnemyCount} /n spawning 1 enemy");
     }
 
     void GameStart()

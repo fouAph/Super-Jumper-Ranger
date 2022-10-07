@@ -81,8 +81,7 @@ public class PathfindingAgent : MonoBehaviour
 
     private void Start()
     {
-       pathfindingTarget = GameObject.FindGameObjectWithTag("Player");
-
+        Invoke("DelayStart", .1f);
     }
 
     void DelayStart()
@@ -551,7 +550,7 @@ public class PathfindingAgent : MonoBehaviour
             pathLineRenderer.positionCount = (1);
             pathLineRenderer.startWidth = (0.1f);
             pathLineRenderer.endWidth = (0.1f);
-            pathLineRenderer.sortingOrder= 30;
+            pathLineRenderer.sortingOrder = 30;
         }
     }
 }
