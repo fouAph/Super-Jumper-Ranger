@@ -8,9 +8,8 @@ public class EnemyHealth : HealthSystem
     {
         base.Start();
         onDeathEvent.AddListener(delegate { OnDead(); });
-        spriteRenderer.color = originialColor;
-        isDead = false;
     }
+    
 
     private void OnDisable()
     {

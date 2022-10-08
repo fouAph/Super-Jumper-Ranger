@@ -61,7 +61,9 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-
+        {
+            SceneManager.LoadScene(2);
+        }
             Mathf.Clamp(currentBoxCount, 0, currentBoxCount);
 
         if (gameState == GameState.GetReady || gameState == GameState.Menu) return;
@@ -121,7 +123,7 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayGameButton()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(2);
 
         Invoke("GameStart", 1);
     }
