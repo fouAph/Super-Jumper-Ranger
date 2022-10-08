@@ -7,7 +7,7 @@ public class ItemSpawnManager : MonoBehaviour
     public static ItemSpawnManager Singleton;
     public WeaponPickupRandom gunPickupRandom;
     public ItemPickupRandomItem ammoPickupRandom;
-
+    GameManager gameManager;
     [SerializeField] private PipeItemSpawner[] pipeSpawnerPosition;
 
     private void Awake()
@@ -24,7 +24,7 @@ public class ItemSpawnManager : MonoBehaviour
 
     private void Start()
     {
-
+        gameManager = GameManager.Singleton;
         Invoke("DelayStart", .5f);
         // spawnTimer = spawnTimeWait;
     }
@@ -42,7 +42,7 @@ public class ItemSpawnManager : MonoBehaviour
             if (pipeSpawnerPosition[i].busy == false)
             {
                 pipeSpawnerPosition[i].SpawnItem();
-        GameManager.Singleton.currentBoxCount++;
+                gameManager.currentBoxCount++;
                 StartCoroutine(TriggerSpawn(i));
                 break;
             }

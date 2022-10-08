@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8665922427123247619}
   - component: {fileID: 8665922427123247618}
   - component: {fileID: 8665922427123247617}
+  - component: {fileID: 8461470891019065159}
   m_Layer: 23
   m_Name: JohnThicc
   m_TagString: Player
@@ -79,7 +80,7 @@ MonoBehaviour:
   verticalRayCount: 4
   horizontalRaySpacing: 0
   verticalRaySpacing: 0
-  _collider: {fileID: 0}
+  _collider: {fileID: 8665922427123247645}
   maxClimbAngle: 80
   maxDescendAngle: 80
   playerInput: {x: 0, y: 0}
@@ -117,7 +118,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  _graphics: {fileID: 0}
   movement:
     ability: 1
     accelerationTimeGrounded: 0.06
@@ -180,7 +180,6 @@ MonoBehaviour:
   teleport: 0
   rightClickPathFind: 0
   FallNodes: 1
-  rotateWithMousePosition: 1
 --- !u!114 &8665922427123247617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +197,31 @@ MonoBehaviour:
   - {fileID: 8665922427541341863}
   isFacingRight: 0
   facingDirection: 0
+--- !u!114 &8461470891019065159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8665922427123247616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810422011f013a44aa9f07d283554201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  currentHealth: 0
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  damagedSFX: {fileID: 8300000, guid: 41e9956ae14b9b242a35c8770f1e90c6, type: 3}
+  onDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  deathVFX: {fileID: 2841056089519160658, guid: 6a2ad8318448eb845ac5aff8eaac84a1, type: 3}
+  deathClipSFX: {fileID: 8300000, guid: ad5e8936e94cfe94c91c4606bfa95df0, type: 3}
+  onDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  isDead: 0
 --- !u!1 &8665922427347030848
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +366,7 @@ GameObject:
   - component: {fileID: 8665922428999084269}
   m_Layer: 23
   m_Name: WeaponInventoryHolder
-  m_TagString: Untagged
+  m_TagString: WeaponHolder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

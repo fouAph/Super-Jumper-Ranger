@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     public GameObject target;
 
     // [System.NonSerialized]
-    public GameObject _graphics;
+    private GameObject _graphics;
     [System.NonSerialized]
     public AiController _ai;
     BoxCollider2D _box;
@@ -43,7 +43,6 @@ public class Character : MonoBehaviour
     float requestUpdatePathTimer;
     void Awake()
     {
-        _controller = GetComponent<CharacterController2D>();
         _body = GetComponent<Rigidbody2D>();
         _box = GetComponent<BoxCollider2D>();
         _pathingAgent = GetComponent<PathfindingAgent>();
@@ -66,6 +65,7 @@ public class Character : MonoBehaviour
 
     void Start()
     {
+        _controller = GetComponent<CharacterController2D>();
         jump.UpdateJumpHeight();
         if (target && requestUpdatePathTimer <= 0)
         {
@@ -77,6 +77,7 @@ public class Character : MonoBehaviour
 
     void Update()
     {
+        // if(GameManager.Singleton.gameState != GameState.InGame) return;
         requestUpdatePathTimer -= Time.deltaTime;
         if (_pathingAgent && _pathingAgent.pathfindingTarget)
         {

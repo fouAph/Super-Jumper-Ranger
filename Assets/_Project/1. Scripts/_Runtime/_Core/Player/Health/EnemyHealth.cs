@@ -8,11 +8,18 @@ public class EnemyHealth : HealthSystem
     {
         base.Start();
         onDeathEvent.AddListener(delegate { OnDead(); });
+        spriteRenderer.color = originialColor;
+        isDead = false;
+    }
+
+    private void OnDisable()
+    {
+        onDeathEvent.RemoveAllListeners();
     }
 
     void OnDead()
     {
-        if(GameManager.Singleton)
+        if (GameManager.Singleton)
         {
             GameManager.Singleton.currentEnemyCount--;
         }

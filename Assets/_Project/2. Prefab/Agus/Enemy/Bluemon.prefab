@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 850763920}
   m_Layer: 7
   m_Name: Bluemon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,11 +221,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  _graphics: {fileID: 0}
   movement:
     ability: 1
     accelerationTimeGrounded: 0.06
-    moveSpeed: 3
+    moveSpeed: 4
   jump:
     ability: 1
     maxHeight: 3.5
@@ -310,15 +309,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathfindingTarget: {fileID: 0}
-  stopDistance: 0
+  distanceFromTarget: 0
+  followMainTarget: 1
   followDistance: 0.5
   debugBool: 0
   drawPath: 1
   drawColor: {r: 1, g: 0, b: 0, a: 1}
   endDrawComplete: 1
   repathOnFail: 1
-  followPathTimer: 0.3
-  pathFailTimer: 1
+  followPathTimer: 0.75
+  pathFailTimer: 0.1
 --- !u!114 &6425862320048163704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,8 +332,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  currentHealth: 0
   hitColor: {r: 1, g: 0.5235849, b: 0.5235849, a: 1}
-  onDamagedSFX: {fileID: 0}
+  damagedSFX: {fileID: 0}
   onDamagedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -342,6 +343,7 @@ MonoBehaviour:
   onDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  isDead: 0
 --- !u!114 &850763920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,4 +358,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canDamagePlayer: 0
   attackCooldown: 2
-  damage: 20
+  damage: 1

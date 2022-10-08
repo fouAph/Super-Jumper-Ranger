@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
-    public GameState gameState = GameState.Menu;
-    [SerializeField] HealthSystem playerHealth;
+    public CharacterDataSO currentCharacter;
     ItemSpawnManager itemSpawnManager;
     EnemySpawnerManager enemySpawnerManager;
+    string sceneName;
     private void Awake()
     {
         if (Singleton != null)
@@ -24,7 +23,8 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("Game State")]
-    public GameObject player;
+    public GameState gameState = GameState.Menu;
+
 
     [Header("Player")]
     public int score;
@@ -46,22 +46,32 @@ public class GameManager : MonoBehaviour
     private UiManager uiManager;
     private void Start()
     {
-        uiManager = UiManager.Singleton;
-        itemSpawnManager = ItemSpawnManager.Singleton;
-        enemySpawnerManager = EnemySpawnerManager.Singleton;
-        Invoke("GameStart", 1f);
+
+        Invoke("DelayStart", .1f);
+        // Invoke("GameStart", 3f);
         boxWaitTimer = nextBoxSpawnTime;
 
+    }
+
+    void DelayStart()
+    {
+        // PoolSystem.Singleton.SpawnFromPool(PlayerManager.Singleton.characterDataSO.CharacterPrefab, playerSpawnPosition.position, Quaternion.identity);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-            ResetLevel();
+
+            Mathf.Clamp(currentBoxCount, 0, currentBoxCount);
 
         if (gameState == GameState.GetReady || gameState == GameState.Menu) return;
-        if (playerHealth.isDead)
+
+        if (PlayerManager.Singleton.playerHealth.isDead)
             gameState = GameState.GameOver;
+
+
+
+
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
             enemyWaitTimer -= Time.deltaTime;
@@ -96,6 +106,9 @@ public class GameManager : MonoBehaviour
     void GameStart()
     {
         gameState = GameState.InGame;
+        uiManager = UiManager.Singleton;
+        itemSpawnManager = ItemSpawnManager.Singleton;
+        enemySpawnerManager = EnemySpawnerManager.Singleton;
     }
 
     public void UpdateScoreCount(int scoreToAdd)
@@ -105,10 +118,15 @@ public class GameManager : MonoBehaviour
             uiManager.UpdateScoreText(score);
     }
 
-    public void ResetLevel()
+
+    public void OnPlayGameButton()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadSceneAsync(1);
+
+        Invoke("GameStart", 1);
     }
+
+
 
 }
 

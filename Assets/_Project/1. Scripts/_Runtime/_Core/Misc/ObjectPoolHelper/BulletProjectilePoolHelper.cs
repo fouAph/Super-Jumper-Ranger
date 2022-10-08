@@ -46,11 +46,13 @@ public class BulletProjectilePoolHelper : PoolHelper
         gameObject.SetActive(false);
         // PoolSystemGeneric.Singleton.SpawnFromPool(hitVFXPrefab, transform.position, transform.rotation);
         PoolSystem.Singleton.SpawnFromPool(hitVFXPrefab.gameObject, transform.position, transform.rotation);        //Spawn HitVFXPrefab
-
-        IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
-        if (damageable != null)
+        if (other.collider.CompareTag("Enemy"))
         {
-            damageable.OnDamage(WeaponManager.Singleton.weaponInventoryHolder.GetComponentInChildren<Weapon>().curentDamage);
+            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.OnDamage(WeaponManager.Singleton.weaponInventoryHolder.GetComponentInChildren<Weapon>().curentDamage);
+            }
         }
 
         // if(projectileType == ProjectileType.Explodeable)

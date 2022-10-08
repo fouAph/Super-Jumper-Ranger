@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour
 
     private float _lastFired;
     private PoolSystem poolSystem;
-    private bool debugSetGunPosition;
+    [SerializeField] private bool debugSetGunPosition;
 
     Vector2 directions;
 

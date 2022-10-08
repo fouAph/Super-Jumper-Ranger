@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using NaughtyAttributes;
 
 public class HealthSystem : MonoBehaviour, IDamageable
 {
     public int maxHealth = 100;
-    protected int currentHealth;
+    public int currentHealth;
 
     //OnDamaged Settings
     [SerializeField] Color hitColor = Color.white;
-    SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
     protected Color originialColor;
     [SerializeField] private AudioClip damagedSFX;
     public UnityEvent onDamagedEvent;
@@ -41,12 +42,6 @@ public class HealthSystem : MonoBehaviour, IDamageable
         onDamagedEvent.AddListener(delegate { OnDamaged(); });
     }
 
-    // private void OnDisable()
-    // {
-    //     onDeathEvent.RemoveAllListeners();
-    //     onDamagedEvent.RemoveAllListeners();
-    // }
-
     void DelayStart()
     {
         if (deathVFX && PoolSystem.Singleton)
@@ -72,6 +67,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, currentHealth);
+        UiManager.Singleton.UpdateHealth();
 
         if (currentHealth > 0)
             onDamagedEvent?.Invoke();
@@ -80,12 +76,14 @@ public class HealthSystem : MonoBehaviour, IDamageable
 
         if (gameObject.activeSelf)
             StartCoroutine(SpriteBlinkRoutine());
+
     }
     #endregion
 
     void OnDamaged()
     {
         AudioPoolSystem.Singleton.PlayAudio(damagedSFX, .5f);
+
     }
 
     public void OnDeath()

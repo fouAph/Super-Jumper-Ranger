@@ -4,14 +4,14 @@ using UnityEngine;
 public class PathfindingAgent : MonoBehaviour
 {
 
-    [System.NonSerialized]
     public static Pathfinding _pathfindingManagerScript;
     private Character _characterScript;
     private CharacterController2D _controller;
     private AiController _aiControllerScript;
 
     public GameObject pathfindingTarget; /*Following / Chasing - overrides Vector3 Pathfinding*/
-    public float stopDistance = 1f;
+    public float distanceFromTarget;
+    public bool followMainTarget;
 
     public float followDistance = 0.5f; //if follow target is this distance away, we start following
     public bool debugBool = false; /*Very expensive if multiple characters have this enabled*/
@@ -86,9 +86,9 @@ public class PathfindingAgent : MonoBehaviour
 
     void DelayStart()
     {
-        if (gameManager)
+        if (PlayerManager.Singleton)
         {
-            pathfindingTarget = gameManager.player;
+            pathfindingTarget = PlayerManager.Singleton.PlayerObject;
         }
     }
 
@@ -456,6 +456,8 @@ public class PathfindingAgent : MonoBehaviour
 
         //Update Follow/Chase Path
         if (pathfindingTarget)
+            distanceFromTarget = Vector3.Distance(transform.position, pathfindingTarget.transform.position);
+        if (pathfindingTarget && followMainTarget)
         {
             fFollowPathTimer += Time.deltaTime;
             if (fFollowPathTimer >= followPathTimer)
@@ -464,7 +466,7 @@ public class PathfindingAgent : MonoBehaviour
                 if ((currentOrders != null && currentOrders.Count > 0 && currentOrders.Count > 0 && Vector3.Distance(currentOrders[currentOrders.Count - 1].pos, pathfindingTarget.transform.position) > followDistance)
                     || ((currentOrders == null || currentOrders.Count == 0)))
                 {
-                    if (Vector3.Distance(transform.position, pathfindingTarget.transform.position) > followDistance + 0.18f)
+                    if (distanceFromTarget > followDistance + 0.18f)
                         pathIsDirty = true;
                 }
             }

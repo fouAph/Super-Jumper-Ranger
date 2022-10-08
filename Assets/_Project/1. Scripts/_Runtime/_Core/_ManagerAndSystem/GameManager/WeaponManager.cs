@@ -26,10 +26,11 @@ public class WeaponManager : MonoBehaviour
 
     private int selectedWeapon;
     List<Weapon> guns = new List<Weapon>();
-    UiManager uiManager ;
+    UiManager uiManager;
     private void Start()
     {
-       uiManager = UiManager.Singleton;
+        uiManager = UiManager.Singleton;
+        weaponInventoryHolder = GameObject.FindGameObjectWithTag("WeaponHolder").transform;
     }
     private void Update()
     {
@@ -161,11 +162,11 @@ public class WeaponManager : MonoBehaviour
         if (isPickedup)
         {
             //TODO Spawn With PoolSystem
-            int randGun = Random.Range(0, pickupDataSo.Count);
+            int randGun = 0;
+            randGun = Random.Range(0, pickupDataSo.Count);
+
             var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             gun.transform.SetParent(weaponInventoryHolder);
-
-
             guns.Add(pickupDataSo[randGun].ItemPrefab.GetComponent<Weapon>());
 
             if (currentGun)

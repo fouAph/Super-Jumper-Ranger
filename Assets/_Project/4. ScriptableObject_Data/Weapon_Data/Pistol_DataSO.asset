@@ -20,11 +20,11 @@ MonoBehaviour:
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.2
   fireRate: 7
-  damage: 2
+  damage: 8
   maxAmmoInMag: 30
   maxCarryingAmmo: 90
   autoFire: 0
   spreadValue: 11.3
-  howManyBulletPerShoot: 3
+  howManyBulletPerShoot: 1
   shootPower: 1300
   spawnPosition: {x: 0.05, y: -0.038, z: 1.05}

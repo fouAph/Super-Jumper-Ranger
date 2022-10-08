@@ -20,7 +20,7 @@ MonoBehaviour:
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.5
   fireRate: 2
-  damage: 3
+  damage: 20
   maxAmmoInMag: 30
   maxCarryingAmmo: 90
   autoFire: 0

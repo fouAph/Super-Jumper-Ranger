@@ -18,7 +18,6 @@ public class WeaponPickupRandom : MonoBehaviour
     void DelayStart()
     {
         PoolSystem.Singleton.AddObjectToPooledObject(pikcupVFX, 5);
-        if (healthSystem) healthSystem.onDeathEvent.AddListener(delegate { SubstractCurrentBoxCount(); });
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -36,17 +35,20 @@ public class WeaponPickupRandom : MonoBehaviour
             }
         }
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))
+        else if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))
         {
             if (healthSystem)
                 healthSystem.Die();
+            SubstractCurrentBoxCount();
         }
     }
 
     void SubstractCurrentBoxCount()
     {
         if (GameManager.Singleton)
+        {
             GameManager.Singleton.currentBoxCount--;
+        }
 
     }
 
