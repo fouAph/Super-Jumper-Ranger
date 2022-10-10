@@ -1,15 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
-    public CharacterDataSO currentCharacter;
-    ItemSpawnManager itemSpawnManager;
-    EnemySpawnerManager enemySpawnerManager;
-    string sceneName;
     private void Awake()
     {
         if (Singleton != null)
@@ -20,42 +17,120 @@ public class GameManager : MonoBehaviour
         }
 
         Singleton = this;
+
+        SceneManager.LoadSceneAsync((int)SceneIndexes.TITLE_SCREEN, LoadSceneMode.Additive);
+        loadingScreen.SetActive(false);
+        AudioPoolSystem.Singleton.Initialize();
     }
+
+    public GameObject countdownGameobject;
+    [SerializeField] CountDownHelper countDownHelper;
+    public GameObject loadingScreen;
+    public GameObject gameOverScreen;
+    [SerializeField] int currentSceneLevelIndex;
 
     [Header("Game State")]
     public GameState gameState = GameState.Menu;
+    public CharacterDataSO currentCharacter;
 
+    ItemSpawnManager itemSpawnManager;
+    EnemySpawnerManager enemySpawnerManager;
 
-    [Header("Player")]
-    public int score;
+    [BoxGroup("Game Settings")]
+    public MapDataSO mapDataSO;
+    [BoxGroup("Game Settings")]
+    public int targetScore;
+    [BoxGroup("Game Settings")]
+    public int playerScore;
+    [BoxGroup("Game Settings")]
+    public float startCountdownTimer;
+    float startCountdown;
 
-    [Header("Enemy Spawn Settings")]
-    public int maxEnemyCount;
-    // [System.NonSerialized]
+    [BoxGroup("Enemy Spawn Settings")]
+    public int maxEnemyCount = 3;
+    [HideInInspector]
     public int currentEnemyCount;
+    [BoxGroup("Enemy Spawn Settings")]
     public float nextEnemySpawnTime = 0.5f;
     float enemyWaitTimer;
 
-    [Header("Box Spawn Settings")]
+    [BoxGroup("Box Spawn Settings")]
     public int maxBoxCount = 1;
-    // [System.NonSerialized]
+    [HideInInspector]
     public int currentBoxCount;
+    [BoxGroup("Box Spawn Settings")]
     public float nextBoxSpawnTime = 1f;
     float boxWaitTimer;
 
     private UiManager uiManager;
-    private void Start()
+
+    List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
+    public void LoadGame()
     {
+        loadingScreen.SetActive(true);
+        MusicManager.Singleton.StopMusic();
+        sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
 
-        Invoke("DelayStart", .1f);
-        // Invoke("GameStart", 3f);
-        boxWaitTimer = nextBoxSpawnTime;
-
+        StartCoroutine(GetSceneLoadingProgress());
+        StartCoroutine(StartGameCountdown());
     }
 
-    void DelayStart()
+    public void RestartGame()
     {
-        // PoolSystem.Singleton.SpawnFromPool(PlayerManager.Singleton.characterDataSO.CharacterPrefab, playerSpawnPosition.position, Quaternion.identity);
+        LoadGame();
+        //     loadingScreen.SetActive(true);
+        //     gameOverScreen.SetActive(false);
+        //     sceneLoading.Add(SceneManager.UnloadSceneAsync(currentSceneLevelIndex));
+        //     sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
+
+        //     StartCoroutine(GetSceneLoadingProgress());
+        //     StartCoroutine(StartGameCountdown());
+    }
+
+    IEnumerator GetSceneLoadingProgress()
+    {
+        for (int i = 0; i < sceneLoading.Count; i++)
+        {
+            while (sceneLoading[i].isDone)
+            {
+                yield return null;
+            }
+        }
+        yield return new WaitForSeconds(1f);
+        loadingScreen.SetActive(false);
+    }
+
+    IEnumerator StartGameCountdown()
+    {
+        yield return new WaitForSeconds(1);
+        countdownGameobject.SetActive(true);
+        startCountdown = startCountdownTimer;
+        AudioPoolSystem.Singleton.PlayAudio(countDownHelper.countdownClip);
+        MusicManager.Singleton.PlayInGameMusic();
+        while (startCountdown >= 0)
+        {
+            startCountdown -= Time.deltaTime;
+            if (startCountdown <= 2 && startCountdown >= 1)
+                countDownHelper.SetSprite(countDownHelper._2);
+            else if (startCountdown <= 1 && startCountdown >= 0)
+                countDownHelper.SetSprite(countDownHelper._1);
+            else if (startCountdown <= 0)
+                countDownHelper.SetSprite(countDownHelper._go);
+
+            yield return null;
+        }
+        yield return new WaitForSeconds(1f);
+        countdownGameobject.SetActive(false);
+        SetupReference();
+        gameState = GameState.InGame;
+    }
+
+    private void Start()
+    {
+        boxWaitTimer = nextBoxSpawnTime;
+        enemyWaitTimer = nextEnemySpawnTime;
+        MusicManager.Singleton.PlayMainMenuMusic();
     }
 
     private void Update()
@@ -64,15 +139,11 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(2);
         }
-            Mathf.Clamp(currentBoxCount, 0, currentBoxCount);
 
-        if (gameState == GameState.GetReady || gameState == GameState.Menu) return;
-
-        if (PlayerManager.Singleton.playerHealth.isDead)
-            gameState = GameState.GameOver;
+        if (gameState == GameState.GameOver || gameState == GameState.Menu) return;
 
 
-
+        Gameloop();
 
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
@@ -95,6 +166,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Gameloop()
+    {
+        if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
+        {
+            gameOverScreen.SetActive(true);
+            gameState = GameState.GameOver;
+            MusicManager.Singleton.PlayGameOverMusic();
+        }
+
+    }
+
     void SpawnBox()
     {
         itemSpawnManager.SpawnBoxItem();
@@ -105,9 +187,8 @@ public class GameManager : MonoBehaviour
         enemySpawnerManager.SpawnEnemy();
     }
 
-    void GameStart()
+    void SetupReference()
     {
-        gameState = GameState.InGame;
         uiManager = UiManager.Singleton;
         itemSpawnManager = ItemSpawnManager.Singleton;
         enemySpawnerManager = EnemySpawnerManager.Singleton;
@@ -115,21 +196,18 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScoreCount(int scoreToAdd)
     {
-        score += scoreToAdd;
+        playerScore += scoreToAdd;
         if (uiManager)
-            uiManager.UpdateScoreText(score);
+            uiManager.UpdateScoreText(playerScore);
     }
-
 
     public void OnPlayGameButton()
     {
-        SceneManager.LoadSceneAsync(2);
+        LoadGame();
 
-        Invoke("GameStart", 1);
     }
-
-
 
 }
 
-public enum GameState { Menu, GetReady, InGame, GameOver }
+public enum SceneIndexes { MANAGER = 0, TITLE_SCREEN = 1, MAP_1 = 2, MAP_2 = 3, MAP_3 = 3, MAP_4 = 4 }
+public enum GameState { Menu, InGame, GameOver }

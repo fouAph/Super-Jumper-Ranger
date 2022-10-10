@@ -22,16 +22,15 @@ public class PlayerManager : MonoBehaviour
     public GameObject PlayerObject;
     public HealthSystem playerHealth;
     public bool invicible;
-
+    public bool isPlayerDead;
     private void Start()
     {
-        // Invoke("DelayStart", .1f);
-        DelayStart();
+        Setup();
     }
 
-    void DelayStart()
+    void Setup()
     {
-        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity);
+        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity,transform);
 
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         playerHealth = PlayerObject.GetComponent<HealthSystem>();

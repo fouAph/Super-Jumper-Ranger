@@ -26,20 +26,11 @@ public class CharacterSelector : MonoBehaviour
         currentCharDataSO = selectedChar.characterDataSO;
         charStatsImage.sprite = currentCharDataSO.statsSprite;
         selectedChar.selectedArrow.SetActive(true);
-
+        gameManager.currentCharacter = currentCharDataSO;
         menuManager.OnClickMenu();
         if (prevChar != currentCharacter)
         {
             prevChar.selectedArrow.SetActive(false);
         }
     }
-
-    public void SetPlayerManagerCharacterData()
-    {
-        gameManager.currentCharacter = currentCharDataSO;
-    }
-    // public void OnDeselectCharacter()
-    // {
-    //     currentCharacter.
-    // }
 }

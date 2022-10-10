@@ -43,7 +43,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
         SetupHealth();
     }
 
-    void SetupHealth()
+    protected void SetupHealth()
     {
         Debug.Log("Setup health, is dead is " + isDead, this);
         isDead = false;
@@ -80,7 +80,6 @@ public class HealthSystem : MonoBehaviour, IDamageable
             onDamagedEvent?.Invoke();
         else if (currentHealth == 0)
         {
-            isDead = true;
             onDeathEvent?.Invoke();
         }
 
@@ -102,6 +101,11 @@ public class HealthSystem : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
         if (deathClipSFX)
             AudioPoolSystem.Singleton.PlayAudioAtLocation(deathClipSFX, transform.position, 1f);
+        SetHealth(0);
+        UiManager.Singleton.UpdateHealth();
+        if(PlayerManager.Singleton)
+            PlayerManager.Singleton.isPlayerDead = isDead;
+        isDead = true;
     }
 
     public void Die()

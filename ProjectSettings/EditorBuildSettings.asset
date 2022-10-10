@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Project/3. Scenes/Agus/MainMenu.unity
+    path: Assets/_Project/3. Scenes/Agus/UsedScene/Presistent Scene.unity
+    guid: 5b0491b13137db54cb7dfc52d10f5e1c
+  - enabled: 1
+    path: Assets/_Project/3. Scenes/Agus/UsedScene/MainMenu.unity
     guid: 0a2b8c6c03ffed04793b00d39ae4597f
   - enabled: 1
-    path: Assets/_Project/3. Scenes/Agus/Level 1.unity
-    guid: b35a3b196ed424b4888237d40db86b37
-  - enabled: 1
-    path: Assets/_Project/3. Scenes/Agus/new level 1.unity
+    path: Assets/_Project/3. Scenes/Agus/UsedScene/new level 1.unity
     guid: 396c755c7cc40fd468df70bea2310b39
   m_configObjects: {}

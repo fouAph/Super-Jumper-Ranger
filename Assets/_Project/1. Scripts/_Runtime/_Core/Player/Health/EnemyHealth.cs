@@ -13,6 +13,7 @@ public class EnemyHealth : HealthSystem
 
     private void OnDisable()
     {
+     SetupHealth();
         onDeathEvent.RemoveAllListeners();
     }
 

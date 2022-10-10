@@ -16,7 +16,7 @@ public class AudioPoolSystem : MonoBehaviour
     }
     #endregion
 
-    public int poolSize;
+    public int audioPoolSize = 30;
     public Queue<AudioSource> audioqueue;
     public AudioClip[] musicClip;
 
@@ -33,10 +33,31 @@ public class AudioPoolSystem : MonoBehaviour
 
     private AudioSource audioSource;
 
-    private void Start()
-    {
-        Initialize();
-    }
+    // private void Start()
+    // {
+    //     Initialize();
+    // }
+
+    // public IEnumerator InitializeAudioPool()
+    // {
+    //     for (int i = 0; i < audioPoolSize; i++)
+    //     {
+    //         while ()
+    //         {
+    //             audioqueue = new Queue<AudioSource>();
+    //             var obj = new GameObject("AudioSource");
+    //             obj.AddComponent<AudioSource>();
+    //             audioSource = obj.GetComponent<AudioSource>();
+
+    //             for (int i = 0; i < audioPoolSize; i++)
+    //             {
+    //                 var go = Instantiate(audioSource, transform);
+    //                 audioqueue.Enqueue(go);
+    //             }
+    //             yield return null;
+    //         }
+    //     }
+    // }
 
     public void Initialize()
     {
@@ -45,9 +66,9 @@ public class AudioPoolSystem : MonoBehaviour
         obj.AddComponent<AudioSource>();
         audioSource = obj.GetComponent<AudioSource>();
 
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < audioPoolSize; i++)
         {
-            var go = Instantiate(audioSource,transform);
+            var go = Instantiate(audioSource, transform);
             audioqueue.Enqueue(go);
         }
     }
@@ -56,7 +77,7 @@ public class AudioPoolSystem : MonoBehaviour
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = menuVolume * masterVolume;
+        source.volume = volume * menuVolume * masterVolume;
         source.clip = clip;
         source.Play();
 
@@ -68,7 +89,7 @@ public class AudioPoolSystem : MonoBehaviour
         AudioSource source = audioqueue.Dequeue();
 
         source.spatialBlend = 1;
-        source.volume = volume;
+        source.volume = volume * SFXVolume * masterVolume;
         source.clip = clip;
         source.transform.position = position;
         source.Play();
