@@ -67,7 +67,7 @@ public class Weapon : MonoBehaviour
                         break;
                 }
 
-                AudioPoolSystem.Singleton.PlayAudio(gunDataSO.shootSFX, 1f);
+                AudioPoolSystem.Singleton.PlayShootAudio(gunDataSO.shootSFX, 1f);
                 CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
             }
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a45fdc07066ff46be0102d23529d5f, type: 3}
   m_Name: Greg
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 0}
+  CharacterPrefab: {fileID: 4972089703242021975, guid: 10f25bf92ef722547bc4dafc1e1c233d, type: 3}
   statsSprite: {fileID: 21300000, guid: d1cf11027a05fcc49a21c8335f65a125, type: 3}
   characterName: 
   moveSpeed3: 4

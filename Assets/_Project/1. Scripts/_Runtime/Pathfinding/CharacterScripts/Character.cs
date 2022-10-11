@@ -511,7 +511,7 @@ public class Character : MonoBehaviour
     public class wallSlideStats
     {
 
-        public bool ability = true;
+        public bool ability = false;
         public Vector2 wallJumpClimb = new Vector2(5, 9);
         public Vector2 wallJumpOff = new Vector2(5, 9);
         public Vector2 wallLeap = new Vector2(5, 9);
@@ -524,7 +524,7 @@ public class Character : MonoBehaviour
     public class jetPackStats
     {
 
-        public bool ability = true;
+        public bool ability = false;
         public bool isJetpacking = false;
         public float jetpackForce = 0.65f;
         public float jetpackGravityReduction = 0.65f;
@@ -550,7 +550,7 @@ public class Character : MonoBehaviour
     public class ladderClimbStats : movementEssentials
     {
 
-        public bool ability = true;
+        public bool ability = false;
         public bool canClimb = false;
         public bool isClimbing = false;
         public float ladderClimbingSpeed = 4.1f;
@@ -711,7 +711,7 @@ public class Character : MonoBehaviour
     public class ledgeGrabStats : movementEssentials
     {
 
-        public bool ability = true;
+        public bool ability = false;
         public float grabHeight = 0.2f;
         public float characterYPosition = -0.15f;
         public float ledgeClimbSpeed = 0.05f;
@@ -847,7 +847,7 @@ public class Character : MonoBehaviour
     public class portalStats
     {
 
-        public bool ability = true;
+        public bool ability = false;
         public GameObject usePortal;
         public bool canUsePortal = true;
         public float usePortalCooldown = 0.7f;

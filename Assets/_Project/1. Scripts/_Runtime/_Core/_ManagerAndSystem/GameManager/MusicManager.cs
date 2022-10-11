@@ -13,13 +13,14 @@ public class MusicManager : MonoBehaviour
         }
 
         Singleton = this;
+
+        source.volume = AudioPoolSystem.Singleton.musicVolume * AudioPoolSystem.Singleton.masterVolume;
     }
 
     public AudioClip mainMenuMusic;
     public AudioClip inGameMusic;
     public AudioClip gameOverMusic;
     public AudioSource source = new AudioSource();
-
 
     public void PlayMainMenuMusic()
     {
@@ -49,5 +50,5 @@ public class MusicManager : MonoBehaviour
     {
         source.Stop();
     }
-
+    
 }

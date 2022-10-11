@@ -27,28 +27,26 @@ public class HealthSystem : MonoBehaviour, IDamageable
     public virtual void Start()
     {
 
+
+        Setup();
+    }
+
+    public void Setup()
+    {
+        isDead = false;
+        SetMaxHealth();
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-
+            
         if (spriteRenderer)
             originialColor = spriteRenderer.color;
 
         Invoke("DelayStart", .2f);
-
         onDeathEvent.AddListener(delegate { OnDeath(); });
         onDamagedEvent.AddListener(delegate { OnDamaged(); });
-
-        SetupHealth();
     }
 
-    protected void SetupHealth()
-    {
-        Debug.Log("Setup health, is dead is " + isDead, this);
-        isDead = false;
-        SetMaxHealth();
-    }
     void DelayStart()
     {
         if (deathVFX && PoolSystem.Singleton)
@@ -89,13 +87,13 @@ public class HealthSystem : MonoBehaviour, IDamageable
     }
     #endregion
 
-    void OnDamaged()
+    private void OnDamaged()
     {
-        AudioPoolSystem.Singleton.PlayAudio(damagedSFX, .5f);
+        AudioPoolSystem.Singleton.PlayAudioSFX(damagedSFX, .5f);
 
     }
 
-    public void OnDeath()
+    private void OnDeath()
     {
         PoolSystem.Singleton.SpawnFromPool(deathVFX, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
@@ -103,7 +101,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
             AudioPoolSystem.Singleton.PlayAudioAtLocation(deathClipSFX, transform.position, 1f);
         SetHealth(0);
         UiManager.Singleton.UpdateHealth();
-        if(PlayerManager.Singleton)
+        if (PlayerManager.Singleton)
             PlayerManager.Singleton.isPlayerDead = isDead;
         isDead = true;
     }

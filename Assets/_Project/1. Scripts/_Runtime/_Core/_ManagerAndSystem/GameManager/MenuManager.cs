@@ -34,7 +34,7 @@ public class MenuManager : MonoBehaviour
     {
         if (audioPoolSystem && selectMenuClip)
         {
-            audioPoolSystem.PlayAudio(selectMenuClip, 1f);
+            audioPoolSystem.PlayAudioMenu(selectMenuClip, 1f);
         }
     }
 
@@ -42,7 +42,7 @@ public class MenuManager : MonoBehaviour
     {
         if (audioPoolSystem && exitSelectMenuClip)
         {
-            audioPoolSystem.PlayAudio(exitSelectMenuClip, 1f);
+            audioPoolSystem.PlayAudioMenu(exitSelectMenuClip, 1f);
         }
     }
 
@@ -50,7 +50,7 @@ public class MenuManager : MonoBehaviour
     {
         if (audioPoolSystem && clickMenuClip)
         {
-            audioPoolSystem.PlayAudio(clickMenuClip, 1f);
+            audioPoolSystem.PlayAudioMenu(clickMenuClip, 1f);
         }
     }
 

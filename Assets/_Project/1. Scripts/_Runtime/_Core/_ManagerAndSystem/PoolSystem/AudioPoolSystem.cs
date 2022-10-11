@@ -33,32 +33,6 @@ public class AudioPoolSystem : MonoBehaviour
 
     private AudioSource audioSource;
 
-    // private void Start()
-    // {
-    //     Initialize();
-    // }
-
-    // public IEnumerator InitializeAudioPool()
-    // {
-    //     for (int i = 0; i < audioPoolSize; i++)
-    //     {
-    //         while ()
-    //         {
-    //             audioqueue = new Queue<AudioSource>();
-    //             var obj = new GameObject("AudioSource");
-    //             obj.AddComponent<AudioSource>();
-    //             audioSource = obj.GetComponent<AudioSource>();
-
-    //             for (int i = 0; i < audioPoolSize; i++)
-    //             {
-    //                 var go = Instantiate(audioSource, transform);
-    //                 audioqueue.Enqueue(go);
-    //             }
-    //             yield return null;
-    //         }
-    //     }
-    // }
-
     public void Initialize()
     {
         audioqueue = new Queue<AudioSource>();
@@ -74,6 +48,39 @@ public class AudioPoolSystem : MonoBehaviour
     }
 
     public void PlayAudio(AudioClip clip, float volume = .1f)
+    {
+        AudioSource source = audioqueue.Dequeue();
+        source.spatialBlend = 0;
+        source.volume = volume * masterVolume;
+        source.clip = clip;
+        source.Play();
+
+        audioqueue.Enqueue(source);
+    }
+
+    public void PlayShootAudio(AudioClip clip, float volume = .1f)
+    {
+        AudioSource source = audioqueue.Dequeue();
+        source.spatialBlend = 0;
+        source.volume = volume * shootVolume * masterVolume;
+        source.clip = clip;
+        source.Play();
+
+        audioqueue.Enqueue(source);
+    }
+
+    public void PlayAudioSFX(AudioClip clip, float volume = .1f)
+    {
+        AudioSource source = audioqueue.Dequeue();
+        source.spatialBlend = 0;
+        source.volume = volume * SFXVolume * masterVolume;
+        source.clip = clip;
+        source.Play();
+
+        audioqueue.Enqueue(source);
+    }
+
+    public void PlayAudioMenu(AudioClip clip, float volume = .1f)
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
@@ -97,5 +104,10 @@ public class AudioPoolSystem : MonoBehaviour
         audioqueue.Enqueue(source);
     }
 
+    [NaughtyAttributes.Button("Apply volume")]
+    public void ApplyVolume()
+    {
+        MusicManager.Singleton.source.volume = musicVolume * masterVolume;
+    }
 }
 public enum SoundType { SFX, Music }

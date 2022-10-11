@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a45fdc07066ff46be0102d23529d5f, type: 3}
   m_Name: CaptainDook
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 0}
+  CharacterPrefab: {fileID: 8804855522363037125, guid: 45801074ddb3e93429119baa99156d8a, type: 3}
   statsSprite: {fileID: 21300000, guid: badb360670b8cc541ad736739539c1b3, type: 3}
-  characterName: 
+  characterName: CaptainDook
   moveSpeed3: 4
   maxJumpHeight: 2.5
   damageMultiplier: 1

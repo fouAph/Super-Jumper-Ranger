@@ -48,10 +48,11 @@ public class BulletProjectilePoolHelper : PoolHelper
         PoolSystem.Singleton.SpawnFromPool(hitVFXPrefab.gameObject, transform.position, transform.rotation);        //Spawn HitVFXPrefab
         if (other.collider.CompareTag("Enemy"))
         {
-            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+            EnemyHealth damageable = other.gameObject.GetComponent<EnemyHealth>();
             if (damageable != null)
             {
                 damageable.OnDamage(WeaponManager.Singleton.weaponInventoryHolder.GetComponentInChildren<Weapon>().curentDamage);
+                if (damageable.isDead) GameManager.Singleton.killCounter++;
             }
         }
 

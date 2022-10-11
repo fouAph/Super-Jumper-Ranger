@@ -9,12 +9,11 @@ public class EnemyHealth : HealthSystem
         base.Start();
         onDeathEvent.AddListener(delegate { OnDead(); });
     }
-    
+
 
     private void OnDisable()
     {
-     SetupHealth();
-        onDeathEvent.RemoveAllListeners();
+        Setup();
     }
 
     void OnDead()
@@ -22,6 +21,11 @@ public class EnemyHealth : HealthSystem
         if (GameManager.Singleton)
         {
             GameManager.Singleton.currentEnemyCount--;
+            if (GameManager.Singleton.currentEnemyCount < 0)
+            {
+                GameManager.Singleton.currentEnemyCount = 0;
+            }
+
         }
     }
 }

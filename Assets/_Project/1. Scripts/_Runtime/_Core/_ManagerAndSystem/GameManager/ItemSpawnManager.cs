@@ -42,7 +42,7 @@ public class ItemSpawnManager : MonoBehaviour
             if (pipeSpawnerPosition[i].busy == false)
             {
                 pipeSpawnerPosition[i].SpawnItem();
-                gameManager.currentBoxCount++;
+        gameManager.currentBoxCount++;
                 StartCoroutine(TriggerSpawn(i));
                 break;
             }

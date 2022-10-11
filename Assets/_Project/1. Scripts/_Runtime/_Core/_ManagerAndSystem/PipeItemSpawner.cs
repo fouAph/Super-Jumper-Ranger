@@ -24,7 +24,7 @@ public class PipeItemSpawner : MonoBehaviour
     IEnumerator PlaySpawnSFX()
     {
         yield return new WaitForSeconds(.5f);
-        AudioPoolSystem.Singleton.PlayAudio(spawnSfx, 0.5f);
+        AudioPoolSystem.Singleton.PlayAudioSFX(spawnSfx, 0.5f);
 
     }
 

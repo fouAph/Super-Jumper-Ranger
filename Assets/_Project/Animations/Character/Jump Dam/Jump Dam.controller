@@ -84,7 +84,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerController
+  m_Name: Jump Dam
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: speed
@@ -119,7 +119,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: JohnThicc_Idle
+  m_Name: JumpDam_Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -134,7 +134,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6ad4fbcd9d69a134896f0623163471cd, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0a8c0a2392d415d43a473e23a0d38831, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -175,7 +175,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: JohnThicc_Run
+  m_Name: JumpDam_Run
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -190,7 +190,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 084094df4d8245f49ae1f6aa43026492, type: 2}
+  m_Motion: {fileID: 7400000, guid: 3445db9bbbc35c847b786491f8c8ae23, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -203,7 +203,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: JohnThicc_Jump
+  m_Name: JumpDam_Jump
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -218,7 +218,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b6af26e60c7d53940a3754d186fac2b0, type: 2}
+  m_Motion: {fileID: 7400000, guid: d6aae902246470f4eaca5fe1c13c50cb, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

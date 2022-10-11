@@ -26,29 +26,30 @@ public class GameManager : MonoBehaviour
     public GameObject countdownGameobject;
     [SerializeField] CountDownHelper countDownHelper;
     public GameObject loadingScreen;
+    public GameOverScorePopup gameOverScorePopup;
     public GameObject gameOverScreen;
     [SerializeField] int currentSceneLevelIndex;
 
     [Header("Game State")]
+    public bool invicible;
     public GameState gameState = GameState.Menu;
     public CharacterDataSO currentCharacter;
+    public int playerScore;
+    public int killCounter;
 
-    ItemSpawnManager itemSpawnManager;
-    EnemySpawnerManager enemySpawnerManager;
 
     [BoxGroup("Game Settings")]
     public MapDataSO mapDataSO;
     [BoxGroup("Game Settings")]
     public int targetScore;
-    [BoxGroup("Game Settings")]
-    public int playerScore;
+
     [BoxGroup("Game Settings")]
     public float startCountdownTimer;
     float startCountdown;
 
     [BoxGroup("Enemy Spawn Settings")]
     public int maxEnemyCount = 3;
-    [HideInInspector]
+
     public int currentEnemyCount;
     [BoxGroup("Enemy Spawn Settings")]
     public float nextEnemySpawnTime = 0.5f;
@@ -56,13 +57,15 @@ public class GameManager : MonoBehaviour
 
     [BoxGroup("Box Spawn Settings")]
     public int maxBoxCount = 1;
-    [HideInInspector]
+
     public int currentBoxCount;
     [BoxGroup("Box Spawn Settings")]
     public float nextBoxSpawnTime = 1f;
     float boxWaitTimer;
 
     private UiManager uiManager;
+    ItemSpawnManager itemSpawnManager;
+    EnemySpawnerManager enemySpawnerManager;
 
     List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     public void LoadGame()
@@ -106,7 +109,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         countdownGameobject.SetActive(true);
         startCountdown = startCountdownTimer;
-        AudioPoolSystem.Singleton.PlayAudio(countDownHelper.countdownClip);
+        AudioPoolSystem.Singleton.PlayAudioMenu(countDownHelper.countdownClip);
         MusicManager.Singleton.PlayInGameMusic();
         while (startCountdown >= 0)
         {
@@ -144,7 +147,6 @@ public class GameManager : MonoBehaviour
 
 
         Gameloop();
-
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
             enemyWaitTimer -= Time.deltaTime;
@@ -154,6 +156,7 @@ public class GameManager : MonoBehaviour
                 SpawnEnemy();
             }
         }
+        Mathf.Clamp(currentBoxCount, 0, maxBoxCount);
 
         if (currentBoxCount < maxBoxCount && itemSpawnManager)
         {
@@ -171,6 +174,8 @@ public class GameManager : MonoBehaviour
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
         {
             gameOverScreen.SetActive(true);
+
+            gameOverScorePopup.SetGameOverPopup();
             gameState = GameState.GameOver;
             MusicManager.Singleton.PlayGameOverMusic();
         }
@@ -194,6 +199,19 @@ public class GameManager : MonoBehaviour
         enemySpawnerManager = EnemySpawnerManager.Singleton;
     }
 
+    #region Get Scene Name
+    public static string GetSceneNameFromBuildIndex(int index)
+    {
+        string scenePath = SceneUtility.GetScenePathByBuildIndex(index);
+        string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+
+        return sceneName;
+    }
+    public string GetSceneName()
+    {
+        return GetSceneNameFromBuildIndex(currentSceneLevelIndex);
+    }
+    #endregion
     public void UpdateScoreCount(int scoreToAdd)
     {
         playerScore += scoreToAdd;

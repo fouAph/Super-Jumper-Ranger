@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/_Project/3. Scenes/Agus/UsedScene/MainMenu.unity
     guid: 0a2b8c6c03ffed04793b00d39ae4597f
   - enabled: 1
-    path: Assets/_Project/3. Scenes/Agus/UsedScene/new level 1.unity
+    path: Assets/_Project/3. Scenes/Agus/UsedScene/Level 1.unity
     guid: 396c755c7cc40fd468df70bea2310b39
   m_configObjects: {}

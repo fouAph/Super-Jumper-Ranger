@@ -26,7 +26,7 @@ public class WeaponPickupRandom : MonoBehaviour
         {
             WeaponManager.Singleton.PickupGun(this);
             PoolSystem.Singleton.SpawnFromPool(pikcupVFX, transform.position, Quaternion.identity);
-            AudioPoolSystem.Singleton.PlayAudio(pickupSfx, .5f);
+            AudioPoolSystem.Singleton.PlayAudioSFX(pickupSfx, .5f);
 
             if (GameManager.Singleton && scoreAdder)
             {

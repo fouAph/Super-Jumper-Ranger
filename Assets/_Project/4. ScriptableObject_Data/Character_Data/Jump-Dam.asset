@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a45fdc07066ff46be0102d23529d5f, type: 3}
   m_Name: Jump-Dam
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 0}
+  CharacterPrefab: {fileID: 1268472599362825721, guid: 2144a13fbe3a5824da4c5b1fac2188d8, type: 3}
   statsSprite: {fileID: 21300000, guid: 7ea034834b25fd24da88691d700fcd25, type: 3}
   characterName: 
   moveSpeed3: 4

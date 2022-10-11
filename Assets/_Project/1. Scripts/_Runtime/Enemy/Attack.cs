@@ -31,7 +31,7 @@ public class Attack : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (canDamagePlayer && !PlayerManager.Singleton.invicible)
+            if (canDamagePlayer && !GameManager.Singleton.invicible)
             {
                 IDamageable damageable = other.collider.GetComponent<IDamageable>();
                 if (damageable != null)
@@ -47,7 +47,7 @@ public class Attack : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (canDamagePlayer && !PlayerManager.Singleton.invicible)
+            if (canDamagePlayer && !GameManager.Singleton.invicible)
             {
                 IDamageable damageable = other.collider.GetComponent<IDamageable>();
                 if (damageable != null)

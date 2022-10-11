@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a45fdc07066ff46be0102d23529d5f, type: 3}
   m_Name: PolkaBoy
   m_EditorClassIdentifier: 
-  CharacterPrefab: {fileID: 0}
-  statsSprite: {fileID: 0}
+  CharacterPrefab: {fileID: 4547778974268273950, guid: 7979a0aa4f5692747b9f9cca63f2118f, type: 3}
+  statsSprite: {fileID: 21300000, guid: d573e8ce684a1ab48a518946f42ca210, type: 3}
   characterName: 
   moveSpeed3: 4
   maxJumpHeight: 2.5

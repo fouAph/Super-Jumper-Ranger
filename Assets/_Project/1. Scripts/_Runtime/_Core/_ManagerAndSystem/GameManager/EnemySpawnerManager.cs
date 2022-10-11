@@ -43,6 +43,7 @@ public class EnemySpawnerManager : MonoBehaviour
             if (pipeSpawnerPosition[i].busy == false)
             {
                 pipeSpawnerPosition[i].SpawnItem();
+
                 GameManager.Singleton.currentEnemyCount++;
                 StartCoroutine(TriggerSpawn(i));
                 break;
@@ -57,6 +58,5 @@ public class EnemySpawnerManager : MonoBehaviour
         int randomEnemyIndex = Random.Range(0, enemyGameObjects.Count);
         var go = PoolSystem.Singleton.SpawnFromPool(enemyGameObjects[randomEnemyIndex].gameObject, pipeSpawnerPosition[pos].transform.position, Quaternion.identity);
         go.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-
     }
 }

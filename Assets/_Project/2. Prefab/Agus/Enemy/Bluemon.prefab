@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 3667323411144858459}
   - component: {fileID: 6425862320048163704}
   - component: {fileID: 850763920}
+  - component: {fileID: 7013671554465738913}
   m_Layer: 7
   m_Name: Bluemon
   m_TagString: Enemy
@@ -313,7 +314,7 @@ MonoBehaviour:
   followMainTarget: 1
   followDistance: 0.5
   debugBool: 0
-  drawPath: 1
+  drawPath: 0
   drawColor: {r: 1, g: 0, b: 0, a: 1}
   endDrawComplete: 1
   repathOnFail: 1
@@ -359,3 +360,18 @@ MonoBehaviour:
   canDamagePlayer: 0
   attackCooldown: 2
   damage: 1
+--- !u!114 &7013671554465738913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3667323411144858457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2989d7c6be895ba4aadea35c55e872ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useDeactive: 0
+  deactiveAfter: 0.5
+  healthSystem: {fileID: 6425862320048163704}
