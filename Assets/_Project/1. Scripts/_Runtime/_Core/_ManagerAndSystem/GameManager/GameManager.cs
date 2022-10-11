@@ -81,14 +81,24 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        LoadGame();
-        //     loadingScreen.SetActive(true);
-        //     gameOverScreen.SetActive(false);
-        //     sceneLoading.Add(SceneManager.UnloadSceneAsync(currentSceneLevelIndex));
-        //     sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
+        sceneLoading.Clear();
+        loadingScreen.SetActive(true);
+        gameOverScreen.SetActive(false);
+        ResetCurrentGameProgress();
+        countDownHelper.SetSprite(countDownHelper._3);
+        MusicManager.Singleton.StopMusic();
+        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentSceneLevelIndex));
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
+        StartCoroutine(GetSceneLoadingProgress());
+        StartCoroutine(StartGameCountdown());
+    }
 
-        //     StartCoroutine(GetSceneLoadingProgress());
-        //     StartCoroutine(StartGameCountdown());
+    private void ResetCurrentGameProgress()
+    {
+        currentBoxCount = 0;
+        currentEnemyCount = 0;
+        killCounter = 0;
+        playerScore = 0;
     }
 
     IEnumerator GetSceneLoadingProgress()
@@ -109,7 +119,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         countdownGameobject.SetActive(true);
         startCountdown = startCountdownTimer;
-        AudioPoolSystem.Singleton.PlayAudioMenu(countDownHelper.countdownClip);
+        AudioPoolSystem.Singleton.PlayShootAudio(countDownHelper.countdownClip);
         MusicManager.Singleton.PlayInGameMusic();
         while (startCountdown >= 0)
         {
@@ -119,7 +129,11 @@ public class GameManager : MonoBehaviour
             else if (startCountdown <= 1 && startCountdown >= 0)
                 countDownHelper.SetSprite(countDownHelper._1);
             else if (startCountdown <= 0)
+            {
                 countDownHelper.SetSprite(countDownHelper._go);
+                PlayerManager.Singleton.EnablePlayerController();
+            }
+
 
             yield return null;
         }
@@ -140,7 +154,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene(2);
+            RestartGame();
         }
 
         if (gameState == GameState.GameOver || gameState == GameState.Menu) return;
@@ -169,6 +183,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region  InGame Methods
     void Gameloop()
     {
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
@@ -191,12 +206,26 @@ public class GameManager : MonoBehaviour
     {
         enemySpawnerManager.SpawnEnemy();
     }
+    #endregion
 
     void SetupReference()
     {
         uiManager = UiManager.Singleton;
         itemSpawnManager = ItemSpawnManager.Singleton;
         enemySpawnerManager = EnemySpawnerManager.Singleton;
+    }
+
+    public void UpdateScoreCount(int scoreToAdd)
+    {
+        playerScore += scoreToAdd;
+        if (uiManager)
+            uiManager.UpdateScoreText(playerScore);
+    }
+
+    public void OnPlayGameButton()
+    {
+        LoadGame();
+
     }
 
     #region Get Scene Name
@@ -212,17 +241,20 @@ public class GameManager : MonoBehaviour
         return GetSceneNameFromBuildIndex(currentSceneLevelIndex);
     }
     #endregion
-    public void UpdateScoreCount(int scoreToAdd)
+
+    public void MainMenu_OnClikButton()
     {
-        playerScore += scoreToAdd;
-        if (uiManager)
-            uiManager.UpdateScoreText(playerScore);
+        MusicManager.Singleton.StopMusic();
+        sceneLoading.Clear();
+        loadingScreen.SetActive(true);
+        sceneLoading.Add(SceneManager.LoadSceneAsync(0));
+
+        StartCoroutine(GetSceneLoadingProgress());
     }
 
-    public void OnPlayGameButton()
+    public void Exit_OnClickButton()
     {
-        LoadGame();
-
+        Application.Quit();
     }
 
 }

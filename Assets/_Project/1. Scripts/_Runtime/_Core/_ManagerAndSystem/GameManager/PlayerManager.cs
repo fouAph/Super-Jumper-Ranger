@@ -21,6 +21,7 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject PlayerObject;
     public HealthSystem playerHealth;
+    public Character c;
     public bool invicible;
     public bool isPlayerDead;
     private void Start()
@@ -30,11 +31,25 @@ public class PlayerManager : MonoBehaviour
 
     void Setup()
     {
-        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity,transform);
+        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity, transform);
 
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         playerHealth = PlayerObject.GetComponent<HealthSystem>();
+        c = PlayerObject.GetComponent<Character>();
+
+        DisablePlayerController();
     }
+
+    public void DisablePlayerController()
+    {
+        c.playerControlled = false;
+    }
+
+     public void EnablePlayerController()
+    {
+        c.playerControlled = true;
+    }
+
 
 
 

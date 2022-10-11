@@ -77,7 +77,6 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-        // if(GameManager.Singleton.gameState != GameState.InGame) return;
         requestUpdatePathTimer -= Time.deltaTime;
         if (_pathingAgent && _pathingAgent.pathfindingTarget)
         {
