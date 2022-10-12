@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
+    [Header("Save")]
+    public string saveName = "save";
+    public SaveData saveData;
     private void Awake()
     {
         if (Singleton != null)
@@ -25,6 +28,7 @@ public class GameManager : MonoBehaviour
         AudioPoolSystem.Singleton.Initialize();
     }
 
+    [Header("References")]
     public GameObject countdownGameobject;
     [SerializeField] CountDownHelper countDownHelper;
     public GameObject loadingScreen;
@@ -78,6 +82,10 @@ public class GameManager : MonoBehaviour
         boxWaitTimer = nextBoxSpawnTime;
         enemyWaitTimer = nextEnemySpawnTime;
         MusicManager.Singleton.PlayMainMenuMusic();
+
+        //load Game
+        var save = SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/" + saveName + ".save");
+        saveData = save;
     }
 
     private void Update()
@@ -186,7 +194,7 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
         }
-        
+
         yield return new WaitForSeconds(.01f);
         gameOverScreen.SetActive(false);
         yield return new WaitForSeconds(1f);
@@ -227,12 +235,22 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
         {
+            if (boxCollected > SaveData.Current.levels[currentSceneLevelIndex - 2].highScore)
+            {
+                SaveHighScore();
+            }
             gameOverScreen.SetActive(true);
             gameOverScorePopup.SetGameOverPopup();
             gameState = GameState.GameOver;
             MusicManager.Singleton.PlayGameOverMusic();
         }
 
+    }
+
+    private void SaveHighScore()
+    {
+        SaveData.Current.levels[currentSceneLevelIndex - 2].highScore = boxCollected;
+        SerializationManager.Save(saveName, SaveData.Current);
     }
 
     void SpawnBox() => itemSpawnManager.SpawnBoxItem();
