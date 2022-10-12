@@ -62,7 +62,7 @@ public class AudioPoolSystem : MonoBehaviour
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = volume * shootVolume * masterVolume;
+        source.volume = (volume * shootVolume * masterVolume) *.05f;
         source.clip = clip;
         source.Play();
 
@@ -73,7 +73,7 @@ public class AudioPoolSystem : MonoBehaviour
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = volume * SFXVolume * masterVolume;
+        source.volume = (volume * SFXVolume * masterVolume) *.05f;
         source.clip = clip;
         source.Play();
 
@@ -84,7 +84,7 @@ public class AudioPoolSystem : MonoBehaviour
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = volume * menuVolume * masterVolume;
+        source.volume = volume * menuVolume * masterVolume * 0.01f;
         source.clip = clip;
         source.Play();
 
@@ -107,7 +107,7 @@ public class AudioPoolSystem : MonoBehaviour
     [NaughtyAttributes.Button("Apply volume")]
     public void ApplyVolume()
     {
-        MusicManager.Singleton.source.volume = musicVolume * masterVolume;
+        MusicManager.Singleton.source.volume = (musicVolume * masterVolume) * .05f;
     }
 }
 public enum SoundType { SFX, Music }

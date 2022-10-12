@@ -14,7 +14,7 @@ public class MusicManager : MonoBehaviour
 
         Singleton = this;
 
-        source.volume = AudioPoolSystem.Singleton.musicVolume * AudioPoolSystem.Singleton.masterVolume;
+        source.volume = (AudioPoolSystem.Singleton.musicVolume * AudioPoolSystem.Singleton.masterVolume) *.05f;
     }
 
     public AudioClip mainMenuMusic;

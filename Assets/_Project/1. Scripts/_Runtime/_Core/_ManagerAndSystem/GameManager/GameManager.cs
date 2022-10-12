@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
         SceneManager.LoadSceneAsync((int)SceneIndexes.TITLE_SCREEN, LoadSceneMode.Additive);
         loadingScreen.SetActive(false);
+        pauseMenuScreen.SetActive(false);
+        gameOverScreen.SetActive(false);
         AudioPoolSystem.Singleton.Initialize();
     }
 
@@ -27,6 +29,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] CountDownHelper countDownHelper;
     public GameObject loadingScreen;
     public GameOverScorePopup gameOverScorePopup;
+    public GameObject pauseMenuScreen;
     public GameObject gameOverScreen;
     [SerializeField] int currentSceneLevelIndex;
 
@@ -34,7 +37,7 @@ public class GameManager : MonoBehaviour
     public bool invicible;
     public GameState gameState = GameState.Menu;
     public CharacterDataSO currentCharacter;
-    public int playerScore;
+    public int boxCollected;
     public int killCounter;
 
 
@@ -68,10 +71,82 @@ public class GameManager : MonoBehaviour
     EnemySpawnerManager enemySpawnerManager;
 
     List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
+    bool isPause;
+
+    private void Start()
+    {
+        boxWaitTimer = nextBoxSpawnTime;
+        enemyWaitTimer = nextEnemySpawnTime;
+        MusicManager.Singleton.PlayMainMenuMusic();
+    }
+
+    private void Update()
+    {
+        // if (Input.GetKeyDown(KeyCode.R))
+        // {
+        //     RestartGame();
+        // }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+
+            isPause = !isPause;
+            if (isPause)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
+        if (gameState != GameState.InGame) return;
+
+
+        Gameloop();
+        if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
+        {
+            enemyWaitTimer -= Time.deltaTime;
+            if (enemyWaitTimer <= 0)
+            {
+                enemyWaitTimer = nextEnemySpawnTime;
+                SpawnEnemy();
+            }
+        }
+        Mathf.Clamp(currentBoxCount, 0, maxBoxCount);
+
+        if (currentBoxCount < maxBoxCount && itemSpawnManager)
+        {
+            boxWaitTimer -= Time.deltaTime;
+            if (boxWaitTimer <= 0)
+            {
+                boxWaitTimer = nextBoxSpawnTime;
+                SpawnBox();
+            }
+        }
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        gameState = GameState.InGame;
+        PlayerManager.Singleton.EnablePlayerController();
+        pauseMenuScreen.SetActive(false);
+
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        gameState = GameState.Menu;
+        PlayerManager.Singleton.DisablePlayerController();
+        pauseMenuScreen.SetActive(true);
+    }
+
     public void LoadGame()
     {
-        loadingScreen.SetActive(true);
         MusicManager.Singleton.StopMusic();
+        loadingScreen.SetActive(true);
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
 
@@ -83,14 +158,15 @@ public class GameManager : MonoBehaviour
     {
         sceneLoading.Clear();
         loadingScreen.SetActive(true);
-        gameOverScreen.SetActive(false);
         ResetCurrentGameProgress();
+        ResumeGame();
         countDownHelper.SetSprite(countDownHelper._3);
         MusicManager.Singleton.StopMusic();
         sceneLoading.Add(SceneManager.UnloadSceneAsync(currentSceneLevelIndex));
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
+
     }
 
     private void ResetCurrentGameProgress()
@@ -98,7 +174,7 @@ public class GameManager : MonoBehaviour
         currentBoxCount = 0;
         currentEnemyCount = 0;
         killCounter = 0;
-        playerScore = 0;
+        boxCollected = 0;
     }
 
     IEnumerator GetSceneLoadingProgress()
@@ -110,6 +186,9 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
         }
+        
+        yield return new WaitForSeconds(.01f);
+        gameOverScreen.SetActive(false);
         yield return new WaitForSeconds(1f);
         loadingScreen.SetActive(false);
     }
@@ -143,53 +222,12 @@ public class GameManager : MonoBehaviour
         gameState = GameState.InGame;
     }
 
-    private void Start()
-    {
-        boxWaitTimer = nextBoxSpawnTime;
-        enemyWaitTimer = nextEnemySpawnTime;
-        MusicManager.Singleton.PlayMainMenuMusic();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RestartGame();
-        }
-
-        if (gameState == GameState.GameOver || gameState == GameState.Menu) return;
-
-
-        Gameloop();
-        if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
-        {
-            enemyWaitTimer -= Time.deltaTime;
-            if (enemyWaitTimer <= 0)
-            {
-                enemyWaitTimer = nextEnemySpawnTime;
-                SpawnEnemy();
-            }
-        }
-        Mathf.Clamp(currentBoxCount, 0, maxBoxCount);
-
-        if (currentBoxCount < maxBoxCount && itemSpawnManager)
-        {
-            boxWaitTimer -= Time.deltaTime;
-            if (boxWaitTimer <= 0)
-            {
-                boxWaitTimer = nextBoxSpawnTime;
-                SpawnBox();
-            }
-        }
-    }
-
     #region  InGame Methods
     void Gameloop()
     {
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
         {
             gameOverScreen.SetActive(true);
-
             gameOverScorePopup.SetGameOverPopup();
             gameState = GameState.GameOver;
             MusicManager.Singleton.PlayGameOverMusic();
@@ -197,15 +235,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void SpawnBox()
-    {
-        itemSpawnManager.SpawnBoxItem();
-    }
+    void SpawnBox() => itemSpawnManager.SpawnBoxItem();
 
-    void SpawnEnemy()
-    {
-        enemySpawnerManager.SpawnEnemy();
-    }
+    void SpawnEnemy() => enemySpawnerManager.SpawnEnemy();
     #endregion
 
     void SetupReference()
@@ -217,15 +249,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScoreCount(int scoreToAdd)
     {
-        playerScore += scoreToAdd;
+        boxCollected += scoreToAdd;
         if (uiManager)
-            uiManager.UpdateScoreText(playerScore);
-    }
-
-    public void OnPlayGameButton()
-    {
-        LoadGame();
-
+            uiManager.UpdateScoreText(boxCollected);
     }
 
     #region Get Scene Name
@@ -241,6 +267,13 @@ public class GameManager : MonoBehaviour
         return GetSceneNameFromBuildIndex(currentSceneLevelIndex);
     }
     #endregion
+
+    public void OnPlayGameButton()
+    {
+        MusicManager.Singleton.StopMusic();
+        LoadGame();
+
+    }
 
     public void MainMenu_OnClikButton()
     {

@@ -13,8 +13,8 @@ public class GameOverScorePopup : MonoBehaviour
     {
         levelName_TMP.text = GameManager.Singleton.GetSceneName();
         totalKill_TMP.text = $"Total Kill: {GameManager.Singleton.killCounter.ToString()}";
-        boxCollected_TMP.text = $"Box Collected: {GameManager.Singleton.playerScore.ToString()}";
-        totalScore_TMP.text = $"Total Score: {Mathf.RoundToInt(GameManager.Singleton.killCounter / 3 + GameManager.Singleton.playerScore).ToString()}";
+        boxCollected_TMP.text = $"Box Collected: {GameManager.Singleton.boxCollected.ToString()}";
+        totalScore_TMP.text = $"Total Score: {Mathf.RoundToInt(GameManager.Singleton.killCounter / 3 + GameManager.Singleton.boxCollected).ToString()}";
 
 
     }
