@@ -28,6 +28,7 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         audioPoolSystem = AudioPoolSystem.Singleton;
+        OpenMenu("main");
     }
 
     public void OnSelectMenu()
@@ -59,6 +60,23 @@ public class MenuManager : MonoBehaviour
         for (int i = 0; i < menus.Length; i++)
         {
             if (menus[i].menuName == menuName)
+            {
+                previousMenu = currentMenu;
+                menus[i].Open();
+                currentMenu = menus[i].menuName;
+            }
+            else
+            {
+                menus[i].Close();
+            }
+        }
+    }
+
+    public void OpenMenu(Menu menu)
+    {
+        for (int i = 0; i < menus.Length; i++)
+        {
+            if (menus[i].menuName == menu.menuName)
             {
                 previousMenu = currentMenu;
                 menus[i].Open();

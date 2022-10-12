@@ -35,7 +35,13 @@ public class GameManager : MonoBehaviour
     public GameOverScorePopup gameOverScorePopup;
     public GameObject pauseMenuScreen;
     public GameObject gameOverScreen;
-    [SerializeField] int currentSceneLevelIndex;
+    public int currentMapBuildLevelIndex;
+
+    [BoxGroup("Game Settings")]
+    public MapDataSO currentMap;
+    [BoxGroup("Game Settings")]
+    public int targetScore;
+
 
     [Header("Game State")]
     public bool invicible;
@@ -45,10 +51,6 @@ public class GameManager : MonoBehaviour
     public int killCounter;
 
 
-    [BoxGroup("Game Settings")]
-    public MapDataSO mapDataSO;
-    [BoxGroup("Game Settings")]
-    public int targetScore;
 
     [BoxGroup("Game Settings")]
     public float startCountdownTimer;
@@ -90,12 +92,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.R))
-        // {
-        //     RestartGame();
-        // }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+      
+        if (gameState != GameState.InGame) return;
+
+  if (Input.GetKeyDown(KeyCode.Escape))
         {
 
             isPause = !isPause;
@@ -108,9 +109,6 @@ public class GameManager : MonoBehaviour
                 ResumeGame();
             }
         }
-        if (gameState != GameState.InGame) return;
-
-
         Gameloop();
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
@@ -156,7 +154,7 @@ public class GameManager : MonoBehaviour
         MusicManager.Singleton.StopMusic();
         loadingScreen.SetActive(true);
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));
-        sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));
 
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
@@ -170,8 +168,8 @@ public class GameManager : MonoBehaviour
         ResumeGame();
         countDownHelper.SetSprite(countDownHelper._3);
         MusicManager.Singleton.StopMusic();
-        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentSceneLevelIndex));
-        sceneLoading.Add(SceneManager.LoadSceneAsync(currentSceneLevelIndex, LoadSceneMode.Additive));
+        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
 
@@ -235,10 +233,14 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
         {
-            if (boxCollected > SaveData.Current.levels[currentSceneLevelIndex - 2].highScore)
+            if (boxCollected > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
             {
                 SaveHighScore();
+                gameOverScorePopup.highScorePopupObject.SetActive(true);
             }
+            else
+                gameOverScorePopup.highScorePopupObject.SetActive(false);
+
             gameOverScreen.SetActive(true);
             gameOverScorePopup.SetGameOverPopup();
             gameState = GameState.GameOver;
@@ -249,7 +251,7 @@ public class GameManager : MonoBehaviour
 
     private void SaveHighScore()
     {
-        SaveData.Current.levels[currentSceneLevelIndex - 2].highScore = boxCollected;
+        SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore = boxCollected;
         SerializationManager.Save(saveName, SaveData.Current);
     }
 
@@ -282,7 +284,7 @@ public class GameManager : MonoBehaviour
     }
     public string GetSceneName()
     {
-        return GetSceneNameFromBuildIndex(currentSceneLevelIndex);
+        return GetSceneNameFromBuildIndex(currentMapBuildLevelIndex);
     }
     #endregion
 
@@ -308,6 +310,16 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    #region Map Methods
+    public void SetMapSettings()
+    {
+        targetScore = currentMap.scoreTarget;
+        maxEnemyCount = currentMap.maxEnemyCount;
+        maxBoxCount = currentMap.maxBoxCount;
+        currentMapBuildLevelIndex = currentMap.indexInBuildIndex;
+
+    }
+    #endregion
 }
 
 public enum SceneIndexes { MANAGER = 0, TITLE_SCREEN = 1, MAP_1 = 2, MAP_2 = 3, MAP_3 = 3, MAP_4 = 4 }

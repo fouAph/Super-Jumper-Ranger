@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 4159056502313534271}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.890374, y: -7.0489445, z: 0}
-  m_LocalScale: {x: 7.167739, y: 5.375805, z: 0.5973117}
+  m_LocalScale: {x: 7.1129775, y: 5.3347344, z: 0.5927482}
   m_Children:
   - {fileID: 4159056500896978706}
   m_Father: {fileID: 0}
@@ -129,5 +129,4 @@ MonoBehaviour:
   gunDataSO: {fileID: 11400000, guid: c8f260998ced4d142ad54aa3387f5089, type: 2}
   bulletSpawnPoint: {fileID: 4159056500896978706}
   bulletPrefab: {fileID: 544899722065147082, guid: 0f32c72cfd58623478ce185e52efe1d4, type: 3}
-  curentDamage: 13
   debugSetGunPosition: 0

@@ -45,8 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreTMP: {fileID: 0}
   ammoCountTMP: {fileID: 0}
+  targetScore: {fileID: 0}
   healthSpriteHolder: {fileID: 0}
-  healthPrefab: {fileID: 8129296517224866196, guid: 3e949e648aa4641488ffed0bcb475b30, type: 3}
+  healthPrefab: {fileID: 8129296517224866197, guid: 3e949e648aa4641488ffed0bcb475b30, type: 3}
 --- !u!1 &880415353
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +64,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &880415354
 Transform:
   m_ObjectHideFlags: 0
@@ -142,7 +143,53 @@ MonoBehaviour:
   characterDataSO: {fileID: 0}
   PlayerObject: {fileID: 0}
   playerHealth: {fileID: 0}
+  c: {fileID: 0}
   invicible: 0
+  isPlayerDead: 0
+--- !u!1 &2075026356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2075026358}
+  - component: {fileID: 2075026357}
+  m_Layer: 0
+  m_Name: PoolSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2075026358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075026356}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 161.24242, y: 139.51587, z: -0.66356313}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3183152419368673850}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2075026357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075026356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d003a38b181d595409fa101c31fa79bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolItems: []
 --- !u!1 &3183152419306928042
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +274,7 @@ Transform:
   - {fileID: 3183152420755339173}
   - {fileID: 560509458}
   - {fileID: 1244370281}
+  - {fileID: 2075026358}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

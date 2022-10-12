@@ -19,6 +19,7 @@ public class UiManager : MonoBehaviour
 
     public TMP_Text scoreTMP;
     public TMP_Text ammoCountTMP;
+    public TMP_Text targetScore;
     public Transform healthSpriteHolder;
     public GameObject healthPrefab;
     private PoolSystem poolSystem;
@@ -26,6 +27,7 @@ public class UiManager : MonoBehaviour
     {
         poolSystem = PoolSystem.Singleton;
         Invoke("InitHealth", .5f);
+        targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
 
     }
 
@@ -42,7 +44,7 @@ public class UiManager : MonoBehaviour
     #region Health Methode
     private void InitHealth()
     {
-        if(poolSystem)
+        if (poolSystem)
         {
             PoolSystem.Singleton.AddObjectToPooledObject(healthPrefab, 7);
             for (int i = healthSpriteHolder.childCount; i < PlayerManager.Singleton.playerHealth.maxHealth; i++)

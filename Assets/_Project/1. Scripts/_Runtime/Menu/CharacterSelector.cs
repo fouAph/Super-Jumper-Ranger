@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterSelector : MonoBehaviour
 {
-    public CharacterSelectorHelper currentCharacter;
+    public CharacterSelectorHelper currentSelectedCharacter;
     public CharacterDataSO currentCharDataSO;
     public Image charStatsImage;
     CharacterSelectorHelper prevChar;
@@ -15,20 +15,20 @@ public class CharacterSelector : MonoBehaviour
     {
         menuManager = MenuManager.Singleton;
         gameManager = GameManager.Singleton;
-        OnSelectCharacter(currentCharacter);
+        OnSelectCharacter(currentSelectedCharacter);
     }
 
     public void OnSelectCharacter(CharacterSelectorHelper selectedChar)
     {
-        prevChar = currentCharacter;
+        prevChar = currentSelectedCharacter;
 
-        currentCharacter = selectedChar;
+        currentSelectedCharacter = selectedChar;
         currentCharDataSO = selectedChar.characterDataSO;
         charStatsImage.sprite = currentCharDataSO.statsSprite;
         selectedChar.selectedArrow.SetActive(true);
         gameManager.currentCharacter = currentCharDataSO;
         menuManager.OnClickMenu();
-        if (prevChar != currentCharacter)
+        if (prevChar != currentSelectedCharacter)
         {
             prevChar.selectedArrow.SetActive(false);
         }

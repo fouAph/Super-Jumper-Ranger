@@ -191,7 +191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -3, y: -264.80212}
+  m_AnchoredPosition: {x: -3, y: -299}
   m_SizeDelta: {x: 177.0961, y: 46.6042}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6008204853240268743
@@ -412,7 +412,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 287.025, y: -101.091736}
+  m_AnchoredPosition: {x: 287.025, y: -98.352}
   m_SizeDelta: {x: 398.05, y: 35.4368}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6008204853419032702
@@ -570,7 +570,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: -1.6
+  m_Spacing: 4.88
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 6008204854084164098}
   - component: {fileID: 6008204854084164099}
   m_Layer: 5
-  m_Name: TotalScoreText
+  m_Name: HighScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -746,7 +746,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.00003, y: -308}
+  m_AnchoredPosition: {x: 400.00003, y: -342.19788}
   m_SizeDelta: {x: 398.05, y: 35.4368}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6008204854084164098
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Total Score: 0'
+  m_text: 'High Score: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -880,7 +880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 287.025, y: -59.405067}
+  m_AnchoredPosition: {x: 287.025, y: -58.0352}
   m_SizeDelta: {x: 398.05, y: 35.4368}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6008204854186074647
@@ -1129,7 +1129,9 @@ MonoBehaviour:
   levelName_TMP: {fileID: 6008204853741562042}
   totalKill_TMP: {fileID: 6008204854186074632}
   boxCollected_TMP: {fileID: 6008204853419032703}
-  totalScore_TMP: {fileID: 6008204854084164099}
+  totalScore_TMP: {fileID: 4193312627316952664}
+  highScore_TMP: {fileID: 6008204854084164099}
+  highScorePopupObject: {fileID: 6008204853240268794}
 --- !u!1 &7767349784659684905
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,7 +1295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3582505966052685277
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1310,7 +1312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 199.025, y: -119.2288}
+  m_AnchoredPosition: {x: 287.025, y: -138.6688}
   m_SizeDelta: {x: 398.05, y: 35.4368}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2549878286637000022
