@@ -152,6 +152,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
+        sceneLoading.Clear();
         MusicManager.Singleton.StopMusic();
         loadingScreen.SetActive(true);
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));
@@ -159,6 +160,27 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
+    }
+
+    public void LoadNextLevel()
+    {
+        sceneLoading.Clear();
+        MusicManager.Singleton.StopMusic();
+        loadingScreen.SetActive(true);
+        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex + 1, LoadSceneMode.Additive));
+        ResetCurrentGameProgress();
+        currentMapBuildLevelIndex = currentMapBuildLevelIndex + 1;
+        currentMap = mapDataSO[currentMapBuildLevelIndex -2];
+        SetMapSettings();
+        StartCoroutine(GetSceneLoadingProgress());
+        StartCoroutine(StartGameCountdown());
+    }
+
+
+    public void NextLevel_OnClikButton()
+    {
+        LoadNextLevel();
     }
 
     public void RestartGame()
@@ -202,6 +224,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartGameCountdown()
     {
+        countDownHelper.SetSprite(countDownHelper._3);
         yield return new WaitForSeconds(1);
         countdownGameobject.SetActive(true);
         startCountdown = startCountdownTimer;
@@ -232,29 +255,44 @@ public class GameManager : MonoBehaviour
     #region  InGame Methods
     void Gameloop()
     {
-        if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
+        // if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
+        if (gameState == GameState.InGame)
         {
             var totalscore = killCounter / 3 + boxCollected;
-            if (totalscore > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
+            if (PlayerManager.Singleton.playerHealth.isDead || totalscore >= targetScore)
             {
-                SaveHighScore();
-                gameOverScorePopup.highScorePopupObject.SetActive(true);
-            }
-            else
-                gameOverScorePopup.highScorePopupObject.SetActive(false);
+                if (PlayerManager.Singleton.playerHealth.isDead)
+                {
+                    gameOverScorePopup.SetTitleToGameOver();
+                }
 
-            if (totalscore >= targetScore)
-            {
-                mapDataSO[currentMapBuildLevelIndex - 1].unlocked = true;
-                gameOverScorePopup.levelUnlockedNotifactionText.SetActive(true);
-            }
-            else
-                gameOverScorePopup.levelUnlockedNotifactionText.SetActive(false);
+                else if (totalscore >= targetScore)
+                {
+                    print($"totalscore {totalscore}+ targetScore is { targetScore}");
+                    gameOverScorePopup.SetTitleToGameWin();
+                    mapDataSO[currentMapBuildLevelIndex - 1].unlocked = true;
+                    gameOverScorePopup.levelUnlockedNotifactionText.SetActive(true);
+                }
 
-            gameOverScreen.SetActive(true);
-            gameOverScorePopup.SetGameOverPopup();
-            gameState = GameState.GameOver;
-            MusicManager.Singleton.PlayGameOverMusic();
+                else
+                    gameOverScorePopup.levelUnlockedNotifactionText.SetActive(false);
+
+                if (totalscore > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
+                {
+                    SaveHighScore();
+                    print(totalscore);
+                    gameOverScorePopup.highScorePopupObject.SetActive(true);
+                }
+                else
+                    gameOverScorePopup.highScorePopupObject.SetActive(false);
+
+                gameOverScreen.SetActive(true);
+                gameOverScorePopup.SetGameOverPopup();
+                gameState = GameState.GameOver;
+                MusicManager.Singleton.PlayGameOverMusic();
+            }
+
+
 
 
         }
