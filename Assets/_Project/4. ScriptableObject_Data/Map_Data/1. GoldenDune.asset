@@ -16,6 +16,6 @@ MonoBehaviour:
   unlocked: 1
   maxEnemyCount: 3
   maxBoxCount: 1
-  scoreTarget: 25
+  scoreTarget: 15
   Enemies: []
   weaponPickupRandoms: []

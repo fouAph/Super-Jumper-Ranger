@@ -28,7 +28,7 @@ public class UiManager : MonoBehaviour
         poolSystem = PoolSystem.Singleton;
         Invoke("InitHealth", .5f);
         targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
-
+        UpdateScoreText(0);
     }
 
     public void UpdateScoreText(int score)

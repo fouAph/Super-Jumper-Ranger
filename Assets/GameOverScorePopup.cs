@@ -10,6 +10,7 @@ public class GameOverScorePopup : MonoBehaviour
     public TMP_Text totalScore_TMP;
     public TMP_Text highScore_TMP;
     public GameObject highScorePopupObject;
+    public GameObject levelUnlockedNotifactionText;
     public void SetGameOverPopup()
     {
         levelName_TMP.text = GameManager.Singleton.GetSceneName();

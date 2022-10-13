@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [Header("Save")]
     public string saveName = "save";
     public SaveData saveData;
+    public MapDataSO[] mapDataSO;
     private void Awake()
     {
         if (Singleton != null)
@@ -93,10 +94,10 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
 
-      
+
         if (gameState != GameState.InGame) return;
 
-  if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
 
             isPause = !isPause;
@@ -222,7 +223,7 @@ public class GameManager : MonoBehaviour
 
             yield return null;
         }
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.2f);
         countdownGameobject.SetActive(false);
         SetupReference();
         gameState = GameState.InGame;
@@ -233,7 +234,8 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
         {
-            if (boxCollected > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
+            var totalscore = killCounter / 3 + boxCollected;
+            if (totalscore > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
             {
                 SaveHighScore();
                 gameOverScorePopup.highScorePopupObject.SetActive(true);
@@ -241,17 +243,29 @@ public class GameManager : MonoBehaviour
             else
                 gameOverScorePopup.highScorePopupObject.SetActive(false);
 
+            if (totalscore >= targetScore)
+            {
+                mapDataSO[currentMapBuildLevelIndex - 1].unlocked = true;
+                gameOverScorePopup.levelUnlockedNotifactionText.SetActive(true);
+            }
+            else
+                gameOverScorePopup.levelUnlockedNotifactionText.SetActive(false);
+
             gameOverScreen.SetActive(true);
             gameOverScorePopup.SetGameOverPopup();
             gameState = GameState.GameOver;
             MusicManager.Singleton.PlayGameOverMusic();
+
+
         }
+
+
 
     }
 
     private void SaveHighScore()
     {
-        SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore = boxCollected;
+        SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore = killCounter / 3 + boxCollected;
         SerializationManager.Save(saveName, SaveData.Current);
     }
 
@@ -271,7 +285,7 @@ public class GameManager : MonoBehaviour
     {
         boxCollected += scoreToAdd;
         if (uiManager)
-            uiManager.UpdateScoreText(boxCollected);
+            uiManager.UpdateScoreText(killCounter / 3 + boxCollected);
     }
 
     #region Get Scene Name
