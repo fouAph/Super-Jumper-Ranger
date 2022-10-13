@@ -87,8 +87,15 @@ public class GameManager : MonoBehaviour
         MusicManager.Singleton.PlayMainMenuMusic();
 
         //load Game
-        var save = SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/" + saveName + ".save");
-        saveData = save;
+        SaveData save = SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/" + saveName + ".save");
+        if (save != null)
+            saveData = save;
+        else
+        {
+            SaveData.Current = saveData;
+            SerializationManager.Save(saveName, SaveData.Current);
+            print("creating new save");
+        }
     }
 
     private void Update()
@@ -171,12 +178,11 @@ public class GameManager : MonoBehaviour
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex + 1, LoadSceneMode.Additive));
         ResetCurrentGameProgress();
         currentMapBuildLevelIndex = currentMapBuildLevelIndex + 1;
-        currentMap = mapDataSO[currentMapBuildLevelIndex -2];
+        currentMap = mapDataSO[currentMapBuildLevelIndex - 2];
         SetMapSettings();
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
     }
-
 
     public void NextLevel_OnClikButton()
     {
@@ -268,7 +274,7 @@ public class GameManager : MonoBehaviour
 
                 else if (totalscore >= targetScore)
                 {
-                    print($"totalscore {totalscore}+ targetScore is { targetScore}");
+                    print($"totalscore {totalscore}+ targetScore is {targetScore}");
                     gameOverScorePopup.SetTitleToGameWin();
                     mapDataSO[currentMapBuildLevelIndex - 1].unlocked = true;
                     gameOverScorePopup.levelUnlockedNotifactionText.SetActive(true);
