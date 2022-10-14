@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,11 +19,18 @@ public class MapSelectorHelper : MonoBehaviour, IPointerClickHandler
         button = GetComponent<Button>();
         defaultSprite = buttonImage.sprite;
 
-        UpdateButtonInteractable();
+        // UpdateButtonInteractable();
     }
 
-    public void UpdateButtonInteractable()
+    private void OnEnable()
     {
+
+        StartCoroutine(UpdateButtonInteractable());
+    }
+
+     IEnumerator UpdateButtonInteractable()
+    {
+        yield return new WaitForSeconds(.01f);
         button.interactable = mapDataSO.unlocked;
         buttonImage.sprite = button.interactable ? defaultSprite : lockedSprite;
     }

@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class NextToSelectMapButton : MonoBehaviour
 {
+    UnityEngine.UI.Button button;
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        button = GetComponent<UnityEngine.UI.Button>();
+        // button.onClick.AddListener()
     }
 }

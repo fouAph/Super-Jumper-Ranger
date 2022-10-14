@@ -616,7 +616,7 @@ MonoBehaviour:
   saveData:
     levels:
     - highScore: 0
-      unlocked: 0
+      unlocked: 1
     - highScore: 0
       unlocked: 0
     - highScore: 0
