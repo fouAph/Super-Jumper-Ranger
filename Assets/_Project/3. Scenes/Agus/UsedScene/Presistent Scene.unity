@@ -612,9 +612,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26f068ec8f160346bf7e2bb0a11df87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveName: save
+  saveName: player
   saveData:
-    levels: []
+    levels:
+    - highScore: 0
+      unlocked: 0
+    - highScore: 0
+      unlocked: 0
+    - highScore: 0
+      unlocked: 0
+    - highScore: 0
+      unlocked: 0
     profile:
       playerName: 
   mapDataSO:

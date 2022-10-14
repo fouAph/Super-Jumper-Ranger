@@ -82,42 +82,31 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        boxWaitTimer = nextBoxSpawnTime;
-        enemyWaitTimer = nextEnemySpawnTime;
-        MusicManager.Singleton.PlayMainMenuMusic();
+        boxWaitTimer = nextBoxSpawnTime;                //Set Box Timer
+        enemyWaitTimer = nextEnemySpawnTime;            //Set Enemy Timer 
+        MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
 
-        //load Game
-        SaveData save = SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/" + saveName + ".save");
-        if (save != null)
-            saveData = save;
-        else
-        {
-            SaveData.Current = saveData;
-            SerializationManager.Save(saveName, SaveData.Current);
-            print("creating new save");
-        }
+        LoadGameData();                                 //Load Game Data, if the gameData doesnt exist, then create new data                             
     }
 
     private void Update()
     {
+        if (gameState != GameState.InGame) return;                          //return While not inGame State
 
-
-        if (gameState != GameState.InGame) return;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))                               //if escape button is pressed
         {
-
-            isPause = !isPause;
-            if (isPause)
+            isPause = !isPause;                                             //Toogle if isPause 
+            if (isPause)                                                    //if isPause = true, pause the game
             {
-                PauseGame();
+                PauseGame();                                                //call PauseGame Method
             }
             else
             {
-                ResumeGame();
+                ResumeGame();                                               //if not true then call Resume Game Methode
             }
         }
-        Gameloop();
+
+        Gameloop();                                                         //call GameLoop Methode everyframe
         if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
         {
             enemyWaitTimer -= Time.deltaTime;
@@ -127,7 +116,6 @@ public class GameManager : MonoBehaviour
                 SpawnEnemy();
             }
         }
-        Mathf.Clamp(currentBoxCount, 0, maxBoxCount);
 
         if (currentBoxCount < maxBoxCount && itemSpawnManager)
         {
@@ -139,31 +127,30 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+  #region  InGame Methods
     public void ResumeGame()
     {
-        Time.timeScale = 1;
-        gameState = GameState.InGame;
-        PlayerManager.Singleton.EnablePlayerController();
-        pauseMenuScreen.SetActive(false);
-
+        Time.timeScale = 1;                                 //Unfreeze the game
+        gameState = GameState.InGame;                       //set the gameState to InGame  
+        PlayerManager.Singleton.EnablePlayerController();   //Enable Player controll
+        pauseMenuScreen.SetActive(false);                   //disable Pause Menu Screen
     }
 
     public void PauseGame()
     {
-        Time.timeScale = 0;
-        gameState = GameState.Menu;
-        PlayerManager.Singleton.DisablePlayerController();
-        pauseMenuScreen.SetActive(true);
+        Time.timeScale = 0;                                 //Freeze the game
+        gameState = GameState.Menu;                         //set the game state to menu
+        PlayerManager.Singleton.DisablePlayerController();  //Disable player controll
+        pauseMenuScreen.SetActive(true);                    //Enable Pause Screen Menu
     }
 
     public void LoadGame()
     {
-        sceneLoading.Clear();
-        MusicManager.Singleton.StopMusic();
-        loadingScreen.SetActive(true);
-        sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));
-        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));
+        sceneLoading.Clear();                                                                               //Clear sceneLoading AsynOperation List
+        MusicManager.Singleton.StopMusic();                                                                 //Stop Music
+        loadingScreen.SetActive(true);                                                                      //Enable Loading Scree
+        sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));                    //Unload Title Screen Scene
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));   //Load level scene
 
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
@@ -171,19 +158,20 @@ public class GameManager : MonoBehaviour
 
     public void LoadNextLevel()
     {
-        sceneLoading.Clear();
-        MusicManager.Singleton.StopMusic();
-        loadingScreen.SetActive(true);
-        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));
-        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex + 1, LoadSceneMode.Additive));
-        ResetCurrentGameProgress();
+        sceneLoading.Clear();                                                                                   //Clear sceneLoading AsynOperation List
+        MusicManager.Singleton.StopMusic();                                                                     //Stop Music
+        loadingScreen.SetActive(true);                                                                          //Enable Loading Scree
+        sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));                             //Unload Current level or map
+        sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex + 1, LoadSceneMode.Additive));   //Load next level
+        ResetCurrentGameProgress();                                                                             //Reset All previous score to 0
         currentMapBuildLevelIndex = currentMapBuildLevelIndex + 1;
         currentMap = mapDataSO[currentMapBuildLevelIndex - 2];
-        SetMapSettings();
+        SetMapSettings();                                                                                       //set Map settings, like how many enemy to spawn
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
     }
 
+    //this is for button Event 
     public void NextLevel_OnClikButton()
     {
         LoadNextLevel();
@@ -258,7 +246,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.InGame;
     }
 
-    #region  InGame Methods
+  
     void Gameloop()
     {
         // if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
@@ -285,7 +273,7 @@ public class GameManager : MonoBehaviour
 
                 if (totalscore > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
                 {
-                    SaveHighScore();
+                    SaveHighScoreData();
                     print(totalscore);
                     gameOverScorePopup.highScorePopupObject.SetActive(true);
                 }
@@ -297,25 +285,50 @@ public class GameManager : MonoBehaviour
                 gameState = GameState.GameOver;
                 MusicManager.Singleton.PlayGameOverMusic();
             }
-
-
-
-
         }
-
-
-
-    }
-
-    private void SaveHighScore()
-    {
-        SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore = killCounter / 3 + boxCollected;
-        SerializationManager.Save(saveName, SaveData.Current);
     }
 
     void SpawnBox() => itemSpawnManager.SpawnBoxItem();
 
     void SpawnEnemy() => enemySpawnerManager.SpawnEnemy();
+    #endregion
+
+    #region SaveData, LoadData, ResetData 
+    //Save High Score Data 
+    private void SaveHighScoreData()
+    {
+        SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore = killCounter / 3 + boxCollected;
+        SerializationManager.Save(saveName, SaveData.Current);
+    }
+
+    private void LoadGameData()
+    {
+        SaveData save = SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/" + saveName + ".save");
+        if (save != null)
+            saveData = save;
+        else
+        {
+            SaveData.Current = saveData;
+            SerializationManager.Save(saveName, SaveData.Current);
+            print("creating new save");
+        }
+    }
+
+    public void ResetData()
+    {
+        var resetedData = saveData;
+        for (int i = 0; i < resetedData.levels.Length; i++)
+        {
+            resetedData.levels[i].highScore = 0;
+            if (i != 0)
+            {
+                mapDataSO[i].unlocked = false;
+            }
+        }
+        saveData = resetedData;
+        SaveData.Current = saveData;
+        SerializationManager.Save(saveName, SaveData.Current);
+    }
     #endregion
 
     void SetupReference()

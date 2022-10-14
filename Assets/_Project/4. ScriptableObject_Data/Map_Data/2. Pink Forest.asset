@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2. Pink Forest
   m_EditorClassIdentifier: 
   indexInBuildIndex: 3
-  unlocked: 1
+  unlocked: 0
   maxEnemyCount: 0
   maxBoxCount: 0
   scoreTarget: 25

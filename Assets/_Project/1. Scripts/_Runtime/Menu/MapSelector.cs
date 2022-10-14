@@ -18,7 +18,7 @@ public class MapSelector : MonoBehaviour
 
     IEnumerator SelectRoutine()
     {
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.05f);
         currentSelectedMap.SetSpriteToSelected();
     }
 

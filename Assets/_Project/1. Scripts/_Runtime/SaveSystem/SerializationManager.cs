@@ -49,6 +49,21 @@ public class SerializationManager
         }
     }
 
+    // public static object DeleteSaveData(string saveName)
+
+    // {
+    //     string path = Application.persistentDataPath + "/saves/" + saveName + ".save";
+    //     if (!File.Exists(path))
+    //     {
+    //         Debug.Log("file not xist");
+    //         return null;
+    //     }
+
+    //     BinaryFormatter formatter = GetBinaryFormatter();
+    //     FileStream file =File.Delete("abc");
+
+    // }
+
     public static BinaryFormatter GetBinaryFormatter()
     {
         BinaryFormatter formatter = new BinaryFormatter();
