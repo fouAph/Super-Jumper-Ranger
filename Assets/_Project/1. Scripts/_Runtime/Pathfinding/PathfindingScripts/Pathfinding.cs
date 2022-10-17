@@ -69,7 +69,8 @@ public class Pathfinding : MonoBehaviour
     {
         //Debug tools do not work in awake!
         updateTimer = updateEvery;
-        CreateNodeMap();
+        if (!GameManager.Singleton.isTesting)
+            CreateNodeMap();
     }
 
     void Update()

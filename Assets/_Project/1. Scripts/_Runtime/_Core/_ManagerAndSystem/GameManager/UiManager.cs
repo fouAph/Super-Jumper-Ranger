@@ -23,28 +23,37 @@ public class UiManager : MonoBehaviour
     public Transform healthSpriteHolder;
     public GameObject healthPrefab;
     private PoolSystem poolSystem;
+
+    GameManager gm;
     private void Start()
     {
+        gm = GameManager.Singleton;
         poolSystem = PoolSystem.Singleton;
-        Invoke("InitHealth", .5f);
-        targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
-        UpdateScoreText(0);
+        if (!gm.isTesting)
+        {
+            Invoke("InitHealth", .5f);
+            targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
+            UpdateScoreText(0);
+        }
     }
 
     public void UpdateScoreText(int score)
     {
-        scoreTMP.text = $"Score : {score}";
+        if (scoreTMP)
+            scoreTMP.text = $"Score : {score}";
     }
 
     public void UpdateAmmoCountText(int ammo)
     {
-        ammoCountTMP.text = $"Ammo : {ammo}";
+        if (ammoCountTMP)
+            ammoCountTMP.text = $"Ammo : {ammo}";
     }
 
     #region Health Methode
     private void InitHealth()
     {
-        if (poolSystem)
+        if (!poolSystem) return;
+        else
         {
             PoolSystem.Singleton.AddObjectToPooledObject(healthPrefab, 7);
             for (int i = healthSpriteHolder.childCount; i < PlayerManager.Singleton.playerHealth.maxHealth; i++)
@@ -57,10 +66,13 @@ public class UiManager : MonoBehaviour
 
     public void UpdateHealth()
     {
-        int result = PlayerManager.Singleton.playerHealth.maxHealth - PlayerManager.Singleton.playerHealth.currentHealth;
-        for (int i = 0; i < result; i++)
+        if (PlayerManager.Singleton)
         {
-            healthSpriteHolder.GetChild(i).gameObject.SetActive(false);
+            int result = PlayerManager.Singleton.playerHealth.maxHealth - PlayerManager.Singleton.playerHealth.currentHealth;
+            for (int i = 0; i < result; i++)
+            {
+                healthSpriteHolder.GetChild(i).gameObject.SetActive(false);
+            }
         }
     }
     #endregion

@@ -19,10 +19,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] private bool debugSetGunPosition;
 
     Vector2 directions;
-
+    UiManager uiManager;
+    GameManager gm;
+    bool fireInput;
     private void Start()
     {
+        gm = GameManager.Singleton;
         poolSystem = PoolSystem.Singleton;
+        uiManager = UiManager.Singleton;
         transform.localPosition = gunDataSO.spawnPosition;
         // PoolSystemGeneric.Singleton.AddObjectToPooledObject(bulletPrefab, 50);
         PoolSystem.Singleton.AddObjectToPooledObject(bulletPrefab.gameObject, 50);
@@ -33,7 +37,12 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        bool fireInput = gunDataSO.autoFire ? Input.GetKey(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse0);
+        if (gm.useMobileControll)
+        {
+            fireInput = gm.shootJoystick.progress >= gm.shootThreshold;
+        }
+        else
+            fireInput = gunDataSO.autoFire ? Input.GetKey(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse0);
 
         if (fireInput)
         {
@@ -53,8 +62,9 @@ public class Weapon : MonoBehaviour
             {
                 if (!WeaponManager.Singleton.useInfiniteAmmo)
                     currentAmmo--;
-                
-                UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
+
+                // if (uiManager)
+                //     UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
 
                 _lastFired = Time.time;
                 switch (gunDataSO.bulletType)
@@ -68,7 +78,8 @@ public class Weapon : MonoBehaviour
                 }
 
                 AudioPoolSystem.Singleton.PlayShootAudio(gunDataSO.shootSFX, 1f);
-                CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
+                if (CameraShake.Singleton)
+                    CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
             }
     }
 

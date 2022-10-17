@@ -41,8 +41,11 @@ public class Character : MonoBehaviour
     public bool FallNodes = true;            /*true-- Allows the pathfinding agent to use 'fall' nodes*/
     float maxRequestUpdatePathTime = 1f;
     float requestUpdatePathTimer;
+
+    GameManager gm;
     void Awake()
     {
+        gm = GameManager.Singleton;
         _body = GetComponent<Rigidbody2D>();
         _box = GetComponent<BoxCollider2D>();
         _pathingAgent = GetComponent<PathfindingAgent>();
@@ -104,7 +107,7 @@ public class Character : MonoBehaviour
         if (playerControlled)
         {
 
-            if (Input.GetKeyDown(KeyCode.Space) && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
+            if (Input.GetKeyDown(KeyCode.Space) || gm.jumpPressed && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
             {
                 if (jetpack.fJetpackFuelTime < jetpack.jetpackFuelTime)
                 {
@@ -139,9 +142,21 @@ public class Character : MonoBehaviour
         Vector2 input = Vector2.zero;
         if (playerControlled)
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            // for analog
+            // if (gm.useMobileControll && gm.useJoystickToMove)
+            //     input = new Vector2(gm.movementJoystick.xValue, gm.movementJoystick.yValue);
+
+            //for arrow button,
+             if (gm.useMobileControll)// && !gm.useJoystickToMove)
+                input = new Vector2(gm.direction, 0);
+
+            else
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
             if (isAiControlled && (input.x != 0 || input.y != 0)) { if (isAiControlled) { _pathingAgent.CancelPathing(); } isAiControlled = false; _ai._behaviourText.text = ""; } /*turns off Ai control to avoid confusion user error*/
         }
+
+
         if (isAiControlled)
         {
             _ai.GetInput(ref velocity, ref input, ref jumped);
@@ -234,7 +249,7 @@ public class Character : MonoBehaviour
             if (jump.ability && jump.jumpCount < jump.maxJumps && !wallSliding) { velocity.y = jump.maxJumpVelocity; jump.jumpCount++; }
         }
         //Jump sensitivity
-        if (jump.ability && Input.GetKeyUp(KeyCode.Space))
+        if (jump.ability && Input.GetKeyUp(KeyCode.Space) )
         { //think about adding an isCurrentlyJumping bool that gets reset to false on jetpack or landing or other forces affecting y
             if (velocity.y > jump.minJumpVelocity)
             {

@@ -7,10 +7,25 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
+    public bool isTesting;
+
+    [Header("Mobile Settings")]
+    public GameObject mobileControllCanvas;
+    public bool useMobileControll;
+    [HideInInspector] public float direction;
+    [HideInInspector] public bool jumpPressed;
+    public bool isFacingRight;
+    // public MyJoystick movementJoystick;
+    public MyJoystick shootJoystick;
+    public float shootThreshold = .8f;
+
+
+
     [Header("Save")]
     public string saveName = "save";
     public SaveData saveData;
     public MapDataSO[] mapDataSO;
+
     private void Awake()
     {
         if (Singleton != null)
@@ -21,12 +36,15 @@ public class GameManager : MonoBehaviour
         }
 
         Singleton = this;
-
-        SceneManager.LoadSceneAsync((int)SceneIndexes.TITLE_SCREEN, LoadSceneMode.Additive);
-        loadingScreen.SetActive(false);
-        pauseMenuScreen.SetActive(false);
-        gameOverScreen.SetActive(false);
         AudioPoolSystem.Singleton.Initialize();
+        if (!isTesting)
+        {
+            SceneManager.LoadSceneAsync((int)SceneIndexes.TITLE_SCREEN, LoadSceneMode.Additive);
+            loadingScreen.SetActive(false);
+            pauseMenuScreen.SetActive(false);
+            gameOverScreen.SetActive(false);
+
+        }
     }
 
     [Header("References")]
@@ -127,7 +145,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-  #region  InGame Methods
+    #region  InGame Methods
     public void ResumeGame()
     {
         Time.timeScale = 1;                                 //Unfreeze the game
@@ -152,6 +170,10 @@ public class GameManager : MonoBehaviour
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));                    //Unload Title Screen Scene
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));   //Load level scene
 
+        if (useMobileControll)
+            mobileControllCanvas.SetActive(true);
+        else
+            mobileControllCanvas.SetActive(false);
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
     }
@@ -246,7 +268,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.InGame;
     }
 
-  
+
     void Gameloop()
     {
         // if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
@@ -268,7 +290,7 @@ public class GameManager : MonoBehaviour
                     gameOverScorePopup.levelUnlockedNotifactionText.SetActive(true);
                 }
 
-                else
+                else if (totalscore <= targetScore)
                     gameOverScorePopup.levelUnlockedNotifactionText.SetActive(false);
 
                 if (totalscore > SaveData.Current.levels[currentMapBuildLevelIndex - 2].highScore)
@@ -390,6 +412,19 @@ public class GameManager : MonoBehaviour
         currentMapBuildLevelIndex = currentMap.indexInBuildIndex;
 
     }
+    #endregion
+
+    #region Button Touch Methods
+    public void SetDirection(float dir)
+    {
+        direction = dir;
+    }
+
+    public void SetJumpPressed(bool state)
+    {
+        jumpPressed = state;
+    }
+
     #endregion
 }
 

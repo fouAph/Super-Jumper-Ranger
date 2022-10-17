@@ -24,7 +24,7 @@ MonoBehaviour:
   maxAmmoInMag: 30
   maxCarryingAmmo: 90
   autoFire: 0
-  spreadValue: 11.3
+  spreadValue: 0.3
   howManyBulletPerShoot: 1
   shootPower: 1300
   spawnPosition: {x: 0.05, y: -0.038, z: 1.05}

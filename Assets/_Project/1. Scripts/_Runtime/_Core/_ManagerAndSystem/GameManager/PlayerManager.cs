@@ -24,9 +24,12 @@ public class PlayerManager : MonoBehaviour
     public Character c;
     public bool invicible;
     public bool isPlayerDead;
+    GameManager gm;
     private void Start()
     {
-        Setup();
+        gm = GameManager.Singleton;
+        if (!gm.isTesting)
+            Setup();
     }
 
     void Setup()
@@ -45,13 +48,8 @@ public class PlayerManager : MonoBehaviour
         c.playerControlled = false;
     }
 
-     public void EnablePlayerController()
+    public void EnablePlayerController()
     {
         c.playerControlled = true;
     }
-
-
-
-
-
 }
