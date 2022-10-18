@@ -8,6 +8,10 @@ public class WeaponPickup : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player")
+        {
             WeaponManager.Singleton.PickupGun(this);
+            other.collider.GetComponent<Character>().Flip();
+
+        }
     }
 }

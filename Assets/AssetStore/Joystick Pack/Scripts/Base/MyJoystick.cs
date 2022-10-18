@@ -10,13 +10,14 @@ public class MyJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     [Header("Settings:")]
     public float restriction;
     public bool snapsBack;
+    public bool snapsBackZero;
 
     [Header("References:")]
     public RectTransform touchArea;
     public Transform stick;
 
-    [HideInInspector] public float xValue;
-    [HideInInspector] public float yValue;
+    public float xValue;
+    public float yValue;
     [HideInInspector] public float progress;
     [HideInInspector] public bool isHolding;
 
@@ -44,7 +45,12 @@ public class MyJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         else
         {
             // Reset joystick position:
-            if (snapsBack)
+            if (snapsBackZero)
+            {
+                finalPos = Vector3.zero;
+
+            }
+            else if (snapsBack)
             {
                 if (GameManager.Singleton.isFacingRight)
                     finalPos = new Vector3(1, 0, 0);

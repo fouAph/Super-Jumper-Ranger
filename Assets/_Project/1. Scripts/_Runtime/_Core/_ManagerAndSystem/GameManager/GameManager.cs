@@ -12,14 +12,19 @@ public class GameManager : MonoBehaviour
     [Header("Mobile Settings")]
     public GameObject mobileControllCanvas;
     public bool useMobileControll;
+    public bool use360Aim;
     [HideInInspector] public float direction;
     [HideInInspector] public bool jumpPressed;
-    public bool isFacingRight;
-    // public MyJoystick movementJoystick;
+    [HideInInspector] public bool isFacingRight;
+    [HideInInspector] public bool isFiring;
+    public bool useJoystickToMove;
+    public MyJoystick movementJoystick;
     public MyJoystick shootJoystick;
     public float shootThreshold = .8f;
+    public GameObject[] buttonObjects;
 
-
+    [Header("WeaponSetting")]
+    public bool useBulletGravity;
 
     [Header("Save")]
     public string saveName = "save";
@@ -44,6 +49,30 @@ public class GameManager : MonoBehaviour
             pauseMenuScreen.SetActive(false);
             gameOverScreen.SetActive(false);
 
+        }
+
+    }
+
+    private void SetMobileControllLayout()
+    {
+
+        if (useJoystickToMove)
+        {
+            shootJoystick.gameObject.SetActive(true);
+            movementJoystick.gameObject.SetActive(true);
+            for (int i = 0; i < buttonObjects.Length; i++)
+            {
+                buttonObjects[i].SetActive(false);
+            }
+        }
+        else
+        {
+            shootJoystick.gameObject.SetActive(false);
+            movementJoystick.gameObject.SetActive(false);
+            for (int i = 0; i < buttonObjects.Length; i++)
+            {
+                buttonObjects[i].SetActive(true);
+            }
         }
     }
 
@@ -104,6 +133,16 @@ public class GameManager : MonoBehaviour
         enemyWaitTimer = nextEnemySpawnTime;            //Set Enemy Timer 
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
 
+        if (isTesting)
+        {
+            if (useMobileControll)
+            {
+                SetMobileControllLayout();
+                mobileControllCanvas.SetActive(true);
+            }
+            else
+                mobileControllCanvas.SetActive(false);
+        }
         LoadGameData();                                 //Load Game Data, if the gameData doesnt exist, then create new data                             
     }
 
@@ -170,10 +209,14 @@ public class GameManager : MonoBehaviour
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));                    //Unload Title Screen Scene
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));   //Load level scene
 
-        if (useMobileControll)
-            mobileControllCanvas.SetActive(true);
-        else
-            mobileControllCanvas.SetActive(false);
+       if (useMobileControll)
+            {
+                SetMobileControllLayout();
+                mobileControllCanvas.SetActive(true);
+            }
+            else
+                mobileControllCanvas.SetActive(false);
+
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
     }
@@ -423,6 +466,11 @@ public class GameManager : MonoBehaviour
     public void SetJumpPressed(bool state)
     {
         jumpPressed = state;
+    }
+
+    public void SetIsFiring(bool state)
+    {
+        isFiring = state;
     }
 
     #endregion

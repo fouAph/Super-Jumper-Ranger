@@ -77,7 +77,6 @@ MonoBehaviour:
   gunDataSO: {fileID: 11400000, guid: 7a6b73e9d91869c4b83d378477b41c7b, type: 2}
   bulletSpawnPoint: {fileID: 3273364737704928394}
   bulletPrefab: {fileID: -7354205563366480221, guid: 47b08bf4d55271041843277fbaa1d3ec, type: 3}
-  curentDamage: 13
   debugSetGunPosition: 0
 --- !u!1 &9218713045038432610
 GameObject:

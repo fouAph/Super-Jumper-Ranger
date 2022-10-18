@@ -42,19 +42,16 @@ public class Character : MonoBehaviour
     float maxRequestUpdatePathTime = 1f;
     float requestUpdatePathTimer;
 
-    GameManager gm;
+    GameManager gm => GameManager.Singleton;
     void Awake()
     {
-        gm = GameManager.Singleton;
+        // gm = GameManager.Singleton;
         _body = GetComponent<Rigidbody2D>();
         _box = GetComponent<BoxCollider2D>();
         _pathingAgent = GetComponent<PathfindingAgent>();
         _ai = GetComponent<AiController>();
         _anim = GetComponent<Animator>();
         if (_anim == null) _anim = GetComponentInChildren<Animator>();
-        rotatePlayerBodyParts = GetComponent<RotatePlayerBodyParts>();
-        if (!rotatePlayerBodyParts)
-            if (!_graphics) _graphics = gameObject; /*useful for preventing things from flipping when character is facing left*/
 
         /*allow movement abilities to access character script*/
         ladder.setCharacter(this);
@@ -76,6 +73,12 @@ public class Character : MonoBehaviour
             _ai.state = AiController.ai_state.pathfinding; //set character AI type to pathfinding
             _pathingAgent.RequestPath(target.transform.position + Vector3.up);
         }
+
+        if (gm.use360Aim)
+            rotatePlayerBodyParts = GetComponent<RotatePlayerBodyParts>();
+        if (!rotatePlayerBodyParts)
+            if (!_graphics) _graphics = gameObject; /*useful for preventing things from flipping when character is facing left*/
+
     }
 
     void Update()
@@ -106,8 +109,8 @@ public class Character : MonoBehaviour
 
         if (playerControlled)
         {
-
-            if (Input.GetKeyDown(KeyCode.Space) || gm.jumpPressed && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
+            //Mobile Implementation
+            if (Input.GetKeyDown(KeyCode.Space) || gm.jumpPressed || gm.movementJoystick.yValue >= .9f && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
             {
                 if (jetpack.fJetpackFuelTime < jetpack.jetpackFuelTime)
                 {
@@ -143,11 +146,16 @@ public class Character : MonoBehaviour
         if (playerControlled)
         {
             // for analog
-            // if (gm.useMobileControll && gm.useJoystickToMove)
-            //     input = new Vector2(gm.movementJoystick.xValue, gm.movementJoystick.yValue);
+            //Mobile Impelementation
+            if (gm.useMobileControll && gm.useJoystickToMove)
+            {
+                input = new Vector2(gm.movementJoystick.xValue, gm.movementJoystick.yValue);
+
+            }
 
             //for arrow button,
-             if (gm.useMobileControll)// && !gm.useJoystickToMove)
+            //Mobile Impelementation
+            else if (gm.useMobileControll && !gm.useJoystickToMove)
                 input = new Vector2(gm.direction, 0);
 
             else
@@ -249,7 +257,7 @@ public class Character : MonoBehaviour
             if (jump.ability && jump.jumpCount < jump.maxJumps && !wallSliding) { velocity.y = jump.maxJumpVelocity; jump.jumpCount++; }
         }
         //Jump sensitivity
-        if (jump.ability && Input.GetKeyUp(KeyCode.Space) )
+        if (jump.ability && Input.GetKeyUp(KeyCode.Space))
         { //think about adding an isCurrentlyJumping bool that gets reset to false on jetpack or landing or other forces affecting y
             if (velocity.y > jump.minJumpVelocity)
             {
@@ -290,15 +298,17 @@ public class Character : MonoBehaviour
 
         if (!ladder.isClimbing && !ledgegrab.ledgeGrabbed)
         {
-
-            if (input.x > 0 && !facingRight)
+            if (!gm.use360Aim)
             {
-                Flip();
-            }
-            else if (input.x < 0 && facingRight)
+                if (input.x > 0 && !facingRight)
+                {
+                    Flip();
+                }
+                else if (input.x < 0 && facingRight)
 
-            {
-                Flip();
+                {
+                    Flip();
+                }
             }
 
             //Movement-x
@@ -316,7 +326,20 @@ public class Character : MonoBehaviour
         }
 
         //animation
-        _anim.SetFloat("speed", input.x != 0 ? 1f : 0f);
+        float speed = 0;
+        if (gm.useMobileControll)
+        { //Mobile Implementation
+            if (gm.useJoystickToMove)
+                speed = Mathf.Abs(gm.movementJoystick.xValue);
+            else speed = Mathf.Abs(gm.direction);
+        }
+        else
+        {
+            speed = input.x != 0 ? 1f : 0f;
+        }
+
+        // _anim.SetFloat("speed", input.x != 0 ? 1f : 0f);
+        _anim.SetFloat("speed", speed);
         _anim.SetBool("grounded", _controller.collisions.below);
 
         //Grounded + Jump reset
@@ -364,16 +387,33 @@ public class Character : MonoBehaviour
     }
 
     //changes characters facing direction
-    private void Flip()
+    public void Flip()
     {
         // Switch the way the player is labelled as facing
         // Multiply the player's x local scale by -1
-
         if (rotatePlayerBodyParts == null)
         {
+            print("flip inside");
             facingRight = !facingRight;
             Vector3 theScale = _graphics.transform.localScale;
             theScale.x *= -1; _graphics.transform.localScale = theScale;
+
+            if (!playerControlled) return;
+            if (!WeaponManager.Singleton) return;
+
+            if (WeaponManager.Singleton.currentGun)
+            {
+                Vector3 rotateVector = Vector3.zero;
+                Vector3 flipVector = WeaponManager.Singleton.currentGun.transform.localScale;
+
+                rotateVector.y = (transform.localScale.x == 1 ? 0 : 180);
+                // if (facingRight)
+                // {
+                WeaponManager.Singleton.currentGun.transform.localEulerAngles = rotateVector;
+                WeaponManager.Singleton.currentGun.transform.localScale = transform.localScale;
+                Vector3.ClampMagnitude(WeaponManager.Singleton.currentGun.transform.localScale, 1);
+                // }
+            }
         }
     }
 

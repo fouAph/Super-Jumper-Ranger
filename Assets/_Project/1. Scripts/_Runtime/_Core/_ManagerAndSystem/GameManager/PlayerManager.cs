@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
     void Setup()
     {
-        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity, transform);
+        Instantiate(GameManager.Singleton.currentCharacter.CharacterPrefab, transform.position, Quaternion.identity);
 
         PlayerObject = GameObject.FindGameObjectWithTag("Player");
         playerHealth = PlayerObject.GetComponent<HealthSystem>();

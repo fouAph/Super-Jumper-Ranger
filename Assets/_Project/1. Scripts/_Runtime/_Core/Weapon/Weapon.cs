@@ -8,9 +8,7 @@ public class Weapon : MonoBehaviour
     public Transform bulletSpawnPoint;
     public BulletProjectilePoolHelper bulletPrefab;         //BulletPrefab with BulletProjectilePoolHelper.cs
 
-    [System.NonSerialized]
     public int currentAmmo;
-    [System.NonSerialized]
     public int curentDamage;
     private float currentFireRate;
 
@@ -44,14 +42,15 @@ public class Weapon : MonoBehaviour
         else
             fireInput = gunDataSO.autoFire ? Input.GetKey(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse0);
 
-        if (fireInput)
+        if (fireInput || gm.isFiring)
         {
             Shoot();
         }
 
         if (debugSetGunPosition)
         {
-            gunDataSO.spawnPosition = transform.localPosition;
+            Vector3 pos = transform.localPosition;
+            gunDataSO.spawnPosition = pos;
         }
     }
 

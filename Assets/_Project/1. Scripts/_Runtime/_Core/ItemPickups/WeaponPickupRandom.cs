@@ -34,6 +34,7 @@ public class WeaponPickupRandom : MonoBehaviour
                 GameManager.Singleton.UpdateScoreCount(scoreAdder.scoreToAdd);
                 SubstractCurrentBoxCount();
             }
+            other.collider.GetComponent<Character>().Flip();
         }
 
         else if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))

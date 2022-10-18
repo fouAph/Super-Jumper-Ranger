@@ -9,11 +9,17 @@ public class RotatePlayerBodyParts : MonoBehaviour
     public Transform[] transformsToRotate;
     public bool isFacingRight;
     Vector3 difference;
-    GameManager gm;
+    GameManager gm => GameManager.Singleton;
+
     private void Awake()
     {
         tr = transform;
-        gm = GameManager.Singleton;
+        // gm = GameManager.Singleton;
+         if (!gm.use360Aim)
+            this.enabled = false;
+    }
+    private void Start() {
+       
     }
     private void FixedUpdate()
     {
@@ -45,6 +51,7 @@ public class RotatePlayerBodyParts : MonoBehaviour
                 }
             }
         }
+
         if (playerBody)
         {
             if (isFacingRight)

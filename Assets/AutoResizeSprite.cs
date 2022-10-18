@@ -85,9 +85,6 @@ public class AutoResizeSprite : MonoBehaviour
             }
         }
 
-        print("screen width" + worldScreenWidth);
-        print("screen height" + worldScreenHeight);
-
         // apply change
         transform.localScale = imgScale;
     }

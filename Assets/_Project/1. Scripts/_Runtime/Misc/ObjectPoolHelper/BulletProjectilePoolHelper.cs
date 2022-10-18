@@ -8,7 +8,7 @@ public class BulletProjectilePoolHelper : PoolHelper
     public Rigidbody2D rb;
     private TrailRenderer trailRenderer;
     // ProjectileType projectileType;
-
+    GameManager gm;
     private void Awake()
     {
 
@@ -24,7 +24,9 @@ public class BulletProjectilePoolHelper : PoolHelper
 
     private void Start()
     {
-
+        gm = GameManager.Singleton;
+        if (!gm.useBulletGravity)
+            rb.gravityScale = 0;
         PoolSystem.Singleton.AddObjectToPooledObject(hitVFXPrefab.gameObject, 30);              //menambahkan object hitVFXPrefab untuk bisa diinstantiate kan kembali dari PoolSystem
         // PoolSystemGeneric.Singleton.AddObjectToPooledObject(hitVFXPrefab, 30);   
     }
