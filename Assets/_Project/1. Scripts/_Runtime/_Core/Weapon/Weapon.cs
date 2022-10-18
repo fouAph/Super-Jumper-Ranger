@@ -37,12 +37,12 @@ public class Weapon : MonoBehaviour
     {
         if (gm.useMobileControll)
         {
-            fireInput = gm.shootJoystick.progress >= gm.shootThreshold;
+            fireInput = gm.mobileController.shootJoystick.progress >= gm.mobileController.shootThreshold;
         }
         else
             fireInput = gunDataSO.autoFire ? Input.GetKey(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse0);
 
-        if (fireInput || gm.isFiring)
+        if (fireInput || gm.mobileController.isFiring)
         {
             Shoot();
         }

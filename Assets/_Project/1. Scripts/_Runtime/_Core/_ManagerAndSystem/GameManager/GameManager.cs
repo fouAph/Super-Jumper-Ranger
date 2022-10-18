@@ -8,20 +8,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
     public bool isTesting;
-
-    [Header("Mobile Settings")]
-    public GameObject mobileControllCanvas;
     public bool useMobileControll;
-    public bool use360Aim;
-    [HideInInspector] public float direction;
-    [HideInInspector] public bool jumpPressed;
-    [HideInInspector] public bool isFacingRight;
-    [HideInInspector] public bool isFiring;
-    public bool useJoystickToMove;
-    public MyJoystick movementJoystick;
-    public MyJoystick shootJoystick;
-    public float shootThreshold = .8f;
-    public GameObject[] buttonObjects;
+    public MobileController mobileController;
+
 
     [Header("WeaponSetting")]
     public bool useBulletGravity;
@@ -51,29 +40,6 @@ public class GameManager : MonoBehaviour
 
         }
 
-    }
-
-    private void SetMobileControllLayout()
-    {
-
-        if (useJoystickToMove)
-        {
-            shootJoystick.gameObject.SetActive(true);
-            movementJoystick.gameObject.SetActive(true);
-            for (int i = 0; i < buttonObjects.Length; i++)
-            {
-                buttonObjects[i].SetActive(false);
-            }
-        }
-        else
-        {
-            shootJoystick.gameObject.SetActive(false);
-            movementJoystick.gameObject.SetActive(false);
-            for (int i = 0; i < buttonObjects.Length; i++)
-            {
-                buttonObjects[i].SetActive(true);
-            }
-        }
     }
 
     [Header("References")]
@@ -137,11 +103,11 @@ public class GameManager : MonoBehaviour
         {
             if (useMobileControll)
             {
-                SetMobileControllLayout();
-                mobileControllCanvas.SetActive(true);
+                mobileController.SetMobileControllScheme();
+                mobileController.gameObject.SetActive(true);
             }
             else
-                mobileControllCanvas.SetActive(false);
+                mobileController.gameObject.SetActive(false);
         }
         LoadGameData();                                 //Load Game Data, if the gameData doesnt exist, then create new data                             
     }
@@ -209,13 +175,13 @@ public class GameManager : MonoBehaviour
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));                    //Unload Title Screen Scene
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));   //Load level scene
 
-       if (useMobileControll)
-            {
-                SetMobileControllLayout();
-                mobileControllCanvas.SetActive(true);
-            }
-            else
-                mobileControllCanvas.SetActive(false);
+        if (useMobileControll)
+        {
+            mobileController.SetMobileControllScheme();
+            mobileController.gameObject.SetActive(true);
+        }
+        else
+            mobileController.gameObject.SetActive(false);
 
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
@@ -457,23 +423,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Button Touch Methods
-    public void SetDirection(float dir)
-    {
-        direction = dir;
-    }
 
-    public void SetJumpPressed(bool state)
-    {
-        jumpPressed = state;
-    }
-
-    public void SetIsFiring(bool state)
-    {
-        isFiring = state;
-    }
-
-    #endregion
 }
 
 public enum SceneIndexes { MANAGER = 0, TITLE_SCREEN = 1, MAP_1 = 2, MAP_2 = 3, MAP_3 = 3, MAP_4 = 4 }

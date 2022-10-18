@@ -52,7 +52,7 @@ public class MyJoystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             }
             else if (snapsBack)
             {
-                if (GameManager.Singleton.isFacingRight)
+                if (GameManager.Singleton.mobileController.isFacingRight)
                     finalPos = new Vector3(1, 0, 0);
                 else
                     finalPos = new Vector3(-1, 0, 0);

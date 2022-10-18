@@ -11,27 +11,25 @@ public class RotatePlayerBodyParts : MonoBehaviour
     Vector3 difference;
     GameManager gm => GameManager.Singleton;
 
-    private void Awake()
+  
+    private void Start()
     {
-        tr = transform;
+ tr = transform;
         // gm = GameManager.Singleton;
-         if (!gm.use360Aim)
+        if (!gm.mobileController.use360Aim)
             this.enabled = false;
-    }
-    private void Start() {
-       
     }
     private void FixedUpdate()
     {
         if (gm.useMobileControll)
-            difference = new Vector3(gm.shootJoystick.xValue, gm.shootJoystick.yValue, 0);
+            difference = new Vector3(gm.mobileController.shootJoystick.xValue, gm.mobileController.shootJoystick.yValue, 0);
         else
             difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
         difference.Normalize();
 
         float rotationZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        gm.isFacingRight = isFacingRight = difference.x >= .01f;
+        gm.mobileController.isFacingRight = isFacingRight = difference.x >= .01f;
 
         for (int i = 0; i < transformsToRotate.Length; i++)
         {

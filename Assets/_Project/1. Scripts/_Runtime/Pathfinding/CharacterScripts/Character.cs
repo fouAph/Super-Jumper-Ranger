@@ -74,7 +74,7 @@ public class Character : MonoBehaviour
             _pathingAgent.RequestPath(target.transform.position + Vector3.up);
         }
 
-        if (gm.use360Aim)
+        if (gm.mobileController.use360Aim)
             rotatePlayerBodyParts = GetComponent<RotatePlayerBodyParts>();
         if (!rotatePlayerBodyParts)
             if (!_graphics) _graphics = gameObject; /*useful for preventing things from flipping when character is facing left*/
@@ -110,7 +110,7 @@ public class Character : MonoBehaviour
         if (playerControlled)
         {
             //Mobile Implementation
-            if (Input.GetKeyDown(KeyCode.Space) || gm.jumpPressed || gm.movementJoystick.yValue >= .9f && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
+            if (Input.GetKeyDown(KeyCode.Space) || gm.mobileController.jumpPressed || gm.mobileController.movementJoystick.yValue >= .9f && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
             {
                 if (jetpack.fJetpackFuelTime < jetpack.jetpackFuelTime)
                 {
@@ -147,16 +147,16 @@ public class Character : MonoBehaviour
         {
             // for analog
             //Mobile Impelementation
-            if (gm.useMobileControll && gm.useJoystickToMove)
+            if (gm.useMobileControll && gm.mobileController.useJoystickToMove)
             {
-                input = new Vector2(gm.movementJoystick.xValue, gm.movementJoystick.yValue);
+                input = new Vector2(gm.mobileController.movementJoystick.xValue, gm.mobileController.movementJoystick.yValue);
 
             }
 
             //for arrow button,
             //Mobile Impelementation
-            else if (gm.useMobileControll && !gm.useJoystickToMove)
-                input = new Vector2(gm.direction, 0);
+            else if (gm.useMobileControll && !gm.mobileController.useJoystickToMove)
+                input = new Vector2(gm.mobileController.direction, 0);
 
             else
                 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -298,7 +298,7 @@ public class Character : MonoBehaviour
 
         if (!ladder.isClimbing && !ledgegrab.ledgeGrabbed)
         {
-            if (!gm.use360Aim)
+            if (!gm.mobileController.use360Aim)
             {
                 if (input.x > 0 && !facingRight)
                 {
@@ -329,9 +329,9 @@ public class Character : MonoBehaviour
         float speed = 0;
         if (gm.useMobileControll)
         { //Mobile Implementation
-            if (gm.useJoystickToMove)
-                speed = Mathf.Abs(gm.movementJoystick.xValue);
-            else speed = Mathf.Abs(gm.direction);
+            if (gm.mobileController.useJoystickToMove)
+                speed = Mathf.Abs(gm.mobileController.movementJoystick.xValue);
+            else speed = Mathf.Abs(gm.mobileController.direction);
         }
         else
         {
@@ -923,3 +923,4 @@ public class Character : MonoBehaviour
         }
     }
 }
+
