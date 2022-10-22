@@ -20,10 +20,10 @@ public class EnemyHealth : HealthSystem
     {
         if (GameManager.Singleton)
         {
-            GameManager.Singleton.currentEnemyCount--;
-            if (GameManager.Singleton.currentEnemyCount < 0)
+            GameManager.Singleton.spawnerManager.currentEnemyCount--;
+            if (GameManager.Singleton.spawnerManager.currentEnemyCount < 0)
             {
-                GameManager.Singleton.currentEnemyCount = 0;
+                GameManager.Singleton.spawnerManager.currentEnemyCount = 0;
             }
 
         }

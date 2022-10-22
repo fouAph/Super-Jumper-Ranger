@@ -8,9 +8,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Singleton;
     public bool isTesting;
+    public CharacterFlipMode flipMode;
     public bool useMobileControll;
     public MobileController mobileController;
 
+    [Header("Player")]
+    public bool invicible;
+    public bool useInfiniteAmmo;
+    public CharacterDataSO currentCharacter;
+    public PlayerManager playerManager;
+    public Transform playerSpawnPoint;
 
     [Header("WeaponSetting")]
     public bool useBulletGravity;
@@ -56,54 +63,32 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Game Settings")]
     public int targetScore;
 
-
     [Header("Game State")]
-    public bool invicible;
     public GameState gameState = GameState.Menu;
-    public CharacterDataSO currentCharacter;
     public int boxCollected;
     public int killCounter;
-
-
 
     [BoxGroup("Game Settings")]
     public float startCountdownTimer;
     float startCountdown;
 
-    [BoxGroup("Enemy Spawn Settings")]
-    public int maxEnemyCount = 3;
-
-    public int currentEnemyCount;
-    [BoxGroup("Enemy Spawn Settings")]
-    public float nextEnemySpawnTime = 0.5f;
-    float enemyWaitTimer;
-
-    [BoxGroup("Box Spawn Settings")]
-    public int maxBoxCount = 1;
-
-    public int currentBoxCount;
-    [BoxGroup("Box Spawn Settings")]
-    public float nextBoxSpawnTime = 1f;
-    float boxWaitTimer;
-
     private UiManager uiManager;
-    ItemSpawnManager itemSpawnManager;
-    EnemySpawnerManager enemySpawnerManager;
+    public SpawnerManager spawnerManager;
 
+    int maxEnemyCount = 3;
+    int maxBoxCount = 1;
     List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     bool isPause;
 
     private void Start()
     {
-        boxWaitTimer = nextBoxSpawnTime;                //Set Box Timer
-        enemyWaitTimer = nextEnemySpawnTime;            //Set Enemy Timer 
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
 
         if (isTesting)
         {
             if (useMobileControll)
             {
-                mobileController.SetMobileControllScheme();
+                mobileController.SetMobileControllScheme(this);
                 mobileController.gameObject.SetActive(true);
             }
             else
@@ -129,33 +114,17 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Gameloop();                                                         //call GameLoop Methode everyframe
-        if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
-        {
-            enemyWaitTimer -= Time.deltaTime;
-            if (enemyWaitTimer <= 0)
-            {
-                enemyWaitTimer = nextEnemySpawnTime;
-                SpawnEnemy();
-            }
-        }
+        Gameloop();
 
-        if (currentBoxCount < maxBoxCount && itemSpawnManager)
-        {
-            boxWaitTimer -= Time.deltaTime;
-            if (boxWaitTimer <= 0)
-            {
-                boxWaitTimer = nextBoxSpawnTime;
-                SpawnBox();
-            }
-        }
+        spawnerManager.ObjectSpawnHandler();
     }
+
     #region  InGame Methods
     public void ResumeGame()
     {
         Time.timeScale = 1;                                 //Unfreeze the game
         gameState = GameState.InGame;                       //set the gameState to InGame  
-        PlayerManager.Singleton.EnablePlayerController();   //Enable Player controll
+        playerManager.EnablePlayerController();   //Enable Player controll
         pauseMenuScreen.SetActive(false);                   //disable Pause Menu Screen
     }
 
@@ -163,7 +132,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;                                 //Freeze the game
         gameState = GameState.Menu;                         //set the game state to menu
-        PlayerManager.Singleton.DisablePlayerController();  //Disable player controll
+        playerManager.DisablePlayerController();  //Disable player controll
         pauseMenuScreen.SetActive(true);                    //Enable Pause Screen Menu
     }
 
@@ -177,13 +146,14 @@ public class GameManager : MonoBehaviour
 
         if (useMobileControll)
         {
-            mobileController.SetMobileControllScheme();
+            mobileController.SetMobileControllScheme(this);
             mobileController.gameObject.SetActive(true);
         }
         else
             mobileController.gameObject.SetActive(false);
 
         StartCoroutine(GetSceneLoadingProgress());
+        StartCoroutine(SetupGameReference());
         StartCoroutine(StartGameCountdown());
     }
 
@@ -198,6 +168,7 @@ public class GameManager : MonoBehaviour
         currentMapBuildLevelIndex = currentMapBuildLevelIndex + 1;
         currentMap = mapDataSO[currentMapBuildLevelIndex - 2];
         SetMapSettings();                                                                                       //set Map settings, like how many enemy to spawn
+        spawnerManager = SpawnerManager.Singleton;
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(StartGameCountdown());
     }
@@ -218,15 +189,17 @@ public class GameManager : MonoBehaviour
         MusicManager.Singleton.StopMusic();
         sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));
+        gameState = GameState.Menu;
         StartCoroutine(GetSceneLoadingProgress());
+        StartCoroutine(SetupGameReference());
         StartCoroutine(StartGameCountdown());
 
     }
 
     private void ResetCurrentGameProgress()
     {
-        currentBoxCount = 0;
-        currentEnemyCount = 0;
+        spawnerManager.currentBoxCount = 0;
+        spawnerManager.currentEnemyCount = 0;
         killCounter = 0;
         boxCollected = 0;
     }
@@ -240,12 +213,12 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
         }
-
         yield return new WaitForSeconds(.01f);
         gameOverScreen.SetActive(false);
         yield return new WaitForSeconds(1f);
         loadingScreen.SetActive(false);
     }
+
 
     IEnumerator StartGameCountdown()
     {
@@ -265,28 +238,24 @@ public class GameManager : MonoBehaviour
             else if (startCountdown <= 0)
             {
                 countDownHelper.SetSprite(countDownHelper._go);
-                PlayerManager.Singleton.EnablePlayerController();
+                playerManager.EnablePlayerController();
             }
-
-
             yield return null;
         }
         yield return new WaitForSeconds(.2f);
         countdownGameobject.SetActive(false);
-        SetupReference();
         gameState = GameState.InGame;
     }
 
-
     void Gameloop()
     {
-        // if (PlayerManager.Singleton.playerHealth.isDead && gameState == GameState.InGame)
+        // if (currentPlayer.playerHealth.isDead && gameState == GameState.InGame)
         if (gameState == GameState.InGame)
         {
             var totalscore = killCounter / 3 + boxCollected;
-            if (PlayerManager.Singleton.playerHealth.isDead || totalscore >= targetScore)
+            if (playerManager.playerHealth.isDead || totalscore >= targetScore)
             {
-                if (PlayerManager.Singleton.playerHealth.isDead)
+                if (playerManager.playerHealth.isDead)
                 {
                     gameOverScorePopup.SetTitleToGameOver();
                 }
@@ -319,9 +288,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SpawnBox() => itemSpawnManager.SpawnBoxItem();
-
-    void SpawnEnemy() => enemySpawnerManager.SpawnEnemy();
     #endregion
 
     #region SaveData, LoadData, ResetData 
@@ -362,11 +328,33 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    void SetupReference()
+    IEnumerator SetupGameReference()
     {
+        yield return new WaitForSeconds(.5f);
         uiManager = UiManager.Singleton;
-        itemSpawnManager = ItemSpawnManager.Singleton;
-        enemySpawnerManager = EnemySpawnerManager.Singleton;
+        spawnerManager = SpawnerManager.Singleton;
+        spawnerManager.maxEnemyCount = currentMap.maxEnemyCount;
+        spawnerManager.maxBoxCount = currentMap.maxBoxCount;
+
+        if (!playerSpawnPoint)
+        {
+            playerSpawnPoint = GameObject.Find("PlayerSpawnPoint").transform;
+        }
+
+        yield return new WaitForSeconds(.2f);
+        if (playerManager == false)
+        {
+            PoolSystem.Singleton.AddObjectToPooledObject(currentCharacter.CharacterPrefab, 1);
+            // yield return new WaitForSeconds(.1f);
+            yield return null;
+        }
+
+        var c = PoolSystem.Singleton.SpawnFromPool(currentCharacter.CharacterPrefab, playerSpawnPoint.position, Quaternion.identity);
+        playerManager = c.GetComponent<PlayerManager>();
+        yield return new WaitForSeconds(.1f);
+        uiManager.InitHealth();
+
+
     }
 
     public void UpdateScoreCount(int scoreToAdd)
@@ -420,11 +408,47 @@ public class GameManager : MonoBehaviour
         maxBoxCount = currentMap.maxBoxCount;
         currentMapBuildLevelIndex = currentMap.indexInBuildIndex;
 
+        // spawnerManager.maxEnemyCount = currentMap.maxEnemyCount;
+        // spawnerManager.maxBoxCount = currentMap.maxBoxCount;
     }
     #endregion
 
+    #region Change Controll
+    public void ChangeControllMode_OnClickButton()
+    {
+        if (useMobileControll)
+        {
+            ChangeMobileControllMode();
+        }
+        else ChangeWindowsControllMode();
+    }
 
+    void ChangeMobileControllMode()
+    {
+        int curControll = (int)mobileController.controlScheme;
+        if (curControll < 2)
+        {
+            mobileController.controlScheme++;
+        }
+        else
+            mobileController.controlScheme = 0;
+
+        mobileController.SetMobileControllScheme(this);
+    }
+
+    void ChangeWindowsControllMode()
+    {
+        int curControll = (int)flipMode;
+        if (curControll < 1)
+            flipMode++;
+        else
+            flipMode = 0;
+        playerManager.c.EnableOrDisableRotatePlayerBody();
+
+    }
+    #endregion
 }
 
+public enum CharacterFlipMode { ByMousePosition, ByMoveDirection }
 public enum SceneIndexes { MANAGER = 0, TITLE_SCREEN = 1, MAP_1 = 2, MAP_2 = 3, MAP_3 = 3, MAP_4 = 4 }
 public enum GameState { Menu, InGame, GameOver }

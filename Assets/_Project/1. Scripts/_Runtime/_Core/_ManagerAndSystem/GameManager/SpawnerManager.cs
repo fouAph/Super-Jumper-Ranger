@@ -1,7 +1,9 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 public class SpawnerManager : MonoBehaviour
 {
+    #region Singleton
     public static SpawnerManager Singleton;
     private void Awake()
     {
@@ -15,10 +17,78 @@ public class SpawnerManager : MonoBehaviour
         Singleton = this;
 
     }
+    #endregion
+    public GameManager gm { get; set; }
+    public ItemSpawnManager itemSpawnManager { get; set; }
+    public BuffSpawnManager buffSpawnManager { get; set; }
+    public EnemySpawnerManager enemySpawnerManager { get; set; }
 
-    public ItemSpawnManager itemSpawnManager;
-    public float itemSpawnerWaitTime = 10;
-    private float itemSpawnerTimer;
+    public PipeItemSpawner[] pipeSpawnerPosition;
 
-    public EnemySpawnerManager enemySpawnerManager;
+    [BoxGroup("Box Spawn Settings")]
+    public int currentEnemyCount;
+    [BoxGroup("Enemy Spawn Settings")]
+    public int maxEnemyCount = 3;
+    [BoxGroup("Enemy Spawn Settings")]
+    public float nextEnemySpawnTime = 3f;
+    float enemyWaitTimer;
+
+    [BoxGroup("Box Spawn Settings")]
+    public int currentBoxCount;
+    [BoxGroup("Box Spawn Settings")]
+    public int maxBoxCount = 1;
+    [BoxGroup("Box Spawn Settings")]
+    public float nextBoxSpawnTime = 1f;
+    float boxWaitTimer;
+
+    [BoxGroup("BuffBox Spawn Settings")]
+    public int currentBuffBoxCount;
+    [BoxGroup("BuffBox Spawn Settings")]
+    public int maxBuffBoxCount = 1;
+    [BoxGroup("BuffBox Spawn Settings")]
+    public int spawnBuffBoxEveryEnemyKilled = 5;
+    // float BoxBuffWaitTimer;
+    private void Start()
+    {
+        gm = GameManager.Singleton;
+        itemSpawnManager = GetComponentInChildren<ItemSpawnManager>();
+        enemySpawnerManager = GetComponentInChildren<EnemySpawnerManager>();
+        buffSpawnManager = GetComponentInChildren<BuffSpawnManager>();
+
+        boxWaitTimer = nextBoxSpawnTime;                //Set Box Timer
+        enemyWaitTimer = nextEnemySpawnTime;            //Set Enemy Timer 
+    }
+
+    public void ObjectSpawnHandler()
+    {
+        //call GameLoop Methode everyframe
+        if (currentEnemyCount < maxEnemyCount && enemySpawnerManager)
+        {
+            enemyWaitTimer -= Time.deltaTime;
+            if (enemyWaitTimer <= 0)
+            {
+                enemyWaitTimer = nextEnemySpawnTime;
+                SpawnEnemy();
+            }
+        }
+
+        if (currentBoxCount < maxBoxCount && itemSpawnManager)
+        {
+            boxWaitTimer -= Time.deltaTime;
+            if (boxWaitTimer <= 0)
+            {
+                boxWaitTimer = nextBoxSpawnTime;
+                SpawnBox();
+            }
+        }
+
+        if (currentBuffBoxCount < maxBuffBoxCount && currentEnemyCount < 1)
+        {
+            SpawnBuffBox();
+        }
+    }
+
+    void SpawnBox() => itemSpawnManager.SpawnBoxItem();
+    void SpawnEnemy() => enemySpawnerManager.SpawnEnemy();
+    void SpawnBuffBox() => buffSpawnManager.SpawnBuffBoxItem();
 }

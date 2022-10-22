@@ -45,13 +45,15 @@ GameObject:
   - component: {fileID: 5364455100187748289}
   - component: {fileID: 8905036833684107685}
   - component: {fileID: 4792226253804670675}
+  - component: {fileID: 370738432}
+  - component: {fileID: 370738433}
   m_Layer: 23
   m_Name: PolkaBoy
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6718569428207166675
 Transform:
   m_ObjectHideFlags: 0
@@ -154,6 +156,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.13
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -226,7 +230,6 @@ MonoBehaviour:
   transformsToRotate:
   - {fileID: 8445078299007012458}
   isFacingRight: 0
-  facingDirection: 0
 --- !u!114 &4792226253804670675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +255,37 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isDead: 0
+--- !u!114 &370738432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4547778974268273950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b501d2ba5726341ad28c52bffe4d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSlot: 1
+  weaponInventoryHolder: {fileID: 4753922660178316349}
+  useSwapWeapon: 1
+--- !u!114 &370738433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4547778974268273950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebea8e40dddcdb4a807299b7d1636e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 0}
+  c: {fileID: 0}
+  invicible: 0
+  isPlayerDead: 0
 --- !u!1 &4836497487364913286
 GameObject:
   m_ObjectHideFlags: 0

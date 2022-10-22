@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8920976417311140577}
   m_Layer: 23
-  m_Name: Arm (1)
+  m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ Transform:
   m_Children:
   - {fileID: 8920976416520160427}
   m_Father: {fileID: 8920976417857160792}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8920976417857160774
 GameObject:
@@ -76,6 +76,8 @@ GameObject:
   - component: {fileID: 8920976417857160772}
   - component: {fileID: 8566700469198076673}
   - component: {fileID: 8920976417857160775}
+  - component: {fileID: 1664850550}
+  - component: {fileID: 1664850551}
   m_Layer: 23
   m_Name: JohnThicc 1
   m_TagString: Player
@@ -94,8 +96,8 @@ Transform:
   m_LocalPosition: {x: 0.4247, y: 0, z: -0.6752463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8920976417311140577}
   - {fileID: 8920976418173271815}
+  - {fileID: 8920976417311140577}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -185,6 +187,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.13
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -282,6 +286,37 @@ MonoBehaviour:
   transformsToRotate:
   - {fileID: 8920976417311140577}
   isFacingRight: 0
+--- !u!114 &1664850550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920976417857160774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebea8e40dddcdb4a807299b7d1636e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 0}
+  c: {fileID: 0}
+  invicible: 0
+  isPlayerDead: 0
+--- !u!114 &1664850551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8920976417857160774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b501d2ba5726341ad28c52bffe4d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSlot: 1
+  weaponInventoryHolder: {fileID: 8920976416520160427}
+  useSwapWeapon: 1
 --- !u!1 &8920976418173271814
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +347,7 @@ Transform:
   m_LocalScale: {x: 4.8089, y: 4.8089, z: 4.8089}
   m_Children: []
   m_Father: {fileID: 8920976417857160792}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8920976418173271812
 SpriteRenderer:

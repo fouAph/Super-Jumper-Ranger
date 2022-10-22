@@ -9,8 +9,7 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            WeaponManager.Singleton.PickupGun(this);
-            other.collider.GetComponent<Character>().Flip();
+            other.collider.GetComponent<WeaponManager>().PickupGun(this);
 
         }
     }

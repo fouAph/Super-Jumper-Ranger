@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - WeaponHolder
+  - ImpactFX
+  - PlayerSpawnPoint
   layers:
   - Default
   - TransparentFX

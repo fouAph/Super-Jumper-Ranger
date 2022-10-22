@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!96 &2758703420129928525
 TrailRenderer:
@@ -230,6 +230,7 @@ MonoBehaviour:
   deactiveAfter: 2
   hitVFXPrefab: {fileID: 4471791837547536025, guid: 5a057044714c1544bbd1c5cb20bd25e6, type: 3}
   rb: {fileID: 0}
+  damage: 40
 --- !u!58 &4178344998382317496
 CircleCollider2D:
   m_ObjectHideFlags: 0

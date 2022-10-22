@@ -27,4 +27,4 @@ MonoBehaviour:
   spreadValue: 0.2
   howManyBulletPerShoot: 1
   shootPower: 1700
-  spawnPosition: {x: 0.361, y: 0.042, z: 0}
+  spawnPosition: {x: 0.123, y: 0.083, z: 0}

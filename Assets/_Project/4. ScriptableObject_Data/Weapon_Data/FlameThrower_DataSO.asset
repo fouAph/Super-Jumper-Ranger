@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 789d690aa75194041b38f48735f3e917, type: 3}
+  m_Name: FlameThrower_DataSO
+  m_EditorClassIdentifier: 
+  ItemPrefab: {fileID: 3540999494377323484, guid: 4e70723b50cf7854baf4e18446a6e06b, type: 3}
+  itemName: 
+  bulletType: 0
+  ammoType: 0
+  shootSFX: {fileID: 8300000, guid: b89b8c23ac6e799409c0df807b2200b6, type: 3}
+  cameraShakeDuration: 0.2
+  cameraShakeStrength: 0.2
+  fireRate: 7
+  damage: 8
+  maxAmmoInMag: 30
+  maxCarryingAmmo: 90
+  autoFire: 1
+  spreadValue: 0.3
+  howManyBulletPerShoot: 1
+  shootPower: 1300
+  spawnPosition: {x: 0.05, y: -0.038, z: 1.05}

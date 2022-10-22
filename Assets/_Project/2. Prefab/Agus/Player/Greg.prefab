@@ -148,13 +148,15 @@ GameObject:
   - component: {fileID: 3489940762222079624}
   - component: {fileID: 110784650856413420}
   - component: {fileID: 4079687038591960986}
+  - component: {fileID: 1935706472}
+  - component: {fileID: 1935706473}
   m_Layer: 23
   m_Name: Greg
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2819739970561404314
 Transform:
   m_ObjectHideFlags: 0
@@ -257,6 +259,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.13
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -329,7 +333,6 @@ MonoBehaviour:
   transformsToRotate:
   - {fileID: 1093930662445074211}
   isFacingRight: 0
-  facingDirection: 0
 --- !u!114 &4079687038591960986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,6 +358,37 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isDead: 0
+--- !u!114 &1935706472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972089703242021975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b501d2ba5726341ad28c52bffe4d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSlot: 1
+  weaponInventoryHolder: {fileID: 4316083025814603124}
+  useSwapWeapon: 1
+--- !u!114 &1935706473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972089703242021975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebea8e40dddcdb4a807299b7d1636e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 0}
+  c: {fileID: 0}
+  invicible: 0
+  isPlayerDead: 0
 --- !u!1 &7329390869174957770
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,16 +11,18 @@ public class RotatePlayerBodyParts : MonoBehaviour
     Vector3 difference;
     GameManager gm => GameManager.Singleton;
 
-  
+
     private void Start()
     {
- tr = transform;
+        tr = transform;
         // gm = GameManager.Singleton;
-        if (!gm.mobileController.use360Aim)
+        // if(gm.mobileController)
+        if (gm.flipMode == CharacterFlipMode.ByMoveDirection)
             this.enabled = false;
     }
     private void FixedUpdate()
     {
+          if (gm.flipMode == CharacterFlipMode.ByMoveDirection) return;
         if (gm.useMobileControll)
             difference = new Vector3(gm.mobileController.shootJoystick.xValue, gm.mobileController.shootJoystick.yValue, 0);
         else

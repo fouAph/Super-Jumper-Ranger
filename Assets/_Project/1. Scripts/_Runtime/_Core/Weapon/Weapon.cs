@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : WeaponBase
 {
-    public WeaponDataSO gunDataSO;
     public Transform bulletSpawnPoint;
-    public BulletProjectilePoolHelper bulletPrefab;         //BulletPrefab with BulletProjectilePoolHelper.cs
+    public BulletProjectilePoolHelper bulletProjectilePrefab;         //BulletPrefab with BulletProjectilePoolHelper.cs
 
-    public int currentAmmo;
-    public int curentDamage;
+    public Animator animator;
     private float currentFireRate;
 
     private float _lastFired;
@@ -27,9 +25,16 @@ public class Weapon : MonoBehaviour
         uiManager = UiManager.Singleton;
         transform.localPosition = gunDataSO.spawnPosition;
         // PoolSystemGeneric.Singleton.AddObjectToPooledObject(bulletPrefab, 50);
-        PoolSystem.Singleton.AddObjectToPooledObject(bulletPrefab.gameObject, 50);
         currentAmmo = gunDataSO.maxAmmoInMag;
         curentDamage = gunDataSO.damage;
+        animator = GetComponentInChildren<Animator>();
+        Invoke("AddBulletPrefab", .1f);
+
+    }
+
+    void AddBulletPrefab()
+    {
+        PoolSystem.Singleton.AddObjectToPooledObject(bulletProjectilePrefab.gameObject, 50);
 
     }
 
@@ -59,11 +64,12 @@ public class Weapon : MonoBehaviour
         if (currentAmmo > 0)
             if (Time.time - _lastFired > 1 / gunDataSO.fireRate)
             {
-                if (!WeaponManager.Singleton.useInfiniteAmmo)
+                if (!gm.useInfiniteAmmo)
                     currentAmmo--;
 
-                // if (uiManager)
-                //     UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
+                
+                if (animator)
+                    animator.SetTrigger("Shoot");
 
                 _lastFired = Time.time;
                 switch (gunDataSO.bulletType)
@@ -79,12 +85,15 @@ public class Weapon : MonoBehaviour
                 AudioPoolSystem.Singleton.PlayShootAudio(gunDataSO.shootSFX, 1f);
                 if (CameraShake.Singleton)
                     CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
+                if (!uiManager) return;
+                UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
             }
     }
 
     public void ShootProjectile()
     {
         var spawnEuler = bulletSpawnPoint.localEulerAngles;
+
         for (int i = 0; i < gunDataSO.howManyBulletPerShoot; i++)
         {
             bulletSpawnPoint.transform.localRotation = Quaternion.Euler(
@@ -95,9 +104,12 @@ public class Weapon : MonoBehaviour
                             //Rotate random z
                             Random.Range(-gunDataSO.spreadValue, gunDataSO.spreadValue));
 
-            var bullet = poolSystem.SpawnFromPool(bulletPrefab.gameObject, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-            var bulletRb = bullet.GetComponent<Rigidbody2D>();
-            bulletRb.AddForce(bulletSpawnPoint.right * gunDataSO.shootPower);
+            var bullet = poolSystem.SpawnFromPool(bulletProjectilePrefab.gameObject, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            if (bullet)
+            {
+                var bulletRb = bullet.GetComponent<Rigidbody2D>();
+                bulletRb.AddForce(bulletSpawnPoint.right * gunDataSO.shootPower);
+            }
             // bulletRb.velocity = bulletSpawnPoint.right * gunDataSO.shootPower;
 
             #region Unused (Pool Generic)
@@ -125,7 +137,7 @@ public class Weapon : MonoBehaviour
 
             Debug.DrawLine(bulletSpawnPoint.position, hit.point, Color.red, .2f);
             print(hit.point + new Vector2(Random.Range(-gunDataSO.spreadValue, gunDataSO.spreadValue), Random.Range(-gunDataSO.spreadValue, gunDataSO.spreadValue)));
-            var bullet = poolSystem.SpawnFromPool(bulletPrefab.gameObject, bulletSpawnPoint.position, Quaternion.identity) as GameObject;
+            var bullet = poolSystem.SpawnFromPool(bulletProjectilePrefab.gameObject, bulletSpawnPoint.position, Quaternion.identity) as GameObject;
             var bulletRb = bullet.GetComponent<Rigidbody2D>();
             bulletRb.velocity = Vector3.zero;
             // bulletRb.velocity = direction * 1000;

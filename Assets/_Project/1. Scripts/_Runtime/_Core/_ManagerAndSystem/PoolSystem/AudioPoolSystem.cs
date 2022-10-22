@@ -47,22 +47,26 @@ public class AudioPoolSystem : MonoBehaviour
         }
     }
 
-    public void PlayAudio(AudioClip clip, float volume = .1f)
+    public AudioSource PlayAudio(AudioClip clip, float volume = .1f, bool loop = false)
     {
         AudioSource source = audioqueue.Dequeue();
+        source.loop = loop;
         source.spatialBlend = 0;
         source.volume = volume * masterVolume;
         source.clip = clip;
         source.Play();
 
         audioqueue.Enqueue(source);
+
+        return source;
     }
+
 
     public void PlayShootAudio(AudioClip clip, float volume = .1f)
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = (volume * shootVolume * masterVolume) *.05f;
+        source.volume = (volume * shootVolume * masterVolume) * .05f;
         source.clip = clip;
         source.Play();
 
@@ -73,7 +77,7 @@ public class AudioPoolSystem : MonoBehaviour
     {
         AudioSource source = audioqueue.Dequeue();
         source.spatialBlend = 0;
-        source.volume = (volume * SFXVolume * masterVolume) *.05f;
+        source.volume = (volume * SFXVolume * masterVolume) * .05f;
         source.clip = clip;
         source.Play();
 

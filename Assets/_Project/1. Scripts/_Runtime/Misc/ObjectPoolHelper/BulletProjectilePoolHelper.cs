@@ -45,7 +45,7 @@ public class BulletProjectilePoolHelper : PoolHelper
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        gameObject.SetActive(false);
+
         // PoolSystemGeneric.Singleton.SpawnFromPool(hitVFXPrefab, transform.position, transform.rotation);
         PoolSystem.Singleton.SpawnFromPool(hitVFXPrefab.gameObject, transform.position, transform.rotation);        //Spawn HitVFXPrefab
         if (other.collider.CompareTag("Enemy"))
@@ -53,16 +53,17 @@ public class BulletProjectilePoolHelper : PoolHelper
             EnemyHealth damageable = other.gameObject.GetComponent<EnemyHealth>();
             if (damageable != null)
             {
-                damageable.OnDamage(WeaponManager.Singleton.weaponInventoryHolder.GetComponentInChildren<Weapon>().curentDamage);
+                damageable.OnDamage(gm.playerManager.weaponManager.currentGun.curentDamage);
                 if (damageable.isDead) GameManager.Singleton.killCounter++;
             }
+            gameObject.SetActive(false);
         }
 
         // if(projectileType == ProjectileType.Explodeable)
         // {
         //      rb.AddForce
         // }
-
+        gameObject.SetActive(false);
     }
 }
 public enum ProjectileType { Normal, Explodeable }

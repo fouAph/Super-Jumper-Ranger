@@ -178,13 +178,15 @@ GameObject:
   - component: {fileID: 1107756790837987098}
   - component: {fileID: 4519606605223252350}
   - component: {fileID: 553025694863584776}
+  - component: {fileID: 667766895}
+  - component: {fileID: 667766896}
   m_Layer: 23
   m_Name: CaptainDook
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1734152896871891976
 Transform:
   m_ObjectHideFlags: 0
@@ -287,6 +289,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.13
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -359,7 +363,6 @@ MonoBehaviour:
   transformsToRotate:
   - {fileID: 3467530281621761713}
   isFacingRight: 0
-  facingDirection: 0
 --- !u!114 &553025694863584776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,3 +388,34 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isDead: 0
+--- !u!114 &667766895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804855522363037125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b501d2ba5726341ad28c52bffe4d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSlot: 1
+  weaponInventoryHolder: {fileID: 348051417552792806}
+  useSwapWeapon: 1
+--- !u!114 &667766896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8804855522363037125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eebea8e40dddcdb4a807299b7d1636e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 0}
+  c: {fileID: 0}
+  invicible: 0
+  isPlayerDead: 0

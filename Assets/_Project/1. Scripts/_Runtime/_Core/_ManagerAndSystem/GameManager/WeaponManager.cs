@@ -5,32 +5,19 @@ using UnityEngine.Events;
 using NaughtyAttributes;
 public class WeaponManager : MonoBehaviour
 {
-    #region Singeleton
-    public static WeaponManager Singleton;
-    private void Awake()
-    {
-        if (Singleton != null)
-        {
-            Debug.LogWarning("More than 1 Instance");
-        }
-        Singleton = this;
-    }
-    #endregion
-
-    public Weapon currentGun { get; set; }
+    public WeaponBase currentGun { get; set; }
     public int maxSlot = 1;
     public Transform weaponInventoryHolder;
-    public bool useInfiniteAmmo;
     public bool useSwapWeapon;
 
 
     private int selectedWeapon;
-    List<Weapon> guns = new List<Weapon>();
+    List<WeaponBase> guns = new List<WeaponBase>();
     UiManager uiManager;
     private void Start()
     {
         uiManager = UiManager.Singleton;
-        weaponInventoryHolder = GameObject.FindGameObjectWithTag("WeaponHolder").transform;
+        if (!weaponInventoryHolder) Debug.LogWarningFormat("weaponInventoryHolder variable is not assigned on {0} object", gameObject.name);
     }
     private void Update()
     {
@@ -66,6 +53,64 @@ public class WeaponManager : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (guns.Count > 3)
+            {
+                selectedWeapon = 3;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            if (guns.Count > 4)
+            {
+                selectedWeapon = 4;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            if (guns.Count > 5)
+            {
+                selectedWeapon = 5;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            if (guns.Count > 6)
+            {
+                selectedWeapon = 6;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            if (guns.Count > 7)
+            {
+                selectedWeapon = 7;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            if (guns.Count > 8)
+            {
+                selectedWeapon = 8;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            if (guns.Count > 9)
+            {
+                selectedWeapon = 9;
+            }
+        }
+
+
+
         // if (Input.GetKeyDown(KeyCode.G))
         // {
         //      DropWeapon(currentWeapon.weaponStats);
@@ -88,7 +133,7 @@ public class WeaponManager : MonoBehaviour
             if (i == selectedWeapon)
             {
                 gun.gameObject.SetActive(true);
-                currentGun = gun.GetComponentInChildren<Weapon>();
+                currentGun = gun.GetComponentInChildren<WeaponBase>();
                 if (currentGun)
                     StartCoroutine(UpdateAmmoRoutine());
 
@@ -125,7 +170,7 @@ public class WeaponManager : MonoBehaviour
             //TODO Spawn With PoolSystem
             var gun = Instantiate(pickupDataSo.ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             gun.transform.SetParent(weaponInventoryHolder);
-            guns.Add(pickupDataSo.ItemPrefab.GetComponent<Weapon>());
+            guns.Add(pickupDataSo.ItemPrefab.GetComponent<WeaponBase>());
 
             if (currentGun)
                 gun.SetActive(false);
@@ -143,7 +188,7 @@ public class WeaponManager : MonoBehaviour
         bool isPickedup = false;
         var pickupDataSo = _gunPickupRandom.gunDataSO;
 
-        //FIXME Fix Swap Weapon Algorithm
+        //FIXME Fix Swap WeaponBase Algorithm
         if (useSwapWeapon && currentGun)
         {
             currentGun.transform.SetParent(PoolSystem.Singleton.transform);
@@ -166,8 +211,26 @@ public class WeaponManager : MonoBehaviour
             randGun = Random.Range(0, pickupDataSo.Count);
 
             var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
+            if (GameManager.Singleton && GameManager.Singleton.flipMode == CharacterFlipMode.ByMoveDirection)
+            {
+                Vector3 euler = Vector3.zero;
+                Vector3 scale = Vector3.one;
+                if (transform.localScale.x > 0)
+                {
+                    euler = gun.transform.localEulerAngles = Vector3.zero;
+                    scale = gun.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    euler = gun.transform.localEulerAngles = new Vector3(0, 180, 0);
+                    scale = gun.transform.localScale = new Vector3(1, 1, 1);
+                }
+
+                gun.transform.localEulerAngles = euler;
+                gun.transform.localScale = scale;
+            }
             gun.transform.SetParent(weaponInventoryHolder);
-            guns.Add(pickupDataSo[randGun].ItemPrefab.GetComponent<Weapon>());
+            guns.Add(pickupDataSo[randGun].ItemPrefab.GetComponent<WeaponBase>());
 
             if (currentGun)
                 gun.SetActive(false);

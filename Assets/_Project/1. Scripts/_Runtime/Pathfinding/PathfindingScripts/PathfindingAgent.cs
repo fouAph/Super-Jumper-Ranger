@@ -64,11 +64,11 @@ public class PathfindingAgent : MonoBehaviour
     private bool onewayGrounded = false;
     private bool usedPortal = false;
 
-    GameManager gameManager;
+    GameManager gm;
     //Get Components
     private void Awake()
     {
-        gameManager = GameManager.Singleton;
+        gm = GameManager.Singleton;
         if (_pathfindingManagerScript == null) { _pathfindingManagerScript = GameObject.FindObjectOfType<Pathfinding>(); }
         _aiControllerScript = GetComponent<AiController>();
         _characterScript = GetComponent<Character>();
@@ -86,13 +86,11 @@ public class PathfindingAgent : MonoBehaviour
 
     void DelayStart()
     {
-        if (PlayerManager.Singleton)
+        if (gm)
         {
-            pathfindingTarget = PlayerManager.Singleton.PlayerObject;
+            pathfindingTarget = gm.playerManager.gameObject;
         }
     }
-
-
     public void CancelPathing()
     {
         if (debugBool) { Debug.Log("path canceled"); }

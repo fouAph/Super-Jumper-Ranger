@@ -7,24 +7,11 @@ public class ItemSpawnManager : MonoBehaviour
     public static ItemSpawnManager Singleton;
     public WeaponPickupRandom gunPickupRandom;
     public ItemPickupRandomItem ammoPickupRandom;
-    GameManager gameManager;
-    [SerializeField] private PipeItemSpawner[] pipeSpawnerPosition;
-
-    private void Awake()
-    {
-        if (Singleton != null)
-        {
-            Debug.LogWarning("More than one Instance of " + Singleton.GetType());
-            Debug.LogWarning("Destroying " + Singleton.name);
-            DestroyImmediate(Singleton.gameObject);
-        }
-
-        Singleton = this;
-    }
+    SpawnerManager spawnerManager;
 
     private void Start()
     {
-        gameManager = GameManager.Singleton;
+        spawnerManager = SpawnerManager.Singleton;
         Invoke("DelayStart", .5f);
         // spawnTimer = spawnTimeWait;
     }
@@ -36,13 +23,13 @@ public class ItemSpawnManager : MonoBehaviour
 
     public void SpawnBoxItem()
     {
-        for (int i = Random.Range(0, pipeSpawnerPosition.Length); i < pipeSpawnerPosition.Length; i++)
+        for (int i = Random.Range(0, spawnerManager.pipeSpawnerPosition.Length); i < spawnerManager.pipeSpawnerPosition.Length; i++)
         {
-            // int randomNumberPipe = Random.Range(0, pipeSpawnerPosition.Length);
-            if (pipeSpawnerPosition[i].busy == false)
+            // int randomNumberPipe = Random.Range(0,  spawnerManager.pipeSpawnerPosition.Length);
+            if (spawnerManager.pipeSpawnerPosition[i].busy == false)
             {
-                pipeSpawnerPosition[i].SpawnItem();
-        gameManager.currentBoxCount++;
+                spawnerManager.pipeSpawnerPosition[i].SpawnItem();
+                spawnerManager.currentBoxCount++;
                 StartCoroutine(TriggerSpawn(i));
                 break;
             }
@@ -52,7 +39,7 @@ public class ItemSpawnManager : MonoBehaviour
     IEnumerator TriggerSpawn(int pos)
     {
         yield return new WaitForSeconds(1);
-        var go = PoolSystem.Singleton.SpawnFromPool(gunPickupRandom.gameObject, pipeSpawnerPosition[pos].transform.position, Quaternion.identity);
+        var go = PoolSystem.Singleton.SpawnFromPool(gunPickupRandom.gameObject, spawnerManager.pipeSpawnerPosition[pos].transform.position, Quaternion.identity);
         go.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
     }
 

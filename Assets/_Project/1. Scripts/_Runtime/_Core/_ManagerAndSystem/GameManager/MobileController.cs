@@ -5,7 +5,7 @@ public class MobileController : MonoBehaviour
     [Header("Mobile Settings")]
     public MobileControlScheme controlScheme;
     [HideInInspector] public bool use360Aim;
-    [HideInInspector] public float direction;
+    public float direction;
     [HideInInspector] public bool jumpPressed;
     [HideInInspector] public bool isFacingRight;
     [HideInInspector] public bool isFiring;
@@ -13,31 +13,44 @@ public class MobileController : MonoBehaviour
     public MyJoystick movementJoystick;
     public MyJoystick shootJoystick;
     public float shootThreshold = .8f;
-    public float jumpThreshold = .9f;
+    public float jumpThreshold = .7f;
     public GameObject[] buttonObjects;
 
-    public void SetMobileControllScheme()
+    public void SetMobileControllScheme(GameManager gm)
     {
         switch (controlScheme)
         {
             case MobileControlScheme.Analog:
+                gm.flipMode = CharacterFlipMode.ByMousePosition;
                 AnalogControll();
 
                 break;
             case MobileControlScheme.Button:
+                gm.flipMode = CharacterFlipMode.ByMoveDirection;
                 ButtonControll();
 
                 break;
             case MobileControlScheme.Hybrid:
+                gm.flipMode = CharacterFlipMode.ByMousePosition;
                 HybridControll();
 
                 break;
         }
     }
 
+    public void ChangeControllButton()
+    {
+        int curControll = (int)controlScheme;
+        if (curControll < 2)
+        {
+            controlScheme++;
+        }
+        else
+            controlScheme = 0;
+    }
+
     private void AnalogControll()
     {
-        use360Aim = true;
         useJoystickToMove = true;
 
         shootJoystick.gameObject.SetActive(true);
@@ -45,38 +58,52 @@ public class MobileController : MonoBehaviour
         for (int i = 0; i < buttonObjects.Length; i++)
         {
             buttonObjects[i].SetActive(false);
+            if (buttonObjects[i].name == "Pause_Button")
+            {
+                buttonObjects[i].SetActive(true);
+            }
         }
+
     }
 
     private void ButtonControll()
     {
-        use360Aim = false;
+        // use360Aim = false;
         useJoystickToMove = false;
 
         shootJoystick.gameObject.SetActive(false);
         movementJoystick.gameObject.SetActive(false);
         for (int i = 0; i < buttonObjects.Length; i++)
         {
-            buttonObjects[i].SetActive(true);
+            if (buttonObjects[i].name == "Hybrid_Jump_Button")
+                buttonObjects[i].SetActive(false);
+            else
+                buttonObjects[i].SetActive(true);
+
+            if (buttonObjects[i].name == "Pause_Button")
+            {
+                buttonObjects[i].SetActive(true);
+            }
         }
     }
 
     private void HybridControll()
     {
-        use360Aim = true;
+        // use360Aim = true;
         useJoystickToMove = false;
 
         shootJoystick.gameObject.SetActive(true);
         movementJoystick.gameObject.SetActive(false);
         foreach (var item in buttonObjects)
         {
-            if (item.gameObject.name == "MoveLeft_Button" || item.gameObject.name == "MoveRight_Button" || item.gameObject.name == "Jump_Button(2)")
+            if (item.gameObject.name == "MoveLeft_Button" || item.gameObject.name == "MoveRight_Button" || item.gameObject.name == "Hybrid_Jump_Button" || item.gameObject.name == "Pause_Button")
             {
-                continue;
+                item.SetActive(true);
             }
             else item.SetActive(false);
         }
     }
+
 
     #region Button Touch Methods
     public void SetDirection(float dir)

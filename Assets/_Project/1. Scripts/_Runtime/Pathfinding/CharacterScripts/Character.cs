@@ -34,6 +34,7 @@ public class Character : MonoBehaviour
     private bool facingRight = true;
     private RotatePlayerBodyParts rotatePlayerBodyParts;       /*determines the direction character is facing*/
     public bool jumped = false;              /*used for detecting if jump key was pressed (also used in ai)*/
+    private float coyoteJumptimer;
     public bool isAiControlled = false;      /*allows ai to take control over inputs*/
     public bool playerControlled = false;    /*allows input by player*/
     public bool teleport = false;            /*debugging bool to teleport character and set control to player*/
@@ -43,6 +44,7 @@ public class Character : MonoBehaviour
     float requestUpdatePathTimer;
 
     GameManager gm => GameManager.Singleton;
+    WeaponManager weaponManager;
     void Awake()
     {
         // gm = GameManager.Singleton;
@@ -60,6 +62,7 @@ public class Character : MonoBehaviour
 
         _body.bodyType = RigidbodyType2D.Dynamic;
         _body.freezeRotation = true;
+        weaponManager = GetComponent<WeaponManager>();
 
     }
 
@@ -74,11 +77,26 @@ public class Character : MonoBehaviour
             _pathingAgent.RequestPath(target.transform.position + Vector3.up);
         }
 
-        if (gm.mobileController.use360Aim)
-            rotatePlayerBodyParts = GetComponent<RotatePlayerBodyParts>();
-        if (!rotatePlayerBodyParts)
-            if (!_graphics) _graphics = gameObject; /*useful for preventing things from flipping when character is facing left*/
+        // if (gm.flipMode == CharacterFlipMode.ByMousePosition)
+        if (!_graphics) _graphics = gameObject; /*useful for preventing things from flipping when character is facing left*/
+        if (!playerControlled) return;
+        rotatePlayerBodyParts = GetComponent<RotatePlayerBodyParts>();
+        EnableOrDisableRotatePlayerBody();
 
+    }
+
+    public void EnableOrDisableRotatePlayerBody()
+    {
+        if (gm.flipMode == CharacterFlipMode.ByMoveDirection)
+            rotatePlayerBodyParts.enabled = false;
+        else
+        {
+            rotatePlayerBodyParts.enabled = true;
+            this.transform.localScale = Vector3.one;
+            if (!weaponManager.currentGun) return;
+            weaponManager.currentGun.transform.localEulerAngles = Vector3.zero;
+            weaponManager.currentGun.transform.localScale = Vector3.one;
+        }
     }
 
     void Update()
@@ -110,7 +128,7 @@ public class Character : MonoBehaviour
         if (playerControlled)
         {
             //Mobile Implementation
-            if (Input.GetKeyDown(KeyCode.Space) || gm.mobileController.jumpPressed || gm.mobileController.movementJoystick.yValue >= .9f && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
+            if (Input.GetKeyDown(KeyCode.Space) || gm.mobileController.jumpPressed || gm.mobileController.movementJoystick.yValue >= gm.mobileController.jumpThreshold && !ladder.isClimbing && !ledgegrab.ledgeGrabbed)
             {
                 if (jetpack.fJetpackFuelTime < jetpack.jetpackFuelTime)
                 {
@@ -145,16 +163,16 @@ public class Character : MonoBehaviour
         Vector2 input = Vector2.zero;
         if (playerControlled)
         {
-            // for analog
-            //Mobile Impelementation
+
+            //Mobile Impelementation // for analog
             if (gm.useMobileControll && gm.mobileController.useJoystickToMove)
             {
                 input = new Vector2(gm.mobileController.movementJoystick.xValue, gm.mobileController.movementJoystick.yValue);
 
             }
 
-            //for arrow button,
-            //Mobile Impelementation
+
+            //Mobile Impelementation  //for arrow button
             else if (gm.useMobileControll && !gm.mobileController.useJoystickToMove)
                 input = new Vector2(gm.mobileController.direction, 0);
 
@@ -169,7 +187,6 @@ public class Character : MonoBehaviour
         {
             _ai.GetInput(ref velocity, ref input, ref jumped);
         }
-
 
         //Ledgegrabbing
         if (ledgegrab.ability)
@@ -298,7 +315,7 @@ public class Character : MonoBehaviour
 
         if (!ladder.isClimbing && !ledgegrab.ledgeGrabbed)
         {
-            if (!gm.mobileController.use360Aim)
+            if (gm.flipMode == CharacterFlipMode.ByMoveDirection || isAiControlled)
             {
                 if (input.x > 0 && !facingRight)
                 {
@@ -346,6 +363,7 @@ public class Character : MonoBehaviour
         if (_controller.collisions.below || ladder.isClimbing)
         {
             jump.jumpCount = 0;
+            coyoteJumptimer = jump.maxCoyoteJumptimer;
         }
         if (_controller.collisions.above || _controller.collisions.below)
         {
@@ -354,64 +372,64 @@ public class Character : MonoBehaviour
         }
         else
         { // else if the character falls off an edge, 1 jump is lost
-            if (jump.jumpCount == 0) { jump.jumpCount++; }
+            coyoteJumptimer -= Time.deltaTime;
+            if (jump.jumpCount == 0 && coyoteJumptimer <= 0) { jump.jumpCount++; }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D triggeringCollider)
-    {
+    // private void OnTriggerEnter2D(Collider2D triggeringCollider)
+    // {
 
-        //Ladder Collision
-        if (_controller.ladderCollision.value == 1 << triggeringCollider.gameObject.layer)
-        {
-            ladder.AddLadder(triggeringCollider.gameObject);
-        }
-        if (_controller.portalCollision.value == 1 << triggeringCollider.gameObject.layer)
-        {
-            portal.AddPortal(triggeringCollider.gameObject);
-        }
+    //Ladder Collision
+    // if (_controller.ladderCollision.value == 1 << triggeringCollider.gameObject.layer)
+    // {
+    //     ladder.AddLadder(triggeringCollider.gameObject);
+    // }
+    // if (_controller.portalCollision.value == 1 << triggeringCollider.gameObject.layer)
+    // {
+    //     portal.AddPortal(triggeringCollider.gameObject);
+    // }
 
-    }
+    // }
 
-    private void OnTriggerExit2D(Collider2D triggeringCollider)
-    {
+    // private void OnTriggerExit2D(Collider2D triggeringCollider)
+    // {
 
-        if (_controller.ladderCollision.value == 1 << triggeringCollider.gameObject.layer)
-        {
-            ladder.RemoveLadder(triggeringCollider.gameObject);
-        }
-        if (_controller.portalCollision.value == 1 << triggeringCollider.gameObject.layer)
-        {
-            portal.RemovePortal(triggeringCollider.gameObject);
-        }
-    }
+    //     if (_controller.ladderCollision.value == 1 << triggeringCollider.gameObject.layer)
+    //     {
+    //         ladder.RemoveLadder(triggeringCollider.gameObject);
+    //     }
+    //     if (_controller.portalCollision.value == 1 << triggeringCollider.gameObject.layer)
+    //     {
+    //         portal.RemovePortal(triggeringCollider.gameObject);
+    //     }
+    // }
 
     //changes characters facing direction
     public void Flip()
     {
         // Switch the way the player is labelled as facing
         // Multiply the player's x local scale by -1
-        if (rotatePlayerBodyParts == null)
+        if (gm.flipMode == CharacterFlipMode.ByMoveDirection || !playerControlled)
         {
-            print("flip inside");
             facingRight = !facingRight;
             Vector3 theScale = _graphics.transform.localScale;
             theScale.x *= -1; _graphics.transform.localScale = theScale;
 
             if (!playerControlled) return;
-            if (!WeaponManager.Singleton) return;
+            if (!weaponManager) return;
 
-            if (WeaponManager.Singleton.currentGun)
+            if (weaponManager.currentGun)
             {
                 Vector3 rotateVector = Vector3.zero;
-                Vector3 flipVector = WeaponManager.Singleton.currentGun.transform.localScale;
+                Vector3 flipVector = weaponManager.currentGun.transform.localScale;
 
                 rotateVector.y = (transform.localScale.x == 1 ? 0 : 180);
                 // if (facingRight)
                 // {
-                WeaponManager.Singleton.currentGun.transform.localEulerAngles = rotateVector;
-                WeaponManager.Singleton.currentGun.transform.localScale = transform.localScale;
-                Vector3.ClampMagnitude(WeaponManager.Singleton.currentGun.transform.localScale, 1);
+                weaponManager.currentGun.transform.localEulerAngles = rotateVector;
+                weaponManager.currentGun.transform.localScale = transform.localScale;
+                Vector3.ClampMagnitude(weaponManager.currentGun.transform.localScale, 1);
                 // }
             }
         }
@@ -512,7 +530,8 @@ public class Character : MonoBehaviour
     {
 
         public bool ability = true;
-
+        public bool useCoyoteJump = true;
+        public float maxCoyoteJumptimer = .13f;
         [SerializeField]
         private float maxHeight = 2.5f;
         [SerializeField]

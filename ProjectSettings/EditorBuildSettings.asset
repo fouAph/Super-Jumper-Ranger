@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/3. Scenes/Agus/UsedScene/Level 1.unity
     guid: 396c755c7cc40fd468df70bea2310b39
-  - enabled: 1
-    path: Assets/_Project/3. Scenes/Agus/Flying enemy Test.unity
-    guid: 25469ffebb3bb5147a301e75e40a00f7
   m_configObjects: {}

@@ -4,8 +4,8 @@ using UnityEngine;
 public class WeaponPickupRandom : MonoBehaviour
 {
     public List<WeaponDataSO> gunDataSO;
-    [SerializeField] AudioClip pickupSfx;
     public GameObject pikcupVFX;
+    [SerializeField] AudioClip pickupSfx;
     [SerializeField] ScoreAdder scoreAdder;
     [SerializeField] HealthSystem healthSystem;
     private void Start()
@@ -24,7 +24,7 @@ public class WeaponPickupRandom : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            WeaponManager.Singleton.PickupGun(this);
+            other.collider.GetComponent<WeaponManager>().PickupGun(this);
             PoolSystem.Singleton.SpawnFromPool(pikcupVFX, transform.position, Quaternion.identity);
             if (!GameManager.Singleton.isTesting)
                 AudioPoolSystem.Singleton.PlayAudioSFX(pickupSfx, .5f);
@@ -34,7 +34,7 @@ public class WeaponPickupRandom : MonoBehaviour
                 GameManager.Singleton.UpdateScoreCount(scoreAdder.scoreToAdd);
                 SubstractCurrentBoxCount();
             }
-            other.collider.GetComponent<Character>().Flip();
+            // other.collider.GetComponent<Character>().Flip();
         }
 
         else if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))
@@ -45,12 +45,11 @@ public class WeaponPickupRandom : MonoBehaviour
         }
     }
 
+
     void SubstractCurrentBoxCount()
     {
-        if (GameManager.Singleton)
-        {
-            GameManager.Singleton.currentBoxCount--;
-        }
+        if (GameManager.Singleton.spawnerManager)
+            GameManager.Singleton.spawnerManager.currentBoxCount--;
 
     }
 

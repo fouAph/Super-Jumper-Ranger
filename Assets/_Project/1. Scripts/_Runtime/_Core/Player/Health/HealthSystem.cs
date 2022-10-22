@@ -26,8 +26,6 @@ public class HealthSystem : MonoBehaviour, IDamageable
     //TODO make individual HealthSystem For Enemy and Player
     public virtual void Start()
     {
-
-
         Setup();
     }
 
@@ -38,7 +36,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            
+
         if (spriteRenderer)
             originialColor = spriteRenderer.color;
 
@@ -90,7 +88,6 @@ public class HealthSystem : MonoBehaviour, IDamageable
     private void OnDamaged()
     {
         AudioPoolSystem.Singleton.PlayAudioSFX(damagedSFX, .5f);
-
     }
 
     private void OnDeath()
@@ -99,10 +96,11 @@ public class HealthSystem : MonoBehaviour, IDamageable
         gameObject.SetActive(false);
         if (deathClipSFX)
             AudioPoolSystem.Singleton.PlayAudioAtLocation(deathClipSFX, transform.position, 1f);
+
         SetHealth(0);
-        UiManager.Singleton.UpdateHealth();
-        if (PlayerManager.Singleton)
-            PlayerManager.Singleton.isPlayerDead = isDead;
+        if (transform.CompareTag("Player"))
+            UiManager.Singleton.UpdateHealth();
+
         isDead = true;
     }
 
