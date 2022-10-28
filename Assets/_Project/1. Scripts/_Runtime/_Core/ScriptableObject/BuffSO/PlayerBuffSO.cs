@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class PlayerBuffSO : ScriptableObject
 {
     public string buffName;
     public bool isPermanentBuff;
+    [HideIf("isPermanentBuff")]
     public float maxDuration;
     public virtual void OnUse(PlayerManager playerManager)
     {
@@ -22,12 +24,12 @@ public class PlayerBuffSO : ScriptableObject
     protected virtual IEnumerator UpdateBuffUIRoutine(PlayerManager playerManager)
     {
         playerManager.uiManager.SetupBuffUi(buffName, maxDuration);
-        while (playerManager.buffDurationLeft >= 0)
-        {
-            playerManager.uiManager.UpdateBuffUIProgress(playerManager.buffDurationLeft);
-            yield return null;
-        }
-
+        if (!isPermanentBuff)
+            while (playerManager.buffDurationLeft >= 0)
+            {
+                playerManager.uiManager.UpdateBuffUIProgress(playerManager.buffDurationLeft);
+                yield return null;
+            }
         yield return null;
     }
 

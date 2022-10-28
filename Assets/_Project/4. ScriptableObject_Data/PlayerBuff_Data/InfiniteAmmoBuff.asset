@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Infinite Ammo
-  m_EditorClassIdentifier: Assembly-CSharp::InfiniteAmmoBuff
-  buffName: Infinite Ammo
+  m_Script: {fileID: 11500000, guid: 8669cc2853d608f4c8aa11640de321d8, type: 3}
+  m_Name: InfiniteAmmoBuff
+  m_EditorClassIdentifier: 
+  buffName: InfiniteAmmo
   isPermanentBuff: 0
-  maxDuration: 15
+  maxDuration: 20

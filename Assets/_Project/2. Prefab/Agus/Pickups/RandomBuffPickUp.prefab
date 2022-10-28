@@ -187,11 +187,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponBuffList:
   - {fileID: 11400000, guid: cebcd706522de834795f37f395fcb6fb, type: 2}
-  - {fileID: 11400000, guid: ced53514927cbce48a05d6e2fccae402, type: 2}
+  - {fileID: 11400000, guid: 518f34b6045db704c8e008f5ca9af2a6, type: 2}
   playerBuffList:
   - {fileID: 11400000, guid: ecbaed408d3d3994f85c50f368da290d, type: 2}
-  - {fileID: 11400000, guid: eab73e3f214977a44adcf9d2b08bfbce, type: 2}
-  - {fileID: 11400000, guid: 66a8e8acb36f0dd49a635e69b46ca394, type: 2}
   pikcupVFX: {fileID: 2587631508003662213, guid: 24411b46a25192f4f8267810fa89ebdc, type: 3}
   pickupSfx: {fileID: 8300000, guid: 44c3b9740f7d4f742b820826c80f1a35, type: 3}
   scoreAdder: {fileID: 4478687764341605592}

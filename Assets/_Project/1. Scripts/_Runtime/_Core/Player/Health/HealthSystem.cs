@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using NaughtyAttributes;
+// using System;
 
 public class HealthSystem : MonoBehaviour, IDamageable
 {
     public int maxHealth = 100;
     public int currentHealth;
+    // public event EventHandler OnHealthChanged;
 
     //OnDamaged Settings
     [SerializeField] Color hitColor = Color.white;
@@ -23,7 +25,6 @@ public class HealthSystem : MonoBehaviour, IDamageable
 
     public bool isDead;
 
-    //TODO make individual HealthSystem For Enemy and Player
     public virtual void Start()
     {
         Setup();
@@ -116,5 +117,15 @@ public class HealthSystem : MonoBehaviour, IDamageable
         spriteRenderer.color = originialColor;
     }
 
+    public void OnHeal(int healValue)
+    {
+        currentHealth += healValue;
+
+    }
+
+    // public void HealthChaged()
+    // {
+
+    // }
 }
 

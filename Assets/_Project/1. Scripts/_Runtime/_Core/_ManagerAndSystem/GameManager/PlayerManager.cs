@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public HealthSystem playerHealth;
-    public Character c;
-    public float buffDurationLeft;
-    public bool invicible;
-    public bool isPlayerDead;
+    public int credit = 400;
+    public float buffDurationLeft { get; set; }
+    public bool invicible { get; set; }
+    public bool isPlayerDead { get; set; }
+    public HealthSystem playerHealth { get; set; }
+    public Character c { get; set; }
     public GameManager gm { get; set; }
     public UiManager uiManager { get; set; }
     public WeaponManager weaponManager { get; set; }
     private void Start()
     {
-
         Setup();
     }
 

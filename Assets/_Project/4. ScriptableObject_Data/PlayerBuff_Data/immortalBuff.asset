@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: f3c718c6ba96cd44d87f239daa1ebe78, type: 3}
   m_Name: immortalBuff
-  m_EditorClassIdentifier: Assembly-CSharp::immortalBuff
+  m_EditorClassIdentifier: 
   buffName: Immortal
   isPermanentBuff: 0
-  maxDuration: 10
+  maxDuration: 20

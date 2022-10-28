@@ -165,18 +165,14 @@ public class Character : MonoBehaviour
         {
 
             //Mobile Impelementation // for analog
-            if (gm.useMobileControll && gm.mobileController.useJoystickToMove)
-            {
+            if (gm.mobileController.movementJoystick.progress > .2f)
                 input = new Vector2(gm.mobileController.movementJoystick.xValue, gm.mobileController.movementJoystick.yValue);
-
-            }
-
-
             //Mobile Impelementation  //for arrow button
-            else if (gm.useMobileControll && !gm.mobileController.useJoystickToMove)
+            if (gm.mobileController.direction != 0)
                 input = new Vector2(gm.mobileController.direction, 0);
 
-            else
+            //For PC Keyboard
+            if (Input.GetAxisRaw("Horizontal") > 0 || Input.GetAxisRaw("Horizontal") < 0)
                 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
             if (isAiControlled && (input.x != 0 || input.y != 0)) { if (isAiControlled) { _pathingAgent.CancelPathing(); } isAiControlled = false; _ai._behaviourText.text = ""; } /*turns off Ai control to avoid confusion user error*/
@@ -344,16 +340,14 @@ public class Character : MonoBehaviour
 
         //animation
         float speed = 0;
-        if (gm.useMobileControll)
-        { //Mobile Implementation
-            if (gm.mobileController.useJoystickToMove)
-                speed = Mathf.Abs(gm.mobileController.movementJoystick.xValue);
-            else speed = Mathf.Abs(gm.mobileController.direction);
-        }
-        else
-        {
+
+        if (gm.mobileController.movementJoystick.progress > .2f)
+            speed = Mathf.Abs(gm.mobileController.movementJoystick.xValue);
+        if (gm.mobileController.direction != 0)
+            speed = Mathf.Abs(gm.mobileController.direction);
+
+        if (Input.GetAxisRaw("Horizontal") > 0 || Input.GetAxisRaw("Horizontal") < 0)
             speed = input.x != 0 ? 1f : 0f;
-        }
 
         // _anim.SetFloat("speed", input.x != 0 ? 1f : 0f);
         _anim.SetFloat("speed", speed);

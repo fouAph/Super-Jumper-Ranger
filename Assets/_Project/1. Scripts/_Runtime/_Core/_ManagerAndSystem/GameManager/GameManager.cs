@@ -6,27 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton
     public static GameManager Singleton;
-    public bool isTesting;
-    public CharacterFlipMode flipMode;
-    public bool useMobileControll;
-    public MobileController mobileController;
-
-    [Header("Player")]
-    public bool invicible;
-    public bool useInfiniteAmmo;
-    public CharacterDataSO currentCharacter;
-    public PlayerManager playerManager;
-    public Transform playerSpawnPoint;
-
-    [Header("WeaponSetting")]
-    public bool useBulletGravity;
-
-    [Header("Save")]
-    public string saveName = "save";
-    public SaveData saveData;
-    public MapDataSO[] mapDataSO;
-
     private void Awake()
     {
         if (Singleton != null)
@@ -48,6 +29,31 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    #endregion
+   
+    public bool isTesting;
+    public CharacterFlipMode flipMode;
+    public bool useMobileControll;
+    public MobileController mobileController;
+
+    public UiManager uiManager;
+    public SpawnerManager spawnerManager;
+    public ShopManager shopManager;
+
+    [Header("Player")]
+    public bool invicible;
+    public bool useInfiniteAmmo;
+    public CharacterDataSO currentCharacter;
+    public PlayerManager playerManager;
+    public Transform playerSpawnPoint;
+
+    [Header("WeaponSetting")]
+    public bool useBulletGravity;
+
+    [Header("Save")]
+    public string saveName = "save";
+    public SaveData saveData;
+    public MapDataSO[] mapDataSO;
 
     [Header("References")]
     public GameObject countdownGameobject;
@@ -62,24 +68,22 @@ public class GameManager : MonoBehaviour
     public MapDataSO currentMap;
     [BoxGroup("Game Settings")]
     public int targetScore;
+    [BoxGroup("Game Settings")]
+    public float startCountdownTimer;
 
     [Header("Game State")]
     public GameState gameState = GameState.Menu;
     public int boxCollected;
     public int killCounter;
 
-    [BoxGroup("Game Settings")]
-    public float startCountdownTimer;
+
     float startCountdown;
 
-    private UiManager uiManager;
-    public SpawnerManager spawnerManager;
-
+    List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     int maxEnemyCount = 3;
     int maxBoxCount = 1;
-    List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     bool isPause;
-
+    bool showShop;
     private void Start()
     {
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
@@ -99,6 +103,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            showShop = !showShop;
+            shopManager.gameObject.SetActive(showShop);
+
+        }
+
         if (gameState != GameState.InGame) return;                          //return While not inGame State
 
         if (Input.GetKeyDown(KeyCode.Escape))                               //if escape button is pressed

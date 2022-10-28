@@ -18,25 +18,25 @@ public class UiManager : MonoBehaviour
     #endregion
 
     public TMP_Text scoreTMP;
+    public TMP_Text creditTMP;
     public TMP_Text ammoCountTMP;
     public TMP_Text targetScore;
     public TMP_Text buffNameTMP;
     public Slider buffTimerProgress;
-    public Transform healthSpriteHolder;
-    public GameObject healthPrefab;
-    private PoolSystem poolSystem;
 
+    IHealthUI iHealthUI;
     GameManager gm;
     private void Start()
     {
         gm = GameManager.Singleton;
-        poolSystem = PoolSystem.Singleton;
+        iHealthUI = GetComponent<IHealthUI>();
+
         if (!gm.isTesting)
         {
-            // Invoke("InitHealth", .5f);
             targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
             UpdateScoreText(0);
         }
+
     }
 
     public void UpdateScoreText(int score)
@@ -44,12 +44,12 @@ public class UiManager : MonoBehaviour
         if (scoreTMP)
             scoreTMP.text = $"Score : {score}";
     }
-
     public void UpdateAmmoCountText(int ammo)
     {
         if (ammoCountTMP)
             ammoCountTMP.text = $"Ammo : {ammo}";
     }
+    public void UpdateCreditUI() => creditTMP.text = $"Credit : {gm.playerManager.credit.ToString()}";
 
     #region Buff UI Region
 
@@ -79,28 +79,18 @@ public class UiManager : MonoBehaviour
     #region Health Region
     public void InitHealth()
     {
-        if (!poolSystem) return;
-        else
-        {
-            PoolSystem.Singleton.AddObjectToPooledObject(healthPrefab, 7);
-            for (int i = healthSpriteHolder.childCount; i < gm.playerManager.playerHealth.maxHealth; i++)
-            {
-                var go = PoolSystem.Singleton.SpawnFromPool(healthPrefab, Vector3.zero, Quaternion.identity, healthSpriteHolder);
-                go.transform.localScale = Vector3.one;
-            }
-        }
+        if (iHealthUI != null)
+            iHealthUI.OnInitialize(gm.playerManager);
     }
 
     public void UpdateHealth()
     {
         if (gm.playerManager)
         {
-            int result = gm.playerManager.playerHealth.maxHealth - gm.playerManager.playerHealth.currentHealth;
-            for (int i = 0; i < result; i++)
-            {
-                healthSpriteHolder.GetChild(i).gameObject.SetActive(false);
-            }
+            if (iHealthUI != null)
+                iHealthUI.OnUpdateHealthUI(gm.playerManager);
         }
     }
     #endregion
+
 }

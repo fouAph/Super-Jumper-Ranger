@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 6425862320048163704}
   - component: {fileID: 850763920}
   - component: {fileID: 7013671554465738913}
+  - component: {fileID: 8394588977986127901}
   m_Layer: 7
   m_Name: Bluemon
   m_TagString: Enemy
@@ -228,6 +229,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.13
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -345,6 +348,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   isDead: 0
+  creditAdder: {fileID: 8394588977986127901}
 --- !u!114 &850763920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,3 +379,16 @@ MonoBehaviour:
   useDeactive: 0
   deactiveAfter: 0.5
   healthSystem: {fileID: 6425862320048163704}
+--- !u!114 &8394588977986127901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3667323411144858457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b055e06ccb7caa740b2cb0dec0fe45ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creditToAdd: 50

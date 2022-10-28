@@ -182,7 +182,7 @@ public class WeaponManager : MonoBehaviour
         SelectWeapon();
 
     }
-
+    int randGun;
     public void PickupGun(WeaponPickupRandom _gunPickupRandom)
     {
         bool isPickedup = false;
@@ -207,8 +207,8 @@ public class WeaponManager : MonoBehaviour
         if (isPickedup)
         {
             //TODO Spawn With PoolSystem
-            int randGun = 0;
-            randGun = Random.Range(0, pickupDataSo.Count);
+            StartCoroutine(RandomInt(0, pickupDataSo.Count));
+            print(randGun);
 
             var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             if (GameManager.Singleton && GameManager.Singleton.flipMode == CharacterFlipMode.ByMoveDirection)
@@ -241,6 +241,30 @@ public class WeaponManager : MonoBehaviour
         // EquipAvailableWeapon();
         SelectWeapon();
 
+    }
+
+    IEnumerator RandomInt(int targetRand, int max)
+    {
+        int randNumber = 0;
+        int prev = randNumber;
+        // print($"prev {prev}");
+
+        while (randNumber == prev)
+        {
+            randNumber = Random.Range(0, max);
+            if (randNumber != prev)
+            {
+                prev = randNumber;
+                // print($"prev {prev}");
+                // print($"randNumber {randNumber}");
+                break;
+            }
+            //     print(randNumber);
+            yield return null;
+        }
+
+        randGun = randNumber;
+        yield return null;
     }
 
 

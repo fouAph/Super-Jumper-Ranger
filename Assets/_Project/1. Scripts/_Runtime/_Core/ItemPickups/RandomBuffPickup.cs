@@ -29,13 +29,15 @@ public class RandomBuffPickup : MonoBehaviour
     public void BuffSelector()
     {
         string buffName = "";
-        int select = Random.Range(0, 1);
-        if (select == 1 && gm.playerManager.weaponManager.currentGun)
+        int select = Random.Range(0, 10);
+        if (select > 5 && gm.playerManager.weaponManager.currentGun)
         {
+            print("random weapon");
             random = Random.Range(0, weaponBuffList.Count);
             var buff = weaponBuffList[random];
             buffName = buff.buffName;
             buff.OnUse(gm.playerManager);
+            return;
         }
         else select = 0;
 
@@ -46,8 +48,6 @@ public class RandomBuffPickup : MonoBehaviour
             buffName = buff.buffName;
             buff.OnUse(gm.playerManager);
         }
-
-        print("got a " + buffName);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -74,7 +74,6 @@ public class RandomBuffPickup : MonoBehaviour
             SubstractCurrentBoxCount();
         }
     }
-
 
     void SubstractCurrentBoxCount()
     {
