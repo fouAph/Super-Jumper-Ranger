@@ -2681,8 +2681,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e26f068ec8f160346bf7e2bb0a11df87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTesting: 1
-  flipMode: 1
+  isTesting: 0
+  flipMode: 0
   useMobileControll: 0
   mobileController: {fileID: 2012822203}
   uiManager: {fileID: 0}

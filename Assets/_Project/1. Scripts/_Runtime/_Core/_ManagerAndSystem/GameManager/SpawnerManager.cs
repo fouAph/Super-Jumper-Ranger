@@ -57,6 +57,8 @@ public class SpawnerManager : MonoBehaviour
 
         boxWaitTimer = nextBoxSpawnTime;                //Set Box Timer
         enemyWaitTimer = nextEnemySpawnTime;            //Set Enemy Timer 
+        if (!itemSpawnManager) Debug.LogWarning("itemSpawnManager is empty,\n Item/Gun box is not going to spawn");
+        if (!buffSpawnManager) Debug.LogWarning("buffSpawnManager is empty,\n Buff box is not going to spawn");
     }
 
     public void ObjectSpawnHandler()
@@ -72,19 +74,26 @@ public class SpawnerManager : MonoBehaviour
             }
         }
 
-        if (currentBoxCount < maxBoxCount && itemSpawnManager)
+        if (itemSpawnManager)
         {
-            boxWaitTimer -= Time.deltaTime;
-            if (boxWaitTimer <= 0)
+            if (currentBoxCount < maxBoxCount && itemSpawnManager)
             {
-                boxWaitTimer = nextBoxSpawnTime;
-                SpawnBox();
+                boxWaitTimer -= Time.deltaTime;
+                if (boxWaitTimer <= 0)
+                {
+                    boxWaitTimer = nextBoxSpawnTime;
+                    SpawnBox();
+                }
             }
         }
 
-        if (currentBuffBoxCount < maxBuffBoxCount && currentEnemyCount < 1)
+
+        if (buffSpawnManager)
         {
-            SpawnBuffBox();
+            if (currentBuffBoxCount < maxBuffBoxCount && currentEnemyCount < 1)
+            {
+                SpawnBuffBox();
+            }
         }
     }
 

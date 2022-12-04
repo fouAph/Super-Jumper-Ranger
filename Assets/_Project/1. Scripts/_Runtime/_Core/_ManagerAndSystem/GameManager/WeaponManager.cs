@@ -208,7 +208,6 @@ public class WeaponManager : MonoBehaviour
         {
             //TODO Spawn With PoolSystem
             StartCoroutine(RandomInt(0, pickupDataSo.Count));
-            print(randGun);
 
             var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             if (GameManager.Singleton && GameManager.Singleton.flipMode == CharacterFlipMode.ByMoveDirection)
