@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FlameThrower_DataSO
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 3540999494377323484, guid: 4e70723b50cf7854baf4e18446a6e06b, type: 3}
-  itemName: 
+  itemName: FlameThrower
   bulletType: 0
   ammoType: 0
   shootSFX: {fileID: 8300000, guid: b89b8c23ac6e799409c0df807b2200b6, type: 3}

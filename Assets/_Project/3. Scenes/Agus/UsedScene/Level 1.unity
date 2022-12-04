@@ -2531,6 +2531,10 @@ PrefabInstance:
       propertyPath: spawnEveryEnemyKilled
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3183152419306928040, guid: 1e1fc5f159a8b96489755540ac9ff9e3, type: 3}
+      propertyPath: weaponPickupRandomPrefab
+      value: 
+      objectReference: {fileID: 7362739224546553814, guid: 01083cdf5ac3eee4d92fbd331f1abb7e, type: 3}
     - target: {fileID: 3183152419368673850, guid: 1e1fc5f159a8b96489755540ac9ff9e3, type: 3}
       propertyPath: m_RootOrder
       value: 1

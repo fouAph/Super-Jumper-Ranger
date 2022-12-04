@@ -30,30 +30,35 @@ public class GameManager : MonoBehaviour
 
     }
     #endregion
-   
+
     public bool isTesting;
-    public CharacterFlipMode flipMode;
+    [Header("Game State")]
+    public GameState gameState = GameState.Menu;
+    public int boxCollected { get; set; }
+    public int killCounter { get; set; }
+
+
+    [Header("Game Settings")]
+    public Transform playerSpawnPoint;
+    public float startCountdownTimer;
+    public MapDataSO currentMap;
+    public int targetScore { get; set; }
+    public bool useBulletGravity;
     public bool useMobileControll;
-    public MobileController mobileController;
+    [ShowIf("useMobileControll")] public MobileController mobileController;
 
-    public UiManager uiManager;
-    public SpawnerManager spawnerManager;
-    public ShopManager shopManager;
-
-    [Header("Player")]
+    [Header("Player Settings")]
+    public CharacterFlipMode flipMode;
     public bool invicible;
     public bool useInfiniteAmmo;
-    public CharacterDataSO currentCharacter;
-    public PlayerManager playerManager;
-    public Transform playerSpawnPoint;
+    public CharacterDataSO currentCharacter { get; set; }
+    public PlayerManager playerManager { get; set; }
 
-    [Header("WeaponSetting")]
-    public bool useBulletGravity;
 
-    [Header("Save")]
-    public string saveName = "save";
-    public SaveData saveData;
-    public MapDataSO[] mapDataSO;
+
+    public UiManager uiManager { get; set; }
+    public SpawnerManager spawnerManager { get; set; }
+    public ShopManager shopManager { get; set; }
 
     [Header("References")]
     public GameObject countdownGameobject;
@@ -63,19 +68,11 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenuScreen;
     public GameObject gameOverScreen;
     public int currentMapBuildLevelIndex;
+    public MapDataSO[] mapDataSO;
 
-    [BoxGroup("Game Settings")]
-    public MapDataSO currentMap;
-    [BoxGroup("Game Settings")]
-    public int targetScore;
-    [BoxGroup("Game Settings")]
-    public float startCountdownTimer;
-
-    [Header("Game State")]
-    public GameState gameState = GameState.Menu;
-    public int boxCollected;
-    public int killCounter;
-
+    [Header("Save Settings")]
+    public string saveName = "save";
+    public SaveData saveData;
 
     float startCountdown;
 
@@ -87,7 +84,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
-
+        shopManager = ShopManager.Singleton;
+        AddWeaponDataSoToDictionary();
         if (isTesting)
         {
             if (useMobileControll)
@@ -106,7 +104,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             showShop = !showShop;
-            shopManager.gameObject.SetActive(showShop);
+            shopManager.shopCanvasObject.SetActive(showShop);
 
         }
 
@@ -343,6 +341,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         uiManager = UiManager.Singleton;
+
         spawnerManager = SpawnerManager.Singleton;
         spawnerManager.maxEnemyCount = currentMap.maxEnemyCount;
         spawnerManager.maxBoxCount = currentMap.maxBoxCount;
@@ -458,6 +457,21 @@ public class GameManager : MonoBehaviour
 
     }
     #endregion
+
+    public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
+    public List<WeaponDataSO> weaponDataSoContainer = new List<WeaponDataSO>();
+
+    public void AddWeaponDataSoToDictionary()
+    {
+        foreach (var item in weaponDataSoContainer)
+        {
+            weaponDataSoDict.Add(item.itemName, item);
+        }
+    }
+    public WeaponDataSO GetWeaponDataSoFromDict(string weaponDataSoId)
+    {
+        return weaponDataSoDict[weaponDataSoId];
+    }
 }
 
 public enum CharacterFlipMode { ByMousePosition, ByMoveDirection }

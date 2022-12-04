@@ -5,6 +5,7 @@ public class ShopManager : MonoBehaviour
 {
     #region Singleton
     public static ShopManager Singleton;
+    public GameObject shopCanvasObject;
     private void Awake()
     {
         if (Singleton != null)

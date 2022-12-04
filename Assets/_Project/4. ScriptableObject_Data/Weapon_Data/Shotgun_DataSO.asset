@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shotgun_DataSO
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 1309370917945399940, guid: 943585d00d125ab429d464842458f10c, type: 3}
-  itemName: 
+  itemName: Shotgun
   bulletType: 0
   ammoType: 0
   shootSFX: {fileID: 8300000, guid: 4a2dd8c4beb42b642b8d7cdd91625272, type: 3}

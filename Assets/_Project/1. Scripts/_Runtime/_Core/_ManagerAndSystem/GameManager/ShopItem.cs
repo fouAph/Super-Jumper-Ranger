@@ -10,7 +10,8 @@ public class ShopItem : MonoBehaviour
     [SerializeField] protected TMP_Text itemPrice_TMP;
     [SerializeField] protected Sprite itemIcon;
     [SerializeField] AudioClip buttonSFX;
-    Button BuyButton;
+    protected Button BuyButton;
+   [SerializeField]  protected bool canInteractBuyButton;
     protected virtual void Awake()
     {
         itemName_TMP.text = itemName;
@@ -23,5 +24,12 @@ public class ShopItem : MonoBehaviour
     {
         if (buttonSFX)
             AudioPoolSystem.Singleton.PlayAudio(buttonSFX, .5f);
+
+        if (!canInteractBuyButton)
+        {
+            BuyButton.interactable = false;
+            var tmp = BuyButton.GetComponentInChildren<TMP_Text>();
+            tmp.text = "Purchased";
+        }
     }
 }

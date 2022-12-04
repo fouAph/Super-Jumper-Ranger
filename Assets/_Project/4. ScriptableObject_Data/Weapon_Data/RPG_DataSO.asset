@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RPG_DataSO
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 4159056502313534271, guid: 0277b7974571c50448ad245dd2102364, type: 3}
-  itemName: 
+  itemName: RPG
   bulletType: 0
   ammoType: 0
   shootSFX: {fileID: 8300000, guid: db611387fa8f7b04e8cb2e0ee49e8c93, type: 3}

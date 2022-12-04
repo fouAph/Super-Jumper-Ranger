@@ -146,13 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad1793b9003439c4bad1184664267cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunDataSO:
-  - {fileID: 11400000, guid: 7c1d57da1f02d6947b322de82fe174cd, type: 2}
+  weaponDataSO:
   - {fileID: 11400000, guid: 7a6b73e9d91869c4b83d378477b41c7b, type: 2}
-  - {fileID: 11400000, guid: 79243534139f02b42b3e8315982e17bf, type: 2}
-  - {fileID: 11400000, guid: c8f260998ced4d142ad54aa3387f5089, type: 2}
-  - {fileID: 11400000, guid: fa94e65176f440846b345ab1f6142342, type: 2}
-  - {fileID: 11400000, guid: 991c3ac10a12ba245bdd7e896adb2a10, type: 2}
   pikcupVFX: {fileID: 2587631508003662213, guid: 24411b46a25192f4f8267810fa89ebdc, type: 3}
   pickupSfx: {fileID: 8300000, guid: 38183f89c1ed1b744940102c3591fb91, type: 3}
   scoreAdder: {fileID: -8654892493939208297}

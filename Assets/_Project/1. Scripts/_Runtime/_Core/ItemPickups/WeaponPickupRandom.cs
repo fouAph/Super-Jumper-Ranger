@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WeaponPickupRandom : MonoBehaviour
 {
-    public List<WeaponDataSO> gunDataSO;
+    public List<WeaponDataSO> weaponDataSO;
     public GameObject pikcupVFX;
     [SerializeField] AudioClip pickupSfx;
     [SerializeField] ScoreAdder scoreAdder;

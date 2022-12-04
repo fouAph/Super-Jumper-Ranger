@@ -12,13 +12,18 @@ public class WeaponManager : MonoBehaviour
 
 
     private int selectedWeapon;
-    List<WeaponBase> guns = new List<WeaponBase>();
-    UiManager uiManager;
+    private List<WeaponBase> guns = new List<WeaponBase>();
+    private UiManager uiManager;
+
+   
+
     private void Start()
     {
         uiManager = UiManager.Singleton;
-        if (!weaponInventoryHolder) Debug.LogWarningFormat("weaponInventoryHolder variable is not assigned on {0} object", gameObject.name);
+        if (!weaponInventoryHolder)
+            Debug.LogWarningFormat("weaponInventoryHolder variable is not assigned on {0} object", gameObject.name);
     }
+
     private void Update()
     {
         ChangeWeaponSlotInput();
@@ -186,7 +191,7 @@ public class WeaponManager : MonoBehaviour
     public void PickupGun(WeaponPickupRandom _gunPickupRandom)
     {
         bool isPickedup = false;
-        var pickupDataSo = _gunPickupRandom.gunDataSO;
+        var pickupDataSo = _gunPickupRandom.weaponDataSO;
 
         //FIXME Fix Swap WeaponBase Algorithm
         if (useSwapWeapon && currentGun)

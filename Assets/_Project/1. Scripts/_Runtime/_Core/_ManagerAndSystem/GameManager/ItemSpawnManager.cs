@@ -5,8 +5,8 @@ using UnityEngine;
 public class ItemSpawnManager : MonoBehaviour
 {
     public static ItemSpawnManager Singleton;
-    public WeaponPickupRandom gunPickupRandom;
-    public ItemPickupRandomItem ammoPickupRandom;
+    public WeaponPickupRandom weaponPickupRandomPrefab;
+    public ItemPickupRandomItem ammoPickupRandomPrefab;
     SpawnerManager spawnerManager;
 
     private void Start()
@@ -18,7 +18,7 @@ public class ItemSpawnManager : MonoBehaviour
 
     private void DelayStart()
     {
-        PoolSystem.Singleton.AddObjectToPooledObject(gunPickupRandom.gameObject, 5, transform);
+        PoolSystem.Singleton.AddObjectToPooledObject(weaponPickupRandomPrefab.gameObject, 5, transform);
     }
 
     public void SpawnBoxItem()
@@ -39,7 +39,7 @@ public class ItemSpawnManager : MonoBehaviour
     IEnumerator TriggerSpawn(int pos)
     {
         yield return new WaitForSeconds(1);
-        var go = PoolSystem.Singleton.SpawnFromPool(gunPickupRandom.gameObject, spawnerManager.pipeSpawnerPosition[pos].transform.position, Quaternion.identity);
+        var go = PoolSystem.Singleton.SpawnFromPool(weaponPickupRandomPrefab.gameObject, spawnerManager.pipeSpawnerPosition[pos].transform.position, Quaternion.identity);
         go.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
     }
 
