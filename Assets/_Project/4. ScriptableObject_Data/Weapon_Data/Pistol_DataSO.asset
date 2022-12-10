@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 7735015640324448599, guid: cba57b98dbe18e141a33cad73fb1e0b5, type: 3}
   itemName: Pistol
+  itemSprite: {fileID: 0}
   bulletType: 0
   ammoType: 0
+  upgradeStats:
+    maxDamageLevelUpgrades: 04000000070000000d000000
+    maxAmmoInClipLevelUpgrades: 
   shootSFX: {fileID: 8300000, guid: b89b8c23ac6e799409c0df807b2200b6, type: 3}
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.2

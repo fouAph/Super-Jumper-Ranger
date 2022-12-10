@@ -7,10 +7,13 @@ public class WeaponDataSO : ItemDataSO
     //Weapon Enums
     public BulletType bulletType;
     public AmmoType ammoType;
+    [Header("WeaponUpgrade")]
+    public UpgradeStats upgradeStats;
 
     [Header("Audio")]
     //Audio
     public AudioClip shootSFX;
+
 
     [Header("CameraShake")]
     //CameraShake Setting
@@ -41,9 +44,16 @@ public class WeaponDataSO : ItemDataSO
 
     public GameObject SpawnWeaponObject(Transform weaponholder)
     {
-        return PoolSystem.Singleton.SpawnFromPool(ItemPrefab, spawnPosition, Quaternion.identity,weaponholder);
+        return PoolSystem.Singleton.SpawnFromPool(ItemPrefab, spawnPosition, Quaternion.identity, weaponholder);
     }
 }
 
 public enum BulletType { Projectile, Raycast }
 public enum AmmoType { RifleAmmo, SMGAmmo, Rocket }
+[System.Serializable]
+public struct UpgradeStats
+{
+    [Header("Damage Upgrade")]
+    public int[] maxDamageLevelUpgrades;
+    public int[] damageUpgradeLevelPrice;
+}

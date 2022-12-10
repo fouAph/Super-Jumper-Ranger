@@ -2,7 +2,19 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public int credit = 400;
+    public int Credit
+    {
+        get { return credit; }
+        set
+        {
+            credit = value;
+            print("Assgning credit Value");
+            OnCreditChange?.Invoke();
+        }
+    }
+    private int credit;
+    public delegate void CreditChange();
+    CreditChange OnCreditChange;
     public float buffDurationLeft { get; set; }
     public bool invicible { get; set; }
     public bool isPlayerDead { get; set; }
@@ -11,6 +23,7 @@ public class PlayerManager : MonoBehaviour
     public GameManager gm { get; set; }
     public UiManager uiManager { get; set; }
     public WeaponManager weaponManager { get; set; }
+
     private void Start()
     {
         Setup();
@@ -37,5 +50,10 @@ public class PlayerManager : MonoBehaviour
     public void EnablePlayerController()
     {
         c.playerControlled = true;
+    }
+
+    public int GetCredit()
+    {
+        return credit;
     }
 }

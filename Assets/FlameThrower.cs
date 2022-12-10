@@ -42,11 +42,9 @@ public class FlameThrower : WeaponBase
                 fireInput = gunDataSO.autoFire ? Input.GetKey(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse0);
             else fireInput = Input.GetKey(KeyCode.Mouse0);
         }
-        if (fireInput && currentAmmo >= 0 || gm.mobileController.isFiring)
+        if (fireInput && currentAmmo > 0 || gm.mobileController.isFiring)
         {
             Shoot();
-
-
         }
         else
         {
@@ -61,7 +59,14 @@ public class FlameThrower : WeaponBase
         }
     }
 
-    public void Shoot()
+
+    private void OnEnable()
+    {
+        ResetAmmo();
+        currentFuel = (int)fuel;
+        currentAmmo = (int)currentFuel;
+    }
+    public override void Shoot()
     {
         if (!source.isPlaying)
         {
@@ -69,7 +74,7 @@ public class FlameThrower : WeaponBase
             source.PlayOneShot(shootClip);
         }
         currentFuel -= Time.deltaTime * fuelConsumptionMultiplier;
-        currentAmmo = (int)currentFuel;
+        currentAmmo = Mathf.Clamp(0, (int)currentFuel, currentAmmo);
         UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
         particle.Play();
         col2D.enabled = true;

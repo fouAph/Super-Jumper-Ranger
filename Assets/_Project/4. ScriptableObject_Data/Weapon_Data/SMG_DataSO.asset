@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 7843132274202804891, guid: fcdc2a27fb108e24ea8738af1be4dc5b, type: 3}
   itemName: SMG
+  itemSprite: {fileID: 21300000, guid: 7abeba70fb2839f44bc6aff40e03ba65, type: 3}
   bulletType: 0
   ammoType: 0
+  upgradeStats:
+    maxDamageLevelUpgrades: 150000001700000029000000
+    maxAmmoInClipLevelUpgrades: 
   shootSFX: {fileID: 8300000, guid: e0070b3dd3eefd44a85851703f2e4cf0, type: 3}
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.2

@@ -4,32 +4,42 @@ using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour
 {
-    [SerializeField] protected string itemName;
+    protected string itemName;
     [SerializeField] protected int price;
     [SerializeField] protected TMP_Text itemName_TMP;
-    [SerializeField] protected TMP_Text itemPrice_TMP;
-    [SerializeField] protected Sprite itemIcon;
+    // [SerializeField] protected TMP_Text itemPrice_TMP;
+    public TMP_Text upgradeOrBuyTMP;
+    [SerializeField] protected Image itemImage;
     [SerializeField] AudioClip buttonSFX;
-    protected Button BuyButton;
-   [SerializeField]  protected bool canInteractBuyButton;
+    [SerializeField] protected Button BuyButton;
+    [SerializeField] protected bool canInteractBuyButton;
     protected virtual void Awake()
     {
         itemName_TMP.text = itemName;
-        itemPrice_TMP.text = price.ToString();
+        upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
         BuyButton = GetComponentInChildren<Button>();
         BuyButton.onClick.AddListener(delegate { OnBuyItem(GameManager.Singleton.playerManager); });
     }
 
+    protected bool bought;
     public virtual void OnBuyItem(PlayerManager playerManager)
     {
+        if (playerManager.Credit < price)
+        {
+            print("Not Enough Credit!!!");
+            bought = false;
+            return;
+        }
         if (buttonSFX)
             AudioPoolSystem.Singleton.PlayAudio(buttonSFX, .5f);
+        bought = true;
+        playerManager.Credit -= price;
+        playerManager.uiManager.UpdateCreditUI();
 
-        if (!canInteractBuyButton)
-        {
-            BuyButton.interactable = false;
-            var tmp = BuyButton.GetComponentInChildren<TMP_Text>();
-            tmp.text = "Purchased";
-        }
+    }
+
+    public virtual void OnResetGame()
+    {
+        upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
     }
 }

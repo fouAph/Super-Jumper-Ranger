@@ -6,14 +6,12 @@ public class Weapon : WeaponBase
 {
     public Transform bulletSpawnPoint;
     public BulletProjectilePoolHelper bulletProjectilePrefab;         //BulletPrefab with BulletProjectilePoolHelper.cs
-
     public Animator animator;
-    private float currentFireRate;
-
-    private float _lastFired;
-    private PoolSystem poolSystem;
     [SerializeField] private bool debugSetGunPosition;
 
+    private float currentFireRate;
+    private float _lastFired;
+    private PoolSystem poolSystem;
     Vector2 directions;
     UiManager uiManager;
     GameManager gm;
@@ -27,6 +25,7 @@ public class Weapon : WeaponBase
         // PoolSystemGeneric.Singleton.AddObjectToPooledObject(bulletPrefab, 50);
         currentAmmo = gunDataSO.maxAmmoInMag;
         curentDamage = gunDataSO.damage;
+        maxAmmoInClip = gunDataSO.maxAmmoInMag;
         animator = GetComponentInChildren<Animator>();
         Invoke("AddBulletPrefab", .1f);
 
@@ -59,7 +58,7 @@ public class Weapon : WeaponBase
         }
     }
 
-    public void Shoot()
+    public override void Shoot()
     {
         if (currentAmmo > 0)
             if (Time.time - _lastFired > 1 / gunDataSO.fireRate)
@@ -67,7 +66,7 @@ public class Weapon : WeaponBase
                 if (!gm.useInfiniteAmmo)
                     currentAmmo--;
 
-                
+
                 if (animator)
                     animator.SetTrigger("Shoot");
 
@@ -145,6 +144,4 @@ public class Weapon : WeaponBase
         }
 
     }
-
-
 }

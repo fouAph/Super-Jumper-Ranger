@@ -36,8 +36,10 @@ public class UiManager : MonoBehaviour
             targetScore.text = $"Target Score: {GameManager.Singleton.targetScore.ToString()}";
             UpdateScoreText(0);
         }
-
+        Invoke("UpdateCreditUI", 1f);
     }
+
+
 
     public void UpdateScoreText(int score)
     {
@@ -49,7 +51,7 @@ public class UiManager : MonoBehaviour
         if (ammoCountTMP)
             ammoCountTMP.text = $"Ammo : {ammo}";
     }
-    public void UpdateCreditUI() => creditTMP.text = $"Credit : {gm.playerManager.credit.ToString()}";
+    public void UpdateCreditUI() => creditTMP.text = $"Credit : {gm.playerManager.Credit.ToString()}";
 
     #region Buff UI Region
 

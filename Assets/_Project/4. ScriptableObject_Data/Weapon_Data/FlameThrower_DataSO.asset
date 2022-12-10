@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 3540999494377323484, guid: 4e70723b50cf7854baf4e18446a6e06b, type: 3}
   itemName: FlameThrower
+  itemSprite: {fileID: 0}
   bulletType: 0
   ammoType: 0
+  upgradeStats:
+    maxDamageLevelUpgrades: 4c010000ba0100000a020000
+    maxAmmoInClipLevelUpgrades: 
   shootSFX: {fileID: 8300000, guid: b89b8c23ac6e799409c0df807b2200b6, type: 3}
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.2

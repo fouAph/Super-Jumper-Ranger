@@ -32,7 +32,7 @@ public class EnemyHealth : HealthSystem
 
             if (gm.playerManager)
             {
-                gm.playerManager.credit += creditAdder.creditToAdd;
+                gm.playerManager.Credit += creditAdder.creditToAdd;
                 gm.uiManager.UpdateCreditUI();
             }
 

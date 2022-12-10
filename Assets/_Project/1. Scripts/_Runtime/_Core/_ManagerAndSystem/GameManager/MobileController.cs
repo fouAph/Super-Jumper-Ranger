@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class MobileController : MonoBehaviour
 {
+    public GameObject mobileControllerCanvas;
+
     [Header("Mobile Settings")]
     public MobileControlScheme controlScheme;
     [HideInInspector] public bool use360Aim;
@@ -36,6 +38,11 @@ public class MobileController : MonoBehaviour
 
                 break;
         }
+    }
+
+    private void Start()
+    {
+        mobileControllerCanvas.SetActive(false);
     }
 
     public void ChangeControllButton()

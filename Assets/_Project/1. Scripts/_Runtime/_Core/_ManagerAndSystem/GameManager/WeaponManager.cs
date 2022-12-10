@@ -15,13 +15,13 @@ public class WeaponManager : MonoBehaviour
     private List<WeaponBase> guns = new List<WeaponBase>();
     private UiManager uiManager;
 
-   
 
     private void Start()
     {
         uiManager = UiManager.Singleton;
         if (!weaponInventoryHolder)
             Debug.LogWarningFormat("weaponInventoryHolder variable is not assigned on {0} object", gameObject.name);
+       
     }
 
     private void Update()
@@ -188,10 +188,11 @@ public class WeaponManager : MonoBehaviour
 
     }
     int randGun;
-    public void PickupGun(WeaponPickupRandom _gunPickupRandom)
+    public WeaponBase PickupGun(WeaponPickupRandom _gunPickupRandom)
     {
+        GameObject weapon = null;
         bool isPickedup = false;
-        var pickupDataSo = _gunPickupRandom.weaponDataSO;
+        var pickupDataSo = _gunPickupRandom.weaponDataSoToSpawn;
 
         //FIXME Fix Swap WeaponBase Algorithm
         if (useSwapWeapon && currentGun)
@@ -214,36 +215,41 @@ public class WeaponManager : MonoBehaviour
             //TODO Spawn With PoolSystem
             StartCoroutine(RandomInt(0, pickupDataSo.Count));
 
-            var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
+            // var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
+            weapon = PoolSystem.Singleton.SpawnFromPool(pickupDataSo[randGun].itemName, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
+
             if (GameManager.Singleton && GameManager.Singleton.flipMode == CharacterFlipMode.ByMoveDirection)
             {
                 Vector3 euler = Vector3.zero;
                 Vector3 scale = Vector3.one;
                 if (transform.localScale.x > 0)
                 {
-                    euler = gun.transform.localEulerAngles = Vector3.zero;
-                    scale = gun.transform.localScale = Vector3.one;
+                    euler = weapon.transform.localEulerAngles = Vector3.zero;
+                    scale = weapon.transform.localScale = Vector3.one;
                 }
                 else
                 {
-                    euler = gun.transform.localEulerAngles = new Vector3(0, 180, 0);
-                    scale = gun.transform.localScale = new Vector3(1, 1, 1);
+                    euler = weapon.transform.localEulerAngles = new Vector3(0, 180, 0);
+                    scale = weapon.transform.localScale = new Vector3(1, 1, 1);
                 }
 
-                gun.transform.localEulerAngles = euler;
-                gun.transform.localScale = scale;
+                weapon.transform.localEulerAngles = euler;
+                weapon.transform.localScale = scale;
             }
-            gun.transform.SetParent(weaponInventoryHolder);
+            weapon.transform.SetParent(weaponInventoryHolder);
             guns.Add(pickupDataSo[randGun].ItemPrefab.GetComponent<WeaponBase>());
 
             if (currentGun)
-                gun.SetActive(false);
+                weapon.SetActive(false);
 
             _gunPickupRandom.gameObject.SetActive(false);
+
         }
 
         // EquipAvailableWeapon();
         SelectWeapon();
+        return weapon.GetComponent<Weapon>();
+
 
     }
 
@@ -292,4 +298,11 @@ public class WeaponManager : MonoBehaviour
     }
     */
     #endregion
+}
+
+[System.Serializable]
+public class WeaponUpgradeTracker
+{
+    public string weaponId;
+    public int currentLevelUpgrade = -1;
 }

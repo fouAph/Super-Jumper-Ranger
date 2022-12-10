@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,8 +38,9 @@ public class GameManager : MonoBehaviour
     public int boxCollected { get; set; }
     public int killCounter { get; set; }
 
-
     [Header("Game Settings")]
+    public WeaponDataSO[] startingWeapons;
+    public List<WeaponDataSO> unlockedWeapons = new List<WeaponDataSO>();
     public Transform playerSpawnPoint;
     public float startCountdownTimer;
     public MapDataSO currentMap;
@@ -86,6 +88,7 @@ public class GameManager : MonoBehaviour
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
         shopManager = ShopManager.Singleton;
         AddWeaponDataSoToDictionary();
+        AddTempSavedWeaponStats();
         if (isTesting)
         {
             if (useMobileControll)
@@ -152,7 +155,7 @@ public class GameManager : MonoBehaviour
         loadingScreen.SetActive(true);                                                                      //Enable Loading Scree
         sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndexes.TITLE_SCREEN));                    //Unload Title Screen Scene
         sceneLoading.Add(SceneManager.LoadSceneAsync(currentMapBuildLevelIndex, LoadSceneMode.Additive));   //Load level scene
-
+        unlockedWeapons = startingWeapons.ToList();
         if (useMobileControll)
         {
             mobileController.SetMobileControllScheme(this);
@@ -211,6 +214,14 @@ public class GameManager : MonoBehaviour
         spawnerManager.currentEnemyCount = 0;
         killCounter = 0;
         boxCollected = 0;
+        ResetUnlockedWeapon();
+        unlockedWeapons = startingWeapons.ToList();
+        foreach (var item in shopManager.shopItems)
+        {
+            item.OnResetGame();
+        }
+
+
     }
 
     IEnumerator GetSceneLoadingProgress()
@@ -355,6 +366,11 @@ public class GameManager : MonoBehaviour
         if (playerManager == false)
         {
             PoolSystem.Singleton.AddObjectToPooledObject(currentCharacter.CharacterPrefab, 1);
+            foreach (var item in weaponDataSoContainer)
+            {
+                PoolSystem.Singleton.AddObjectToPooledObject(item.ItemPrefab, 2, null, item.itemName);
+
+            }
             // yield return new WaitForSeconds(.1f);
             yield return null;
         }
@@ -458,10 +474,17 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
     public List<WeaponDataSO> weaponDataSoContainer = new List<WeaponDataSO>();
-
-    public void AddWeaponDataSoToDictionary()
+    public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
+    public Dictionary<string, WeaponBase> tempSavedWeaponStats = new Dictionary<string, WeaponBase>();
+    private void AddTempSavedWeaponStats()
+    {
+        foreach (var item in weaponDataSoContainer)
+        {
+            tempSavedWeaponStats.Add(item.itemName, item.ItemPrefab.GetComponent<WeaponBase>());
+        }
+    }
+    private void AddWeaponDataSoToDictionary()
     {
         foreach (var item in weaponDataSoContainer)
         {
@@ -471,6 +494,18 @@ public class GameManager : MonoBehaviour
     public WeaponDataSO GetWeaponDataSoFromDict(string weaponDataSoId)
     {
         return weaponDataSoDict[weaponDataSoId];
+    }
+    public bool CompareWeaponDataSoFromDict(WeaponDataSO weaponDataSO)
+    {
+        if (weaponDataSoDict.ContainsKey(weaponDataSO.itemName))
+        {
+            return true;
+        }
+        return false;
+    }
+    public void ResetUnlockedWeapon()
+    {
+        unlockedWeapons.Clear();
     }
 }
 

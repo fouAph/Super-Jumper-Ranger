@@ -11,9 +11,9 @@ public class ShopHealthItem : ShopItem
     public override void OnBuyItem(PlayerManager playerManager)
     {
         base.OnBuyItem(playerManager);
-        if (playerManager.credit >= price && playerManager.playerHealth.currentHealth <= playerManager.playerHealth.maxHealth - healthToAdd)
+        if (playerManager.Credit >= price && playerManager.playerHealth.currentHealth <= playerManager.playerHealth.maxHealth - healthToAdd)
         {
-            playerManager.credit -= price;
+            playerManager.Credit -= price;
             playerManager.playerHealth.currentHealth += healthToAdd;
             playerManager.gm.uiManager.UpdateHealth();
             playerManager.gm.uiManager.UpdateCreditUI();

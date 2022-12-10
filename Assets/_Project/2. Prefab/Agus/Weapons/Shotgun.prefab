@@ -161,9 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9055c7cb5ca6d429f575dc8b34d5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmmo: 0
-  curentDamage: 0
   gunDataSO: {fileID: 11400000, guid: fa94e65176f440846b345ab1f6142342, type: 2}
+  currentAmmo: 0
+  curentDamage: 24
+  maxAmmoInClip: 0
+  currentDamageLevelUpgrade: 0
   bulletSpawnPoint: {fileID: 1097968881583348851}
   bulletProjectilePrefab: {fileID: -3898942400064495233, guid: fe371a6c571dcf9488a01c823757991a, type: 3}
   animator: {fileID: 0}

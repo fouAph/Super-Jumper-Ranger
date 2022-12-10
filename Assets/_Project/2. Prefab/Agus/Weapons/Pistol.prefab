@@ -74,12 +74,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9055c7cb5ca6d429f575dc8b34d5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunDataSO: {fileID: 11400000, guid: 7a6b73e9d91869c4b83d378477b41c7b, type: 2}
   currentAmmo: 0
   curentDamage: 0
-  gunDataSO: {fileID: 11400000, guid: 7a6b73e9d91869c4b83d378477b41c7b, type: 2}
   bulletSpawnPoint: {fileID: 3273364737704928394}
   bulletProjectilePrefab: {fileID: -7354205563366480221, guid: 47b08bf4d55271041843277fbaa1d3ec, type: 3}
   animator: {fileID: 0}
+  upgradeStats:
+    damageUpgrade: 0f0000001400000019000000
+    ammoUpgrade: 
   debugSetGunPosition: 0
 --- !u!1 &9218713045038432610
 GameObject:
