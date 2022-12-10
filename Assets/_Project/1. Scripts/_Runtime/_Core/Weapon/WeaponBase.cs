@@ -16,11 +16,21 @@ public class WeaponBase : MonoBehaviour
         currentAmmo = maxAmmoInClip;
     }
 
+    public void UpgradeWeaponDamage(int damageIndex)
+    {
+        // curentDamage = gunDataSO.upgradeStats.maxDamageLevelUpgrades[damageIndex];
+        StartCoroutine(UpgradeDamage_Routine(damageIndex));
+    }
+
     // public void SetUpgradeDamage()
     // {
     //     StartCoroutine(UpgradeDamage_Routine());
     // }
-
+    IEnumerator UpgradeDamage_Routine(int damageIndex)
+    {
+        yield return new WaitForSeconds(.02f);
+        curentDamage = gunDataSO.upgradeStats.maxDamageLevelUpgrades[damageIndex];
+    }
     // IEnumerator UpgradeDamage_Routine()
     // {
     //     yield return new WaitForSeconds(.02f);

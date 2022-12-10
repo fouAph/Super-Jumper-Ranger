@@ -19,7 +19,7 @@ MonoBehaviour:
   ammoType: 0
   upgradeStats:
     maxDamageLevelUpgrades: 020000000400000006000000
-    maxAmmoInClipLevelUpgrades: 
+    damageUpgradeLevelPrice: 7b0000009700000009020000
   shootSFX: {fileID: 8300000, guid: 4a2dd8c4beb42b642b8d7cdd91625272, type: 3}
   cameraShakeDuration: 0.2
   cameraShakeStrength: 0.5

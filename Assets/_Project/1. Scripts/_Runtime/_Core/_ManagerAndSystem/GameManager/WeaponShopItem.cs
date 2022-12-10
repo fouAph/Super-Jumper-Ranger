@@ -17,7 +17,7 @@ public class WeaponShopItem : ShopItem
 
         // upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
 
-        upgradeLevel_TMP.text = $"Upgrade Level {tempWeapon.currentDamageLevelUpgrade}/{weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length}";
+        upgradeLevel_TMP.text = $"Upgrade Level {gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]}/{weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length}";
         if (itemImage) itemImage.sprite = weaponDataSO.itemSprite;
 
     }
@@ -44,26 +44,41 @@ public class WeaponShopItem : ShopItem
         if (playerManager.gm.CompareWeaponDataSoFromDict(weaponDataSO))
         {
 
-            upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.upgradeStats.damageUpgradeLevelPrice[tempWeapon.currentDamageLevelUpgrade]}";
+            upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.upgradeStats.damageUpgradeLevelPrice[gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]]}";
             // bought = true;
         }
     }
     public void OnUpgradeWeapon(PlayerManager playerManager)
     {
+        
         bool fullyUpgraded = false;
         // GameManager.Singleton.playerManager.weaponManager.UpgradeDamage(weaponDataSO.itemName);
         if (fullyUpgraded == false)
         {
-            gm.tempSavedWeaponStats[weaponDataSO.itemName].curentDamage += weaponDataSO.upgradeStats.maxDamageLevelUpgrades[gm.tempSavedWeaponStats[weaponDataSO.itemName].currentDamageLevelUpgrade];
-            tempWeapon.curentDamage += weaponDataSO.upgradeStats.maxDamageLevelUpgrades[tempWeapon.currentDamageLevelUpgrade];
-            var temp = tempWeapon;
-            gm.tempSavedWeaponStats[weaponDataSO.itemName] = temp;
+            if (gm.savedCurrentLevelUpgrade.ContainsKey(weaponDataSO.itemName))
+            {
+                gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]++;
 
-            playerManager.gm.tempSavedWeaponStats[weaponDataSO.itemName].currentDamageLevelUpgrade++;
-            upgradeLevel_TMP.text = $"Upgrade Level {tempWeapon.currentDamageLevelUpgrade}/{weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length}";
-            if (temp.currentDamageLevelUpgrade >= weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length)
+            }
+            // playerManager.gm.tempSavedWeaponStats[weaponDataSO.itemName].currentDamageLevelUpgrade++;
+            upgradeLevel_TMP.text = $"Upgrade Level {gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]}/{weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length}";
+
+            if (gm.savedCurrentLevelUpgrade[weaponDataSO.itemName] >= weaponDataSO.upgradeStats.maxDamageLevelUpgrades.Length)
             {
                 fullyUpgraded = true;
+                upgradeLevel_TMP.text = $"Fully Upgraded";
+                BuyButton.interactable = false;
+            }
+            else
+            {
+                
+                upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.upgradeStats.damageUpgradeLevelPrice[gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]]}";
+
+            }
+
+            foreach (var item in gm.savedCurrentLevelUpgrade)
+            {
+                print($"{item.Key} current Level Upgrade is {item.Value}");
             }
         }
         else

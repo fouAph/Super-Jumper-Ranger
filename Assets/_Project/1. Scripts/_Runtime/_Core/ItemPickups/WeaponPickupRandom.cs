@@ -24,7 +24,8 @@ public class WeaponPickupRandom : MonoBehaviour, IPooledObject
     {
         if (other.gameObject.tag == "Player")
         {
-            SpawnWeapon(other);
+            // SpawnWeapon(other);
+            NewSpawnWeapon(other);
             PoolSystem.Singleton.SpawnFromPool(pikcupVFX, transform.position, Quaternion.identity);
             if (!GameManager.Singleton.isTesting)
                 AudioPoolSystem.Singleton.PlayAudioSFX(pickupSfx, .5f);
@@ -45,34 +46,17 @@ public class WeaponPickupRandom : MonoBehaviour, IPooledObject
         }
     }
     WeaponBase savedWpn;
-    private void SpawnWeapon(Collision2D col)
+
+    public void NewSpawnWeapon(Collision2D col)
     {
-
-
-        //1. Spawn Weapon Gameobject
-        //2. Set Weapon stats from Gamemanager 
         var wpn = col.collider.GetComponent<WeaponManager>().PickupGun(this);
+        if (GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] <= wpn.gunDataSO.upgradeStats.maxDamageLevelUpgrades.Length
+                && GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] - 1 > -1)
+            wpn.UpgradeWeaponDamage(GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] - 1);
+        wpn.ResetAmmo();
 
-        foreach (var item in weaponDataSoToSpawn)
-        {
-            if (GameManager.Singleton.tempSavedWeaponStats.ContainsKey(item.itemName))
-            {
-                savedWpn = GameManager.Singleton.tempSavedWeaponStats[item.itemName];
-                print(item.itemName);
-                print(savedWpn);
-                break;
-            }
+        print("weapon " +  wpn.name +" current damage " + wpn.curentDamage);
 
-            print($"previous damage : {wpn.curentDamage}");
-            savedWpn.curentDamage = wpn.gunDataSO.upgradeStats.maxDamageLevelUpgrades[wpn.currentDamageLevelUpgrade];
-            int newDmg = savedWpn.curentDamage;
-            wpn.curentDamage = newDmg;
-
-            print($"New damage : {wpn.curentDamage}");
-            // if (wpn.currentDamageLevelUpgrade - 1 >= 0)
-            //     wpn.SetUpgradeDamage();
-            wpn.ResetAmmo();
-        }
     }
 
     void SubstractCurrentBoxCount()

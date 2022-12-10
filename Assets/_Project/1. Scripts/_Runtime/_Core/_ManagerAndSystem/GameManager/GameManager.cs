@@ -477,11 +477,13 @@ public class GameManager : MonoBehaviour
     public List<WeaponDataSO> weaponDataSoContainer = new List<WeaponDataSO>();
     public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
     public Dictionary<string, WeaponBase> tempSavedWeaponStats = new Dictionary<string, WeaponBase>();
+    public Dictionary<string, int> savedCurrentLevelUpgrade = new Dictionary<string, int>();
     private void AddTempSavedWeaponStats()
     {
         foreach (var item in weaponDataSoContainer)
         {
             tempSavedWeaponStats.Add(item.itemName, item.ItemPrefab.GetComponent<WeaponBase>());
+            savedCurrentLevelUpgrade.Add(item.itemName, 0);
         }
     }
     private void AddWeaponDataSoToDictionary()

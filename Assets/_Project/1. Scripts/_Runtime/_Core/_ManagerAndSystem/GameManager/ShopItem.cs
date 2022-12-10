@@ -24,7 +24,7 @@ public class ShopItem : MonoBehaviour
     protected bool bought;
     public virtual void OnBuyItem(PlayerManager playerManager)
     {
-        if (playerManager.Credit < price)
+        if (playerManager.Credit <= price)
         {
             print("Not Enough Credit!!!");
             bought = false;

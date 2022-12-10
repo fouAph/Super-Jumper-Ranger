@@ -43,7 +43,7 @@ public class PlayerBuffSO : ScriptableObject
         //reset Infinite ammoBuff
         playerManager.gm.useInfiniteAmmo = false;
         //reset increaseDamageBuff
-        if (playerManager.weaponManager.currentGun)
-            playerManager.weaponManager.currentGun.curentDamage = playerManager.weaponManager.currentGun.gunDataSO.damage;
+        // if (playerManager.weaponManager.currentGun)
+        //     playerManager.weaponManager.currentGun.curentDamage = playerManager.weaponManager.currentGun.gunDataSO.damage;
     }
 }
