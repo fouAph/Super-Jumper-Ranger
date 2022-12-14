@@ -5,27 +5,44 @@ public class WeaponShopItem : ShopItem
     [SerializeField] WeaponDataSO weaponDataSO;
     [SerializeField] TMP_Text upgradeLevel_TMP;
     private GameManager gm;
+    WeaponUpgradeInfo weaponUpgradeInfo;
     void Start()
     {
-        price = weaponDataSO.weaponUpgradeInfo.itemPrice;
+        weaponUpgradeInfo = weaponDataSO.weaponUpgradeInfo;
+        price = weaponUpgradeInfo.itemPrice;
         gm = GameManager.Singleton;
         itemName = weaponDataSO.itemName;
         itemName_TMP.text = weaponDataSO.itemName;
-
-        upgradeLevel_TMP.text = $"Upgrade Level {weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
-        upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
         if (itemImage) itemImage.sprite = weaponDataSO.itemSprite;
+        SetupShop();
+    }
+
+    private void SetupShop()
+    {
+
+        upgradeLevel_TMP.text = $"Upgrade Level {weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
+        bought = false;
+        weaponDataSO.SetWeapon();
+
         for (int i = 0; i < gm.unlockedWeapons.Count; i++)
         {
             if (gm.unlockedWeapons[i].itemName == weaponDataSO.itemName)
             {
-                upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
+                upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
                 removeButton.gameObject.SetActive(true);
                 bought = true;
             }
+
+            else upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
+
         }
 
+        if (weaponUpgradeInfo.currentDamageUpgradeLevel >= weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length - 1)
+            BuyButton.interactable = false;
+        else
+            BuyButton.interactable = true;
     }
+
     public override void OnBuyItem(PlayerManager playerManager)
     {
         if (!bought)
@@ -52,7 +69,7 @@ public class WeaponShopItem : ShopItem
     {
         if (playerManager.gm.CompareWeaponDataSoFromDict(weaponDataSO))
         {
-            upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
+            upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
             // bought = true;
             removeButton.gameObject.SetActive(true);
         }
@@ -60,15 +77,14 @@ public class WeaponShopItem : ShopItem
 
     public void OnUpgradeWeapon(PlayerManager playerManager)
     {
-        if (playerManager.Credit <= weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1])
+        if (playerManager.Credit <= weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1])
         {
             print("Not Enough Credit!! To Upgrade");
             return;
         }
 
-        print($"Upgrading to Level {weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}");
 
-        playerManager.Credit -= weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1];
+        playerManager.Credit -= weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1];
 
         playerManager.uiManager.UpdateCreditUI();
         bool fullyUpgraded = false;
@@ -77,8 +93,8 @@ public class WeaponShopItem : ShopItem
         {
             var info = weaponDataSO.weaponUpgradeInfo;
             info.currentDamageUpgradeLevel++;
-            upgradeLevel_TMP.text = $"Upgrade Level {weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
-            // upgradeLevel_TMP.text = $"Upgrade Level {gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]}/{weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
+            upgradeLevel_TMP.text = $"Upgrade Level {weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
+            // upgradeLevel_TMP.text = $"Upgrade Level {gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
             info.UpgradeDamage();
             if (info.currentDamageUpgradeLevel >= info.damageUpgrade.damageUpgradeLevels.Length - 1)
             {
@@ -87,28 +103,13 @@ public class WeaponShopItem : ShopItem
                 BuyButton.interactable = false;
             }
 
-
         }
-        else
-        {
-            upgradeLevel_TMP.text = $"Fully Upgraded";
-            BuyButton.interactable = false;
-        }
+        // else
+        // {
+        //     upgradeLevel_TMP.text = $"Fully Upgraded";
+        //     BuyButton.interactable = false;
+        // }
     }
-
-    bool UpgradeDamage()
-    {
-        var info = weaponDataSO.weaponUpgradeInfo;
-        info.currentDamageUpgradeLevel++;
-        info.currentDamage = info.damageUpgrade.damageUpgradeLevels[info.currentDamageUpgradeLevel + 1];
-
-        if (info.currentDamageUpgradeLevel >= info.damageUpgrade.damageUpgradeLevels.Length)
-        {
-            return true;
-        }
-        return false;
-    }
-
 
     public override void OnRemove(PlayerManager playerManager)
     {
@@ -131,15 +132,17 @@ public class WeaponShopItem : ShopItem
     public override void OnResetGame()
     {
         base.OnResetGame();
-        upgradeLevel_TMP.text = $"Upgrade Level {weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
 
-        for (int i = 0; i < gm.unlockedWeapons.Count; i++)
-        {
-            if (gm.unlockedWeapons[i].itemName == weaponDataSO.itemName)
-            {
-                upgradeOrBuyTMP.text = $"Upgrade for {weaponDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
-                removeButton.gameObject.SetActive(true);
-            }
-        }
+        // for (int i = 0; i < gm.unlockedWeapons.Count; i++)
+        // {
+        //     if (gm.unlockedWeapons[i].itemName == weaponDataSO.itemName)
+        //     {
+        //         upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
+        //         removeButton.gameObject.SetActive(true);
+        //     }
+        //     else bought = false;
+        // }
+        weaponDataSO.ResetAllUpgrade();
+        SetupShop();
     }
 }

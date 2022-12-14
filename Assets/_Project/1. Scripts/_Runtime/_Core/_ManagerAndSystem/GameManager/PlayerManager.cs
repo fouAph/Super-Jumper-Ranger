@@ -8,13 +8,12 @@ public class PlayerManager : MonoBehaviour
         set
         {
             credit = value;
-            print("Assgning credit Value");
             OnCreditChange?.Invoke();
         }
     }
     private int credit;
     public delegate void CreditChange();
-    CreditChange OnCreditChange;
+    public CreditChange OnCreditChange;
     public float buffDurationLeft { get; set; }
     public bool invicible { get; set; }
     public bool isPlayerDead { get; set; }

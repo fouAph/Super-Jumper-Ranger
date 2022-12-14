@@ -17,12 +17,27 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 7abeba70fb2839f44bc6aff40e03ba65, type: 3}
   bulletType: 0
   ammoType: 0
-  upgradeStats:
-    maxDamageLevelUpgrades: 150000001700000029000000
-    damageUpgradeLevelPrice: 00020000d300000003020000
-  shootSFX: {fileID: 8300000, guid: e0070b3dd3eefd44a85851703f2e4cf0, type: 3}
-  cameraShakeDuration: 0.2
-  cameraShakeStrength: 0.2
+  canUpgradeWeapon: 1
+  weaponUpgradeInfo:
+    itemPrice: 200
+    currentDamage: 0
+    currentClip: 0
+    currentFireRate: 0
+    showUpgradeDamage: 1
+    currentDamageUpgradeLevel: -1
+    damageUpgrade:
+      damageUpgradePrices: 0a000000140000001e000000
+      damageUpgradeLevels: 140000001e00000028000000
+    showUpgradeClip: 1
+    currentClipUpgradeLevel: -1
+    clipUpgrade:
+      clipUpgradePrices: 1e0000002800000032000000
+      clipUpgradeLevels: 14000000190000001e000000
+    showUpgradeFireRate: 1
+    currentFireRateUpgradeLevel: -1
+    fireRateUpgrade:
+      fireRateUpgradePrices: 
+      fireRateUpgradeLevels: []
   fireRate: 13
   damage: 20
   maxAmmoInMag: 30
@@ -31,4 +46,7 @@ MonoBehaviour:
   spreadValue: 0.2
   howManyBulletPerShoot: 1
   shootPower: 1500
+  shootSFX: {fileID: 8300000, guid: e0070b3dd3eefd44a85851703f2e4cf0, type: 3}
+  cameraShakeDuration: 0.2
+  cameraShakeStrength: 0.2
   spawnPosition: {x: 0.13, y: 0.01, z: 0}

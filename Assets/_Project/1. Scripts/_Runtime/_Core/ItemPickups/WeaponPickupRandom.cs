@@ -50,7 +50,7 @@ public class WeaponPickupRandom : MonoBehaviour, IPooledObject
     public void NewSpawnWeapon(Collision2D col)
     {
         var wpn = col.collider.GetComponent<WeaponManager>().PickupGun(this);
-        wpn.gunDataSO.SetWeapon(wpn);
+        wpn.gunDataSO.SetWeapon();
         wpn.ResetAmmo();
     }
 

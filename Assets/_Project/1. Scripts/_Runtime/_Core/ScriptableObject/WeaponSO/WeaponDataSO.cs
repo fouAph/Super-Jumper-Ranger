@@ -52,12 +52,15 @@ public class WeaponDataSO : ItemDataSO
         return PoolSystem.Singleton.SpawnFromPool(ItemPrefab, spawnPosition, Quaternion.identity, weaponholder);
     }
 
-    public void SetWeapon(WeaponBase wpn)
+    public void SetWeapon()
     {
         weaponUpgradeInfo.SetUpWeaponUpgradeInfo(this);
     }
 
-
+    public void ResetAllUpgrade()
+    {
+        weaponUpgradeInfo.ResetAllUpgrade();
+    }
 }
 
 public enum BulletType { Projectile, Raycast }
@@ -107,12 +110,10 @@ public class WeaponUpgradeInfo
         else currentFireRate = fireRateUpgrade.fireRateUpgradeLevels[currentFireRateUpgradeLevel];
     }
 
-     public void UpgradeDamage()
+    public void UpgradeDamage()
     {
         currentDamage = damageUpgrade.damageUpgradeLevels[currentDamageUpgradeLevel];
     }
-
-
 
     public void ResetAllUpgrade()
     {

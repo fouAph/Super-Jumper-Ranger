@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(SetupGameReference());
         StartCoroutine(StartGameCountdown());
-
+        
     }
 
     private void ResetCurrentGameProgress()
@@ -222,8 +222,6 @@ public class GameManager : MonoBehaviour
         {
             item.OnResetGame();
         }
-
-
     }
 
     IEnumerator GetSceneLoadingProgress()
@@ -479,8 +477,8 @@ public class GameManager : MonoBehaviour
 
     public List<WeaponDataSO> weaponDataSoContainer = new List<WeaponDataSO>();
     public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
-  
-  
+
+
     private void AddWeaponDataSoToDictionary()
     {
         foreach (var item in weaponDataSoContainer)
@@ -500,7 +498,7 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
-   
+
     public void ResetUnlockedWeapon()
     {
         unlockedWeapons.Clear();

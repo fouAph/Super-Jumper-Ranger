@@ -34,7 +34,7 @@ public class ShopItem : MonoBehaviour
         removeButton_TMP.text = $"Remove For {removeItemPrice.ToString()}";
     }
 
-    protected bool bought;
+    public bool bought;
     public virtual void OnBuyItem(PlayerManager playerManager)
     {
         if (playerManager.Credit <= price)
