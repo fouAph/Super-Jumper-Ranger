@@ -20,9 +20,6 @@ MonoBehaviour:
   canUpgradeWeapon: 1
   weaponUpgradeInfo:
     itemPrice: 200
-    currentDamage: 0
-    currentClip: 0
-    currentFireRate: 0
     showUpgradeDamage: 1
     currentDamageUpgradeLevel: -1
     damageUpgrade:
@@ -33,7 +30,7 @@ MonoBehaviour:
     clipUpgrade:
       clipUpgradePrices: 1e0000002800000032000000
       clipUpgradeLevels: 14000000190000001e000000
-    showUpgradeFireRate: 1
+    showUpgradeFireRate: 0
     currentFireRateUpgradeLevel: -1
     fireRateUpgrade:
       fireRateUpgradePrices: 

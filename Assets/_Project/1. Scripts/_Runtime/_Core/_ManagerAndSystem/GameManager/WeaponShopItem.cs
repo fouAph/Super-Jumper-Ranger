@@ -4,6 +4,9 @@ public class WeaponShopItem : ShopItem
 {
     [SerializeField] WeaponDataSO weaponDataSO;
     [SerializeField] TMP_Text upgradeLevel_TMP;
+    [SerializeField] TMP_Text clipStat_TMP;
+    [SerializeField] TMP_Text damageStat_TMP;
+
     private GameManager gm;
     WeaponUpgradeInfo weaponUpgradeInfo;
     void Start()
@@ -34,13 +37,20 @@ public class WeaponShopItem : ShopItem
             }
 
             else upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
-
         }
 
         if (weaponUpgradeInfo.currentDamageUpgradeLevel >= weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length - 1)
             BuyButton.interactable = false;
         else
             BuyButton.interactable = true;
+
+        UpdateStatsShop();
+    }
+
+    private void UpdateStatsShop()
+    {
+        clipStat_TMP.text = $"Ammo: {weaponDataSO.weaponUpgradeInfo.currentClip.ToString()}";
+        damageStat_TMP.text = $"Damage:  {weaponDataSO.weaponUpgradeInfo.currentDamage.ToString()}";
     }
 
     public override void OnBuyItem(PlayerManager playerManager)
@@ -104,11 +114,8 @@ public class WeaponShopItem : ShopItem
             }
 
         }
-        // else
-        // {
-        //     upgradeLevel_TMP.text = $"Fully Upgraded";
-        //     BuyButton.interactable = false;
-        // }
+        UpdateStatsShop();
+
     }
 
     public override void OnRemove(PlayerManager playerManager)

@@ -4738,7 +4738,6 @@ MonoBehaviour:
   upgradeOrBuyTMP: {fileID: 0}
   itemImage: {fileID: 0}
   buttonSFX: {fileID: 0}
-  BuyButton: {fileID: 0}
   removeable: 0
   removeButton: {fileID: 0}
   removeButton_TMP: {fileID: 0}
@@ -4863,7 +4862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 11
     m_Right: 0
     m_Top: 84
     m_Bottom: 0
@@ -6073,6 +6072,10 @@ PrefabInstance:
     - target: {fileID: 7530594841029582774, guid: 4e83a2387c119f34f8415a0dc8e5c8d2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8392689034017320273, guid: 4e83a2387c119f34f8415a0dc8e5c8d2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e83a2387c119f34f8415a0dc8e5c8d2, type: 3}

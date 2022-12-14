@@ -12,7 +12,7 @@ public class ShopItem : MonoBehaviour
     public TMP_Text upgradeOrBuyTMP;
     [SerializeField] protected Image itemImage;
     [SerializeField] AudioClip buttonSFX;
-    [SerializeField] protected Button BuyButton;
+    protected Button BuyButton;
 
     [Header("Remove Item")]
     public bool removeable;

@@ -70,9 +70,9 @@ public enum AmmoType { RifleAmmo, SMGAmmo, Rocket }
 public class WeaponUpgradeInfo
 {
     public int itemPrice;
-    public int currentDamage;
-    public int currentClip;
-    public float currentFireRate;
+    public int currentDamage { get; set; }
+    public int currentClip{ get; set; }
+    public float currentFireRate{ get; set; }
 
     [Header("Damage Upgrade")]
     [SerializeField] private bool showUpgradeDamage;
