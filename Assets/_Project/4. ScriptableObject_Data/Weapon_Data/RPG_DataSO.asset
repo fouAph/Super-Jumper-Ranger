@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 4159056502313534271, guid: 0277b7974571c50448ad245dd2102364, type: 3}
   itemName: RPG
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 6c24b9eaad2d4df4abdb901708f65e6a, type: 3}
   bulletType: 0
   ammoType: 0
   upgradeStats:

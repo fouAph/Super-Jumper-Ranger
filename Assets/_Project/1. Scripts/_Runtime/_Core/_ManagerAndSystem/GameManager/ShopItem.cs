@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using NaughtyAttributes;
 
 public class ShopItem : MonoBehaviour
 {
@@ -12,13 +13,25 @@ public class ShopItem : MonoBehaviour
     [SerializeField] protected Image itemImage;
     [SerializeField] AudioClip buttonSFX;
     [SerializeField] protected Button BuyButton;
-    [SerializeField] protected bool canInteractBuyButton;
+
+    [Header("Remove Item")]
+    public bool removeable;
+    [ShowIf("removeable")]
+    public Button removeButton;
+    [ShowIf("removeable")]
+    public TMP_Text removeButton_TMP;
+    [ShowIf("removeable")]
+    public int removeItemPrice;
     protected virtual void Awake()
     {
         itemName_TMP.text = itemName;
         upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
         BuyButton = GetComponentInChildren<Button>();
         BuyButton.onClick.AddListener(delegate { OnBuyItem(GameManager.Singleton.playerManager); });
+        removeButton.onClick.AddListener(delegate { OnRemove(GameManager.Singleton.playerManager); });
+
+        removeButton.gameObject.SetActive(false);
+        removeButton_TMP.text = $"Remove For {removeItemPrice.ToString()}";
     }
 
     protected bool bought;
@@ -41,5 +54,12 @@ public class ShopItem : MonoBehaviour
     public virtual void OnResetGame()
     {
         upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
+        removeButton.gameObject.SetActive(false);
+
+    }
+
+    public virtual void OnRemove(PlayerManager playerManager)
+    {
+
     }
 }

@@ -16,32 +16,16 @@ public class WeaponBase : MonoBehaviour
         currentAmmo = maxAmmoInClip;
     }
 
-    public void UpgradeWeaponDamage(int damageIndex)
-    {
-        // curentDamage = gunDataSO.upgradeStats.maxDamageLevelUpgrades[damageIndex];
-        StartCoroutine(UpgradeDamage_Routine(damageIndex));
-    }
-
-    // public void SetUpgradeDamage()
+    // public virtual void UpgradeDamage()
     // {
-    //     StartCoroutine(UpgradeDamage_Routine());
+    //     if (gunDataSO.weaponUpgradeInfo.currentDamageUpgradeLevel > -1)
+    //         curentDamage = gunDataSO.weaponUpgradeInfo.currentDamage;
     // }
+
     IEnumerator UpgradeDamage_Routine(int damageIndex)
     {
         yield return new WaitForSeconds(.02f);
-        curentDamage = gunDataSO.upgradeStats.maxDamageLevelUpgrades[damageIndex];
+        curentDamage = gunDataSO.weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels[damageIndex];
     }
-    // IEnumerator UpgradeDamage_Routine()
-    // {
-    //     yield return new WaitForSeconds(.02f);
-    //     if (currentDamageLevelUpgrade < 0)
-    //     {
-    //         print("damageLevel is not valid");
-    //         yield return null;
-    //     }
-    //     curentDamage += gunDataSO.upgradeStats.maxDamageLevelUpgrades[currentDamageLevelUpgrade - 1];
-    //     print(currentDamageLevelUpgrade);
-    //     print(gunDataSO.upgradeStats.maxDamageLevelUpgrades[currentDamageLevelUpgrade - 1]);
-    // }
 }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,19 +46,15 @@ public class WeaponPickupRandom : MonoBehaviour, IPooledObject
             SubstractCurrentBoxCount();
         }
     }
-    WeaponBase savedWpn;
 
     public void NewSpawnWeapon(Collision2D col)
     {
         var wpn = col.collider.GetComponent<WeaponManager>().PickupGun(this);
-        if (GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] <= wpn.gunDataSO.upgradeStats.maxDamageLevelUpgrades.Length
-                && GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] - 1 > -1)
-            wpn.UpgradeWeaponDamage(GameManager.Singleton.savedCurrentLevelUpgrade[wpn.gunDataSO.itemName] - 1);
+        wpn.gunDataSO.SetWeapon(wpn);
         wpn.ResetAmmo();
-
-        print("weapon " +  wpn.name +" current damage " + wpn.curentDamage);
-
     }
+
+
 
     void SubstractCurrentBoxCount()
     {

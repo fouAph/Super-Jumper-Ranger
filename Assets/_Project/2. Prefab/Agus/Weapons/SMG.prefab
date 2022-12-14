@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunDataSO: {fileID: 11400000, guid: 991c3ac10a12ba245bdd7e896adb2a10, type: 2}
   currentAmmo: 0
-  curentDamage: 170
+  curentDamage: 0
   maxAmmoInClip: 0
   currentDamageLevelUpgrade: 0
   bulletSpawnPoint: {fileID: 3093268583674971974}

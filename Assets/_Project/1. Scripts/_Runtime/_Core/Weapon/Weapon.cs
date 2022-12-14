@@ -23,8 +23,8 @@ public class Weapon : WeaponBase
         uiManager = UiManager.Singleton;
         transform.localPosition = gunDataSO.spawnPosition;
         // PoolSystemGeneric.Singleton.AddObjectToPooledObject(bulletPrefab, 50);
-        currentAmmo = gunDataSO.maxAmmoInMag;
-        curentDamage = gunDataSO.damage;
+        currentAmmo = gunDataSO.weaponUpgradeInfo.currentClip;
+        curentDamage = gunDataSO.weaponUpgradeInfo.currentDamage;
         maxAmmoInClip = gunDataSO.maxAmmoInMag;
         animator = GetComponentInChildren<Animator>();
         Invoke("AddBulletPrefab", .1f);

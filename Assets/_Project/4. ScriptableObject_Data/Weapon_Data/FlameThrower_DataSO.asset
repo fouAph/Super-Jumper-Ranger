@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 3540999494377323484, guid: 4e70723b50cf7854baf4e18446a6e06b, type: 3}
   itemName: FlameThrower
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 594f8d4e91693ad4e9c00b4162b18b8d, type: 3}
   bulletType: 0
   ammoType: 0
   upgradeStats:

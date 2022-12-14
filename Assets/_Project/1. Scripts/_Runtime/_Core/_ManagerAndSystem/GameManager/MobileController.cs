@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MobileController : MonoBehaviour
 {
-    public GameObject mobileControllerCanvas;
+    // public GameObject mobileControllerCanvas;
 
     [Header("Mobile Settings")]
     public MobileControlScheme controlScheme;
@@ -17,7 +17,7 @@ public class MobileController : MonoBehaviour
     public float shootThreshold = .8f;
     public float jumpThreshold = .7f;
     public GameObject[] buttonObjects;
-
+    public GameObject openShopButtonObject;
     public void SetMobileControllScheme(GameManager gm)
     {
         switch (controlScheme)
@@ -40,10 +40,10 @@ public class MobileController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        mobileControllerCanvas.SetActive(false);
-    }
+    // private void Start()
+    // {
+    //     mobileControllerCanvas.SetActive(false);
+    // }
 
     public void ChangeControllButton()
     {

@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
         MusicManager.Singleton.PlayMainMenuMusic();     //Play Main Music Menu
         shopManager = ShopManager.Singleton;
         AddWeaponDataSoToDictionary();
-        AddTempSavedWeaponStats();
         if (isTesting)
         {
             if (useMobileControll)
@@ -104,12 +103,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            showShop = !showShop;
-            shopManager.shopCanvasObject.SetActive(showShop);
-
-        }
+        if (gameState == GameState.InGame || gameState == GameState.InShop)
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                showShop = !showShop;
+                shopManager.OpenAndCloseShop(this);
+            }
 
         if (gameState != GameState.InGame) return;                          //return While not inGame State
 
@@ -124,6 +123,8 @@ public class GameManager : MonoBehaviour
             {
                 ResumeGame();                                               //if not true then call Resume Game Methode
             }
+
+            pauseMenuScreen.SetActive(isPause);                    //Enable Pause Screen Menu
         }
 
         Gameloop();
@@ -135,9 +136,10 @@ public class GameManager : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale = 1;                                 //Unfreeze the game
+        isPause = false;
         gameState = GameState.InGame;                       //set the gameState to InGame  
         playerManager.EnablePlayerController();   //Enable Player controll
-        pauseMenuScreen.SetActive(false);                   //disable Pause Menu Screen
+        pauseMenuScreen.SetActive(false);
     }
 
     public void PauseGame()
@@ -145,7 +147,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;                                 //Freeze the game
         gameState = GameState.Menu;                         //set the game state to menu
         playerManager.DisablePlayerController();  //Disable player controll
-        pauseMenuScreen.SetActive(true);                    //Enable Pause Screen Menu
     }
 
     public void LoadGame()
@@ -197,6 +198,7 @@ public class GameManager : MonoBehaviour
         loadingScreen.SetActive(true);
         ResetCurrentGameProgress();
         ResumeGame();
+        pauseMenuScreen.SetActive(false);
         countDownHelper.SetSprite(countDownHelper._3);
         MusicManager.Singleton.StopMusic();
         sceneLoading.Add(SceneManager.UnloadSceneAsync(currentMapBuildLevelIndex));
@@ -235,6 +237,7 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(.01f);
         gameOverScreen.SetActive(false);
+        shopManager.shopGameobjectHolder.SetActive(false);
         yield return new WaitForSeconds(1f);
         loadingScreen.SetActive(false);
     }
@@ -476,16 +479,8 @@ public class GameManager : MonoBehaviour
 
     public List<WeaponDataSO> weaponDataSoContainer = new List<WeaponDataSO>();
     public Dictionary<string, WeaponDataSO> weaponDataSoDict = new Dictionary<string, WeaponDataSO>();
-    public Dictionary<string, WeaponBase> tempSavedWeaponStats = new Dictionary<string, WeaponBase>();
-    public Dictionary<string, int> savedCurrentLevelUpgrade = new Dictionary<string, int>();
-    private void AddTempSavedWeaponStats()
-    {
-        foreach (var item in weaponDataSoContainer)
-        {
-            tempSavedWeaponStats.Add(item.itemName, item.ItemPrefab.GetComponent<WeaponBase>());
-            savedCurrentLevelUpgrade.Add(item.itemName, 0);
-        }
-    }
+  
+  
     private void AddWeaponDataSoToDictionary()
     {
         foreach (var item in weaponDataSoContainer)
@@ -505,12 +500,21 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+   
     public void ResetUnlockedWeapon()
     {
         unlockedWeapons.Clear();
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach (var item in weaponDataSoContainer)
+        {
+            item.weaponUpgradeInfo.ResetAllUpgrade();
+        }
     }
 }
 
 public enum CharacterFlipMode { ByMousePosition, ByMoveDirection }
 public enum SceneIndexes { MANAGER = 0, TITLE_SCREEN = 1, MAP_1 = 2, MAP_2 = 3, MAP_3 = 3, MAP_4 = 4 }
-public enum GameState { Menu, InGame, GameOver }
+public enum GameState { Menu, InGame, GameOver, NotReady, InShop }

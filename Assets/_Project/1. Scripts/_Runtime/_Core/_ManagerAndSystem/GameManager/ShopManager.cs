@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
     #region Singleton
     public static ShopManager Singleton;
-    public GameObject shopCanvasObject;
+    public GameObject shopGameobjectHolder;
     public List<ShopItem> shopItems = new List<ShopItem>();
     private void Awake()
     {
@@ -20,10 +21,26 @@ public class ShopManager : MonoBehaviour
 
         Singleton = this;
 
-        shopCanvasObject.SetActive(false);
+        shopGameobjectHolder.SetActive(false);
     }
     #endregion
 
-    public bool isOpen;
+    public void OpenCloseShop()
+    {
+        showShop = !showShop;
+        shopGameobjectHolder.SetActive(showShop);
+    }
+    public void OpenAndCloseShop(GameManager gm)
+    {
+        showShop = !showShop;
+        shopGameobjectHolder.SetActive(showShop);
+        if (showShop)
+        {
+            gm.PauseGame();
+            gm.gameState = GameState.InShop;
+        }
+        else gm.ResumeGame();
+    }
+    public bool showShop;
 
 }

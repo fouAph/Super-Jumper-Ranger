@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemPrefab: {fileID: 7735015640324448599, guid: cba57b98dbe18e141a33cad73fb1e0b5, type: 3}
   itemName: Pistol
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: d047b4867fbbb4240943dcb01bef670b, type: 3}
   bulletType: 0
   ammoType: 0
   upgradeStats:
