@@ -17,11 +17,14 @@ public class ShopManager : MonoBehaviour
             Debug.LogWarning("Destroying " + Singleton.name);
             DestroyImmediate(Singleton.gameObject);
         }
-        shopItems = GetComponentsInChildren<ShopItem>().ToList();
 
         Singleton = this;
 
         shopGameobjectHolder.SetActive(false);
+    }
+
+    private void Start() {
+        
     }
     #endregion
 
@@ -32,6 +35,8 @@ public class ShopManager : MonoBehaviour
     }
     public void OpenAndCloseShop(GameManager gm)
     {
+        shopItems = GetComponentsInChildren<ShopItem>().ToList();
+
         showShop = !showShop;
         shopGameobjectHolder.SetActive(showShop);
         if (showShop)

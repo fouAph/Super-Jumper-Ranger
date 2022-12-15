@@ -22,7 +22,6 @@ public class WeaponShopItem : ShopItem
 
     private void SetupShop()
     {
-
         upgradeLevel_TMP.text = $"Upgrade Level {weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
         bought = false;
         weaponDataSO.SetWeapon();
@@ -63,16 +62,11 @@ public class WeaponShopItem : ShopItem
             {
                 playerManager.gm.unlockedWeapons.Add(playerManager.gm.GetWeaponDataSoFromDict(weaponDataSO.itemName));
                 OnBuyWeapon(playerManager);
-                print("buying Weapon");
             }
 
         }
-        else
-        {
-            OnUpgradeWeapon(playerManager);
-            print("upgrading Weapon");
 
-        }
+        else OnUpgradeWeapon(playerManager);
     }
 
     public void OnBuyWeapon(PlayerManager playerManager)
@@ -80,7 +74,7 @@ public class WeaponShopItem : ShopItem
         if (playerManager.gm.CompareWeaponDataSoFromDict(weaponDataSO))
         {
             upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
-            // bought = true;
+            bought = true;
             removeButton.gameObject.SetActive(true);
         }
     }
@@ -89,6 +83,7 @@ public class WeaponShopItem : ShopItem
     {
         if (playerManager.Credit <= weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1])
         {
+            print(weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]);
             print("Not Enough Credit!! To Upgrade");
             return;
         }
@@ -105,13 +100,17 @@ public class WeaponShopItem : ShopItem
             info.currentDamageUpgradeLevel++;
             upgradeLevel_TMP.text = $"Upgrade Level {weaponUpgradeInfo.currentDamageUpgradeLevel + 1}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
             // upgradeLevel_TMP.text = $"Upgrade Level {gm.savedCurrentLevelUpgrade[weaponDataSO.itemName]}/{weaponUpgradeInfo.damageUpgrade.damageUpgradeLevels.Length}";
-            info.UpgradeDamage();
+            // info.UpgradeDamage();
+            // info.UpgradeClip();
+            info.SetUpWeaponUpgradeInfo(weaponDataSO);
             if (info.currentDamageUpgradeLevel >= info.damageUpgrade.damageUpgradeLevels.Length - 1)
             {
                 fullyUpgraded = true;
                 upgradeOrBuyTMP.text = $"Fully Upgraded";
                 BuyButton.interactable = false;
             }
+            else
+                upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
 
         }
         UpdateStatsShop();
@@ -130,7 +129,7 @@ public class WeaponShopItem : ShopItem
                 removed = true;
                 removeButton.gameObject.SetActive(false);
                 upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";
-
+                bought = false;
                 break;
             }
         }
@@ -139,17 +138,8 @@ public class WeaponShopItem : ShopItem
     public override void OnResetGame()
     {
         base.OnResetGame();
-
-        // for (int i = 0; i < gm.unlockedWeapons.Count; i++)
-        // {
-        //     if (gm.unlockedWeapons[i].itemName == weaponDataSO.itemName)
-        //     {
-        //         upgradeOrBuyTMP.text = $"Upgrade for {weaponUpgradeInfo.damageUpgrade.damageUpgradePrices[weaponUpgradeInfo.currentDamageUpgradeLevel + 1]}";
-        //         removeButton.gameObject.SetActive(true);
-        //     }
-        //     else bought = false;
-        // }
         weaponDataSO.ResetAllUpgrade();
         SetupShop();
+
     }
 }

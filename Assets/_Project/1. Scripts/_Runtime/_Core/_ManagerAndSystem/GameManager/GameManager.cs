@@ -353,7 +353,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         uiManager = UiManager.Singleton;
-
+        yield return new WaitForSeconds(.2f);
         spawnerManager = SpawnerManager.Singleton;
         spawnerManager.maxEnemyCount = currentMap.maxEnemyCount;
         spawnerManager.maxBoxCount = currentMap.maxBoxCount;

@@ -71,32 +71,53 @@ public class WeaponUpgradeInfo
 {
     public int itemPrice;
     public int currentDamage { get; set; }
-    public int currentClip{ get; set; }
-    public float currentFireRate{ get; set; }
+    public int currentClip { get; set; }
+    public float currentFireRate { get; set; }
+    
+    public bool useCurrentDamageUpgradeForAllUpgrade = true;
 
     [Header("Damage Upgrade")]
     [SerializeField] private bool showUpgradeDamage;
     [ShowIf("showUpgradeDamage"), AllowNesting]
-    public int currentDamageUpgradeLevel = 0;
+    public int currentDamageUpgradeLevel = -1;
     [ShowIf("showUpgradeDamage"), AllowNesting]
     public DamageUpgrade damageUpgrade;
 
     [Header("Clip Upgrade")]
     [SerializeField] private bool showUpgradeClip;
     [ShowIf("showUpgradeClip"), AllowNesting]
-    public int currentClipUpgradeLevel = 0;
+    public int currentClipUpgradeLevel = -1;
     [ShowIf("showUpgradeClip"), AllowNesting]
     public ClipUpgrade clipUpgrade;
 
     [Header("FireRate Upgrade")]
     [SerializeField] private bool showUpgradeFireRate;
     [ShowIf("showUpgradeFireRate"), AllowNesting]
-    public int currentFireRateUpgradeLevel = 0;
+    public int currentFireRateUpgradeLevel = -1;
     [ShowIf("showUpgradeFireRate"), AllowNesting]
     public FireRateUpgrade fireRateUpgrade;
 
     public void SetUpWeaponUpgradeInfo(WeaponDataSO weaponDataSO)
     {
+        if (useCurrentDamageUpgradeForAllUpgrade)
+        {
+            if (currentDamageUpgradeLevel == -1)
+            {
+                currentDamage = weaponDataSO.damage;
+                currentClip = weaponDataSO.maxAmmoInMag;
+                currentFireRate = weaponDataSO.fireRate;
+            }
+
+            else
+            {
+                currentDamage = damageUpgrade.damageUpgradeLevels[currentDamageUpgradeLevel];
+                currentClip = clipUpgrade.clipUpgradeLevels[currentDamageUpgradeLevel];
+                currentClip = clipUpgrade.clipUpgradeLevels[currentDamageUpgradeLevel];
+            }
+
+            return;
+        }
+
         if (currentDamageUpgradeLevel == -1)
             currentDamage = weaponDataSO.damage;
         else currentDamage = damageUpgrade.damageUpgradeLevels[currentDamageUpgradeLevel];
@@ -113,6 +134,11 @@ public class WeaponUpgradeInfo
     public void UpgradeDamage()
     {
         currentDamage = damageUpgrade.damageUpgradeLevels[currentDamageUpgradeLevel];
+    }
+
+    public void UpgradeClip()
+    {
+        currentClip = clipUpgrade.clipUpgradeLevels[currentClipUpgradeLevel];
     }
 
     public void ResetAllUpgrade()

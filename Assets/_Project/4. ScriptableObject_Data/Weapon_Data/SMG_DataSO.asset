@@ -20,27 +20,25 @@ MonoBehaviour:
   canUpgradeWeapon: 1
   weaponUpgradeInfo:
     itemPrice: 200
-    currentDamage: 0
-    currentClip: 0
-    currentFireRate: 0
+    useCurrentDamageUpgradeForAllUpgrade: 1
     showUpgradeDamage: 1
     currentDamageUpgradeLevel: -1
     damageUpgrade:
-      damageUpgradePrices: 0a000000140000001e000000
-      damageUpgradeLevels: 140000001e00000028000000
-    showUpgradeClip: 1
+      damageUpgradePrices: 4c0400004006000034080000
+      damageUpgradeLevels: 100000001300000017000000
+    showUpgradeClip: 0
     currentClipUpgradeLevel: -1
     clipUpgrade:
-      clipUpgradePrices: 1e0000002800000032000000
-      clipUpgradeLevels: 14000000190000001e000000
+      clipUpgradePrices: 
+      clipUpgradeLevels: 170000001c00000023000000
     showUpgradeFireRate: 1
     currentFireRateUpgradeLevel: -1
     fireRateUpgrade:
       fireRateUpgradePrices: 
       fireRateUpgradeLevels: []
   fireRate: 13
-  damage: 20
-  maxAmmoInMag: 30
+  damage: 13
+  maxAmmoInMag: 20
   maxCarryingAmmo: 90
   autoFire: 1
   spreadValue: 0.2

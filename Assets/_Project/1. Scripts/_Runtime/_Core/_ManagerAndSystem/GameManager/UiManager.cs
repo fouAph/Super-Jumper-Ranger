@@ -39,8 +39,6 @@ public class UiManager : MonoBehaviour
         Invoke("UpdateCreditUI", 1f);
     }
 
-
-
     public void UpdateScoreText(int score)
     {
         if (scoreTMP)
