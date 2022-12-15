@@ -9,10 +9,7 @@ public class WeaponDataSO : ItemDataSO
     public BulletType bulletType;
     public AmmoType ammoType;
 
-    [Header("WeaponUpgrade")]
-    public bool canUpgradeWeapon;
-    [ShowIf("canUpgradeWeapon")]
-    public WeaponUpgradeInfo weaponUpgradeInfo;
+
 
     [Header("WeaponStats")]
     //Weapon Stats
@@ -42,6 +39,11 @@ public class WeaponDataSO : ItemDataSO
     public Vector3 spawnPosition;
     // public Vector3 weaponScale;
 
+    [Header("WeaponUpgrade")]
+    public bool canUpgradeWeapon;
+    [ShowIf("canUpgradeWeapon")]
+    public WeaponUpgradeInfo weaponUpgradeInfo;
+    
     public void AddWeaponObjectToPool()
     {
         PoolSystem.Singleton.AddObjectToPooledObject(ItemPrefab, 1);
@@ -56,7 +58,6 @@ public class WeaponDataSO : ItemDataSO
     {
         weaponUpgradeInfo.SetUpWeaponUpgradeInfo(this);
     }
-
     public void ResetAllUpgrade()
     {
         weaponUpgradeInfo.ResetAllUpgrade();
@@ -73,7 +74,7 @@ public class WeaponUpgradeInfo
     public int currentDamage { get; set; }
     public int currentClip { get; set; }
     public float currentFireRate { get; set; }
-    
+
     public bool useCurrentDamageUpgradeForAllUpgrade = true;
 
     [Header("Damage Upgrade")]

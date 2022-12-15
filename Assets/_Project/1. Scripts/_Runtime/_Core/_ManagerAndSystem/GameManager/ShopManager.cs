@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,12 +22,32 @@ public class ShopManager : MonoBehaviour
         Singleton = this;
 
         shopGameobjectHolder.SetActive(false);
+
+        // foreach (var item in shopItems)
+        // {
+        //     item.SetupShop();
+        // }
     }
 
-    private void Start() {
-        
-    }
     #endregion
+
+    public void ResetShopItem()
+    {
+        StartCoroutine(RestShopItem_Routine());
+    }
+
+    IEnumerator RestShopItem_Routine()
+    {
+        shopGameobjectHolder.SetActive(true);
+        yield return new WaitForSeconds(.1f);
+        shopGameobjectHolder.SetActive(false);
+
+        foreach (var item in shopItems)
+        {
+            item.SetupShop();
+        }
+
+    }
 
     public void OpenCloseShop()
     {

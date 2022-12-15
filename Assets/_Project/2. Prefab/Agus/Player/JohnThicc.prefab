@@ -124,6 +124,8 @@ MonoBehaviour:
     moveSpeed: 4
   jump:
     ability: 1
+    useCoyoteJump: 1
+    maxCoyoteJumptimer: 0.5
     maxHeight: 3.5
     minHeight: 2.5
     timeToApex: 0.435
@@ -196,7 +198,6 @@ MonoBehaviour:
   transformsToRotate:
   - {fileID: 8665922427541341863}
   isFacingRight: 0
-  facingDirection: 0
 --- !u!114 &8461470891019065159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810422011f013a44aa9f07d283554201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  maxHealth: 10
   currentHealth: 0
   hitColor: {r: 1, g: 1, b: 1, a: 1}
   damagedSFX: {fileID: 8300000, guid: 41e9956ae14b9b242a35c8770f1e90c6, type: 3}

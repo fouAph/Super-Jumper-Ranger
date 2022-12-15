@@ -17,9 +17,21 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: c960011fea3dca047899f1e377346084, type: 3}
   bulletType: 0
   ammoType: 0
+  fireRate: 7
+  damage: 40
+  maxAmmoInMag: 18
+  maxCarryingAmmo: 90
+  autoFire: 1
+  spreadValue: 5.03
+  howManyBulletPerShoot: 1
+  shootPower: 2200
+  shootSFX: {fileID: 8300000, guid: e0070b3dd3eefd44a85851703f2e4cf0, type: 3}
+  cameraShakeDuration: 0.2
+  cameraShakeStrength: 0.2
+  spawnPosition: {x: 0.377, y: -0.031, z: 0}
   canUpgradeWeapon: 1
   weaponUpgradeInfo:
-    itemPrice: 7000
+    itemPrice: 2100
     useCurrentDamageUpgradeForAllUpgrade: 1
     showUpgradeDamage: 0
     currentDamageUpgradeLevel: -1
@@ -36,15 +48,3 @@ MonoBehaviour:
     fireRateUpgrade:
       fireRateUpgradePrices: 
       fireRateUpgradeLevels: []
-  fireRate: 7
-  damage: 40
-  maxAmmoInMag: 18
-  maxCarryingAmmo: 90
-  autoFire: 1
-  spreadValue: 5.03
-  howManyBulletPerShoot: 1
-  shootPower: 2200
-  shootSFX: {fileID: 8300000, guid: e0070b3dd3eefd44a85851703f2e4cf0, type: 3}
-  cameraShakeDuration: 0.2
-  cameraShakeStrength: 0.2
-  spawnPosition: {x: 0.377, y: -0.031, z: 0}

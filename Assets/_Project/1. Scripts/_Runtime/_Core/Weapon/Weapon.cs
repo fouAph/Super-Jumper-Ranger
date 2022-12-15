@@ -84,8 +84,8 @@ public class Weapon : WeaponBase
                 AudioPoolSystem.Singleton.PlayShootAudio(gunDataSO.shootSFX, 1f);
                 if (CameraShake.Singleton)
                     CameraShake.Singleton.ShakeOnce(gunDataSO.cameraShakeDuration, gunDataSO.cameraShakeStrength);
-                if (!uiManager) return;
-                UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
+                if (uiManager)
+                    UiManager.Singleton.UpdateAmmoCountText(currentAmmo);
             }
     }
 

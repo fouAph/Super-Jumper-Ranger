@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviour
 
     void Setup()
     {
-        credit = 10000;
+        credit = 300;
         gm = GameManager.Singleton;
         uiManager = UiManager.Singleton;
         playerHealth = GetComponent<HealthSystem>();

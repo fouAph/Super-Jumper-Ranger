@@ -114,19 +114,15 @@ public class WeaponManager : MonoBehaviour
             }
         }
 
-
-
         // if (Input.GetKeyDown(KeyCode.G))
         // {
         //      DropWeapon(currentWeapon.weaponStats);
         // }
 
-
         if (previousSelectedWeapon != selectedWeapon)
         {
             SelectWeapon();
         }
-
     }
 
     public void SelectWeapon()
@@ -212,10 +208,7 @@ public class WeaponManager : MonoBehaviour
 
         if (isPickedup)
         {
-            //TODO Spawn With PoolSystem
             StartCoroutine(RandomInt(0, pickupDataSo.Count));
-
-            // var gun = Instantiate(pickupDataSo[randGun].ItemPrefab, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
             weapon = PoolSystem.Singleton.SpawnFromPool(pickupDataSo[randGun].itemName, weaponInventoryHolder.position, weaponInventoryHolder.rotation);
 
             if (GameManager.Singleton && GameManager.Singleton.flipMode == CharacterFlipMode.ByMoveDirection)
@@ -243,14 +236,11 @@ public class WeaponManager : MonoBehaviour
                 weapon.SetActive(false);
 
             _gunPickupRandom.gameObject.SetActive(false);
-
         }
 
         // EquipAvailableWeapon();
         SelectWeapon();
         return weapon.GetComponent<Weapon>();
-
-
     }
 
     IEnumerator RandomInt(int targetRand, int max)
@@ -298,11 +288,4 @@ public class WeaponManager : MonoBehaviour
     }
     */
     #endregion
-}
-
-[System.Serializable]
-public class WeaponUpgradeTracker
-{
-    public string weaponId;
-    public int currentLevelUpgrade = -1;
 }

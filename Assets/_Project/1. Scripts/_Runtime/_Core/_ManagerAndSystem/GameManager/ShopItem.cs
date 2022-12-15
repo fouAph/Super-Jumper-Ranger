@@ -51,6 +51,12 @@ public class ShopItem : MonoBehaviour
 
     }
 
+    public virtual void SetupShop()
+    {
+        
+    }
+    
+
     public virtual void OnResetGame()
     {
         upgradeOrBuyTMP.text = $"Buy for {price.ToString()}";

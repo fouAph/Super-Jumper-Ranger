@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
 
         }
 
+#if UNITY_ANDROID
+        useMobileControll = true;
+#endif
     }
     #endregion
 
@@ -55,8 +58,6 @@ public class GameManager : MonoBehaviour
     public bool useInfiniteAmmo;
     public CharacterDataSO currentCharacter { get; set; }
     public PlayerManager playerManager { get; set; }
-
-
 
     public UiManager uiManager { get; set; }
     public SpawnerManager spawnerManager { get; set; }
@@ -207,7 +208,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GetSceneLoadingProgress());
         StartCoroutine(SetupGameReference());
         StartCoroutine(StartGameCountdown());
-        
+
     }
 
     private void ResetCurrentGameProgress()
@@ -218,10 +219,7 @@ public class GameManager : MonoBehaviour
         boxCollected = 0;
         ResetUnlockedWeapon();
         unlockedWeapons = startingWeapons.ToList();
-        foreach (var item in shopManager.shopItems)
-        {
-            item.OnResetGame();
-        }
+        shopManager.ResetShopItem();
     }
 
     IEnumerator GetSceneLoadingProgress()
@@ -511,6 +509,7 @@ public class GameManager : MonoBehaviour
             item.weaponUpgradeInfo.ResetAllUpgrade();
         }
     }
+
 }
 
 public enum CharacterFlipMode { ByMousePosition, ByMoveDirection }
